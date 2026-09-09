@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>5단계 BK21 교원 참여의향 조사</title>
+<style>
+:root{
+  --navy:#0A2A4E; --navy-2:#14477E; --cobalt:#2F6FD0; --cobalt-soft:#E9F0FB;
+  --ink:#101720; --ink-2:#57626F; --ink-3:#8C97A4;
+  --line:#DCE2EA; --line-2:#EDF1F5;
+  --paper:#F3F5F8; --card:#FFFFFF;
+  --go:#1B6F55; --go-soft:#E4F2ED;
+  --hold:#A9711A; --hold-soft:#FBF0DC;
+  --off:#7C8794; --off-soft:#EEF0F3;
+  --danger:#B23A38;
+  --r-lg:12px; --r-md:9px; --r-sm:6px;
+  --shadow:0 1px 2px rgba(16,23,32,.05), 0 8px 24px -16px rgba(16,23,32,.35);
+  --font:"Pretendard","Pretendard Variable",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","맑은 고딕",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{font-size:clamp(14.8px, 0.28vw + 13.2px, 17px)}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--font); background:var(--paper); color:var(--ink);
+  font-size:1rem; line-height:1.62; -webkit-font-smoothing:antialiased;
+  font-feature-settings:"tnum" 0;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:none;padding:0}
+a{color:var(--navy-2)}
+h1,h2,h3,h4{margin:0;line-height:1.3;letter-spacing:-.02em;font-weight:700}
+p{margin:0}
+ul{margin:0;padding:0;list-style:none}
+:focus-visible{outline:2px solid var(--cobalt);outline-offset:2px;border-radius:4px}
+.num{font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ── 공통 상단 룰: 조사 공문의 이중선 모티프 (딱 한 번만 사용) ── */
+.masthead{background:var(--navy);color:#fff;border-bottom:3px solid var(--cobalt)}
+.masthead-in{max-width:1440px;margin:0 auto;padding:clamp(12px,1.1vw,17px) clamp(16px,2.8vw,40px);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.wordmark{font-weight:800;letter-spacing:-.03em;font-size:0.9375rem}
+.wordmark span{opacity:.62;font-weight:500;margin-left:8px;letter-spacing:0}
+.masthead-nav{margin-left:auto;display:flex;gap:6px}
+.masthead-nav button{color:#C9D6E6;font-size:0.8438rem;padding:6px 12px;border-radius:999px;font-weight:600}
+.masthead-nav button:hover{color:#fff;background:rgba(255,255,255,.1)}
+.masthead-nav button[aria-current="page"]{color:var(--navy);background:#fff}
+
+/* ── 레이아웃 ── */
+.wrap{max-width:1440px;margin:0 auto;padding:clamp(20px,2.4vw,36px) clamp(16px,2.8vw,40px) 90px}
+.wrap-narrow{max-width:900px}
+.wrap-tight{max-width:720px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:clamp(17px,1.7vw,24px)}
+.grid{display:grid;gap:16px}
+@media(max-width:720px){.card{padding:clamp(15px,3.6vw,20px)}}
+
+/* ── 설문: 표지 ── */
+.hero{background:var(--navy);color:#fff;min-height:calc(100vh - 57px);display:flex;align-items:center}
+.hero-in{width:100%;max-width:1440px;margin:0 auto;padding:clamp(44px,5.4vw,84px) clamp(18px,3vw,44px);
+  display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(30px,4.4vw,72px);align-items:center}
+.cover-kicker{font-size:clamp(12.5px,0.9vw,14px);color:#9FBBDD;font-weight:600;margin-bottom:clamp(12px,1.4vw,20px)}
+.hero h1{font-size:clamp(30px,4.4vw,62px);text-wrap:balance;letter-spacing:-.05em;line-height:1.1;font-weight:800}
+.hero-rule{margin-top:clamp(24px,3vw,40px);width:min(100%,420px);border-top:1px solid rgba(255,255,255,.3);
+  border-bottom:3px solid rgba(255,255,255,.3);height:4px}
+.hero-card{background:#fff;color:var(--ink);border-radius:16px;padding:clamp(24px,3vw,48px);
+  box-shadow:0 40px 80px -40px rgba(0,0,0,.55)}
+.cover-lead{color:var(--ink);text-wrap:pretty;font-size:clamp(15.2px,0.5vw + 14px,18px);line-height:1.68;letter-spacing:-.01em}
+.meta-rows{margin:30px 0 34px;border-top:1px solid var(--line-2)}
+.meta-row{display:flex;gap:20px;padding:15px 2px;border-bottom:1px solid var(--line-2);font-size:0.9375rem}
+.meta-row dt{width:64px;flex:none;color:var(--ink-3);font-weight:600}
+.meta-row dd{margin:0;color:var(--ink);line-height:1.6}
+@media(max-width:1080px){
+  .hero{min-height:0}
+  .hero-in{grid-template-columns:1fr}
+  .hero-rule{margin-top:24px}
+}
+
+/* ── 버튼 ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 20px;border-radius:var(--r-md);font-weight:700;font-size:0.9062rem;
+  border:1px solid transparent;transition:background .12s ease,border-color .12s ease}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:var(--navy-2)}
+.btn-ghost{background:#fff;border-color:var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--ink-3)}
+.btn-quiet{color:var(--ink-2);padding:11px 12px;font-weight:600}
+.btn-quiet:hover{color:var(--ink)}
+.btn-lg{padding:14px 26px;font-size:1.0rem}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+
+/* ── 진행 표시 ── */
+.stepbar{position:sticky;top:0;z-index:20;background:rgba(243,245,248,.94);backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);margin:0 calc(-1 * clamp(16px,2.8vw,40px)) 20px;
+  padding:12px clamp(16px,2.8vw,40px)}
+.stepbar-in{margin:0 auto}
+.stepbar-head{display:flex;justify-content:space-between;align-items:baseline;font-size:0.8125rem;color:var(--ink-2);margin-bottom:8px}
+.stepbar-head b{color:var(--ink);font-size:0.9062rem;font-weight:700;letter-spacing:-.01em}
+.track{height:3px;background:var(--line);border-radius:2px;overflow:hidden}
+.track-fill{height:100%;background:var(--navy);transition:width .28s cubic-bezier(.2,.7,.3,1)}
+
+/* ── 설문 2단 레이아웃 ── */
+.survey-grid{display:grid;grid-template-columns:minmax(200px,clamp(200px,17vw,270px)) minmax(0,1fr);
+  gap:clamp(28px,3.6vw,60px);align-items:start;max-width:1280px;margin:0 auto}
+.survey-main{min-width:0}
+.rail{position:sticky;top:28px}
+.rail h2{font-size:0.9375rem;letter-spacing:-.025em;color:var(--ink);margin-bottom:4px}
+.rail .rail-sub{font-size:0.8125rem;color:var(--ink-3);margin-bottom:20px}
+.rail-item{display:flex;gap:12px;align-items:center;width:100%;text-align:left;
+  padding:11px 13px;border-radius:9px;color:var(--ink-3);font-weight:600;font-size:0.9062rem;
+  transition:color .12s,background .12s}
+.rail-item .n{width:25px;height:25px;border-radius:50%;border:1.5px solid var(--line);flex:none;
+  display:grid;place-items:center;font-size:0.75rem;background:#fff;font-weight:700}
+.rail-item.done{color:var(--ink-2)}
+.rail-item.done .n{background:var(--go-soft);border-color:#BFDCD1;color:var(--go)}
+.rail-item.done:hover{color:var(--ink);background:#fff}
+.rail-item[aria-current="step"]{color:var(--ink);background:#fff;box-shadow:inset 0 0 0 1px var(--line)}
+.rail-item[aria-current="step"] .n{background:var(--navy);border-color:var(--navy);color:#fff}
+.rail-item:disabled{cursor:default}
+.card-form{padding:clamp(20px,2.4vw,38px)}
+@media(min-width:961px){.stepbar{display:none}}
+@media(max-width:960px){
+  .survey-grid{grid-template-columns:1fr;gap:0;max-width:840px}
+  .rail{display:none}
+}
+
+/* ── 폼 ── */
+.q{padding:clamp(20px,2.1vw,32px) 0;border-bottom:1px solid var(--line-2)}
+.q:first-child{padding-top:4px}
+.q:last-child{border-bottom:none;padding-bottom:6px}
+.q-title{font-size:clamp(16.4px,0.5vw + 15px,19.5px);font-weight:700;letter-spacing:-.025em;display:flex;gap:9px;align-items:baseline}
+.q-title .idx{flex:none;font-weight:800;font-size:0.75rem;color:var(--navy);
+  background:var(--cobalt-soft);padding:3px 9px;border-radius:6px;position:relative;top:-1px}
+.q-major{border-bottom:none}
+.q-major + .q-major{border-top:1px solid var(--line)}
+.q-help{color:var(--ink-2);font-size:clamp(13.4px,0.3vw + 12.8px,15.4px);margin-top:8px;text-wrap:pretty}
+.q-body{margin-top:16px}
+.field{display:block;margin-bottom:14px}
+.field-label{display:block;font-size:0.8438rem;font-weight:600;color:var(--ink-2);margin-bottom:6px}
+.input,select.input,textarea.input{
+  width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:var(--r-md);
+  background:#fff;font-size:0.9375rem;transition:border-color .12s}
+.input:hover{border-color:#C3CCD8}
+.input:focus{outline:none;border-color:var(--cobalt);box-shadow:0 0 0 3px var(--cobalt-soft)}
+textarea.input{resize:vertical;min-height:92px;line-height:1.65}
+select.input{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%2357626F' stroke-width='1.6' stroke-linecap='round'/></svg>");
+  background-repeat:no-repeat;background-position:right 13px center;padding-right:36px}
+.row-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:clamp(10px,1.1vw,16px)}
+.email-row{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1.05fr);gap:9px;align-items:center}
+@media(max-width:420px){.email-row{grid-template-columns:1fr;gap:7px}.email-row .at{display:none}}
+.email-row .at{color:var(--ink-3);font-weight:700}
+.hint{font-size:0.8125rem;color:var(--ink-3);margin-top:6px}
+.err{font-size:0.8125rem;color:var(--danger);margin-top:6px;font-weight:600}
+.warn{font-size:0.8rem;color:var(--hold);margin-top:5px}
+.input.is-bad{border-color:var(--danger);background:#FFFAFA}
+
+/* 선택 카드 (참여 의향) */
+.choices{display:grid;gap:10px}
+.choice{display:flex;gap:13px;align-items:flex-start;padding:15px 16px;border:1px solid var(--line);
+  border-radius:var(--r-md);background:#fff;text-align:left;width:100%;transition:border-color .12s,background .12s}
+.choice:hover{border-color:#B9C4D2}
+.choice[aria-pressed="true"]{border-color:var(--navy);background:#F7FAFE;box-shadow:inset 0 0 0 1px var(--navy)}
+.choice .dot{width:18px;height:18px;border-radius:50%;border:1.5px solid #B9C4D2;flex:none;margin-top:2px;position:relative}
+.choice[aria-pressed="true"] .dot{border-color:var(--navy)}
+.choice[aria-pressed="true"] .dot::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--navy)}
+.choice b{display:block;font-size:0.9688rem;letter-spacing:-.02em}
+.choice small{display:block;color:var(--ink-2);font-size:0.8438rem;margin-top:3px;line-height:1.5}
+.choice-inline{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:600px){.choice-inline{grid-template-columns:1fr}}
+
+/* 칩 */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;
+  font-size:0.875rem;font-weight:600;color:var(--ink-2);transition:all .12s}
+.chip:hover{border-color:#B9C4D2;color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.chip-sm{padding:5px 11px;font-size:0.8rem;font-weight:600}
+.chip-count{margin-left:6px;opacity:.65;font-weight:500}
+.picked{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.tag{display:inline-flex;align-items:center;gap:7px;background:var(--cobalt-soft);color:var(--navy);
+  border-radius:999px;padding:5px 8px 5px 12px;font-size:0.825rem;font-weight:600}
+.tag button{width:17px;height:17px;border-radius:50%;background:rgba(10,42,78,.14);color:var(--navy);
+  font-size:0.75rem;line-height:1;display:grid;place-items:center}
+.tag button:hover{background:rgba(10,42,78,.28)}
+
+/* 연구주제 입력 */
+.topic{display:flex;gap:11px;align-items:flex-start;margin-bottom:11px}
+.topic-n{width:26px;height:26px;flex:none;border-radius:50%;background:var(--navy);color:#fff;
+  display:grid;place-items:center;font-size:0.7812rem;font-weight:700;margin-top:9px}
+.topic-n.opt{background:var(--line);color:var(--ink-3)}
+.example{background:#FAFBFD;border:1px solid var(--line-2);border-radius:var(--r-md);padding:13px 15px;margin-top:12px}
+.example-quiet{background:#FFFCF4;border-color:#EFE4C9}
+.example-quiet h5{color:#8A6A1E}
+.example-list{margin:0;font-size:0.85rem;color:var(--ink-2);line-height:1.9;word-break:keep-all}
+.example h5{margin:0 0 7px;font-size:0.8125rem;color:var(--ink-2);font-weight:700}
+.example li{font-size:0.8438rem;color:var(--ink-2);padding:3px 0;padding-left:13px;position:relative}
+.example li::before{content:"";position:absolute;left:2px;top:12px;width:4px;height:4px;border-radius:50%;background:var(--ink-3)}
+
+/* 검토 */
+.review dl{margin:0;border-top:1px solid var(--line-2)}
+.review-row{display:flex;gap:16px;padding:12px 2px;border-bottom:1px solid var(--line-2);align-items:baseline}
+.review-row dt{width:clamp(96px,14%,140px);flex:none;color:var(--ink-3);font-size:0.8438rem;font-weight:600}
+.review-row dd{margin:0;flex:1;font-size:0.9062rem;white-space:pre-wrap;word-break:break-word}
+.review-row dd .empty{color:var(--ink-3)}
+@media(max-width:600px){.review-row{flex-direction:column;gap:3px}.review-row dt{width:auto}}
+
+/* 완료 */
+.done{text-align:center;padding:64px 28px}
+.done-mark{width:56px;height:56px;margin:0 auto 20px;border-radius:50%;background:var(--go-soft);
+  display:grid;place-items:center}
+.done h2{font-size:clamp(21px,1.4vw + 10px,28px);letter-spacing:-.03em}
+.done p{color:var(--ink-2);margin-top:11px;font-size:0.9375rem}
+.receipt{max-width:420px;margin:26px auto 0;text-align:left;background:#FAFBFD;border:1px solid var(--line-2);
+  border-radius:var(--r-md);padding:16px 18px;font-size:0.875rem}
+.receipt div{display:flex;justify-content:space-between;padding:5px 0;color:var(--ink-2)}
+.receipt div b{color:var(--ink);font-weight:600}
+
+/* ── 관리자 전용 화면 ── */
+.dash-head{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:20px}
+.dash-head h1{font-size:clamp(20px,1.5vw + 8px,29px);letter-spacing:-.035em}
+.dash-head .sub{color:var(--ink-2);font-size:0.875rem;margin-top:5px}
+.dash-tools{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:22px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:10px 15px;font-size:0.9062rem;font-weight:600;color:var(--ink-2);white-space:nowrap;
+  border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--navy);font-weight:700}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:clamp(10px,1vw,16px);margin-bottom:18px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:clamp(14px,1.3vw,22px)}
+.kpi dt{font-size:0.8125rem;color:var(--ink-2);font-weight:600}
+.kpi dd{margin:7px 0 0;font-size:clamp(24px,1.5vw + 8px,34px);font-weight:800;letter-spacing:-.045em;line-height:1}
+.kpi dd small{font-size:0.875rem;font-weight:600;color:var(--ink-3);letter-spacing:-.01em;margin-left:3px}
+.kpi .foot{font-size:0.7875rem;color:var(--ink-3);margin-top:9px}
+.kpi .bar{height:4px;border-radius:2px;background:var(--line-2);margin-top:11px;overflow:hidden}
+.kpi .bar i{display:block;height:100%;background:var(--navy)}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:clamp(16px,1.6vw,26px)}
+.panel-head{display:flex;align-items:baseline;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.panel-head h3{font-size:1.0rem;letter-spacing:-.025em}
+.panel-head .note{font-size:0.8rem;color:var(--ink-3);margin-left:auto}
+.cols-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:clamp(12px,1.2vw,18px)}
+.cols-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:clamp(12px,1.2vw,18px)}
+
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:0.8125rem;color:var(--ink-2);margin-top:14px}
+.legend i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:6px}
+
+.stack{display:flex;height:13px;border-radius:3px;overflow:hidden;background:var(--line-2)}
+.stack i{display:block;height:100%}
+.brow{display:grid;grid-template-columns:minmax(84px,24%) minmax(0,1fr) 46px;gap:11px;align-items:center;padding:6px 0;font-size:0.8438rem}
+.brow .nm{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brow .vl{text-align:right;color:var(--ink-2);font-weight:600}
+.bar-t{height:9px;background:var(--line-2);border-radius:3px;overflow:hidden}
+.bar-t i{display:block;height:100%;background:var(--navy-2);border-radius:3px}
+
+.rank{display:grid;grid-template-columns:20px 1fr auto;gap:11px;align-items:center;padding:7px 0;
+  border-bottom:1px solid var(--line-2);font-size:0.875rem}
+.rank:last-child{border-bottom:none}
+.rank .n{color:var(--ink-3);font-size:0.7812rem;font-weight:700;text-align:right}
+.rank .v{font-weight:700;font-variant-numeric:tabular-nums}
+.rank .track2{grid-column:2/4;height:5px;background:var(--line-2);border-radius:3px;overflow:hidden;margin-top:-3px}
+.rank .track2 i{display:block;height:100%;background:var(--cobalt)}
+
+/* 히트맵 */
+.heat-scroll{overflow-x:auto}
+table.heat{border-collapse:separate;border-spacing:2px;font-size:clamp(11.5px,0.8vw,13.5px);width:100%}
+table.heat th{font-weight:600;color:var(--ink-2);text-align:left;padding:4px 6px;white-space:nowrap}
+table.heat thead th{font-size:clamp(10.5px,0.72vw,12.2px);height:clamp(104px,8vw,132px);vertical-align:bottom;padding:0 0 8px}
+table.heat thead th div{writing-mode:vertical-rl;text-orientation:upright;text-align:left;
+  line-height:1.05;font-weight:600;letter-spacing:-.02em;margin:0 auto}
+table.heat tbody th{position:sticky;left:0;background:#fff;z-index:1;box-shadow:1px 0 0 var(--line-2)}
+table.heat td{width:clamp(24px,1.9vw,36px);height:clamp(24px,1.9vw,36px);text-align:center;border-radius:3px;color:#fff;font-weight:700;
+  font-variant-numeric:tabular-nums;background:var(--line-2);cursor:default}
+table.heat td.z{color:var(--ink-3);font-weight:400}
+.heat-key{display:flex;align-items:center;gap:7px;margin-top:14px;font-size:0.7812rem;color:var(--ink-3)}
+.heat-key i{width:20px;height:11px;border-radius:2px;display:block}
+
+/* 클러스터 카드 */
+.clusters{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:clamp(12px,1.2vw,18px)}
+.cl{border:1px solid var(--line);border-radius:var(--r-lg);background:#fff;padding:clamp(15px,1.4vw,22px);position:relative}
+.cl.ok{border-color:#BFDCD1;background:linear-gradient(#F6FCFA,#fff 60px)}
+.cl-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:13px}
+.cl-top h4{font-size:1.0625rem;letter-spacing:-.03em}
+.cl-score{margin-left:auto;text-align:right;flex:none}
+.cl-score b{font-size:1.3125rem;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.cl-score span{display:block;font-size:0.7188rem;color:var(--ink-3);margin-top:1px}
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:0.7375rem;font-weight:700}
+.pill.ok{background:var(--go-soft);color:var(--go)}
+.pill.mid{background:var(--hold-soft);color:var(--hold)}
+.pill.low{background:var(--off-soft);color:var(--off)}
+.cl-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:14px 0 13px;
+  padding:12px 0;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2)}
+.cl-stats div{text-align:center}
+.cl-stats b{display:block;font-size:1.125rem;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.cl-stats span{font-size:0.7375rem;color:var(--ink-3)}
+.cl h5{font-size:0.7812rem;color:var(--ink-3);margin:0 0 6px;font-weight:700}
+.cl-topics li{font-size:0.8375rem;text-wrap:pretty;color:var(--ink-2);padding:3px 0 3px 12px;position:relative;line-height:1.5}
+.cl-topics li::before{content:"";position:absolute;left:1px;top:11px;width:4px;height:4px;border-radius:50%;background:var(--cobalt)}
+
+/* 테이블 */
+.tbl-tools{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.tbl-tools .input{width:auto;min-width:min(200px,100%);flex:1;max-width:360px}
+.tbl-tools select.input{flex:none;min-width:130px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-lg);background:#fff}
+table.data{width:100%;border-collapse:collapse;font-size:0.8625rem;min-width:760px}
+table.data th{text-align:left;font-weight:700;color:var(--ink-2);font-size:0.7875rem;padding:11px 14px;
+  border-bottom:1px solid var(--line);background:#FAFBFD;white-space:nowrap;position:sticky;top:0}
+table.data td{padding:11px 14px;border-bottom:1px solid var(--line-2);vertical-align:top}
+table.data tr:last-child td{border-bottom:none}
+table.data tbody tr:hover{background:#FAFBFD}
+table.data .clip{max-width:min(320px,28vw);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:0.8125rem;white-space:nowrap}
+.st i{width:7px;height:7px;border-radius:50%}
+.linkish{color:var(--navy-2);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+
+/* 모달 */
+.scrim{position:fixed;inset:0;background:rgba(16,23,32,.42);display:grid;place-items:center;padding:20px;z-index:60}
+.modal{background:#fff;border-radius:14px;max-width:min(760px,100%);width:100%;max-height:86vh;overflow:auto;
+  box-shadow:0 30px 60px -20px rgba(16,23,32,.4)}
+.modal-head{display:flex;align-items:center;gap:12px;padding:clamp(14px,1.6vw,20px) clamp(18px,2.2vw,28px);border-bottom:1px solid var(--line-2);position:sticky;top:0;background:#fff}
+.modal-head h3{font-size:1.0625rem;letter-spacing:-.03em}
+.modal-head button{margin-left:auto;color:var(--ink-3);font-size:1.375rem;line-height:1;padding:2px 6px}
+.modal-body{padding:clamp(16px,2vw,26px) clamp(18px,2.2vw,28px) clamp(20px,2.4vw,30px)}
+
+/* 잡다 */
+.empty-state{text-align:center;padding:44px 20px;color:var(--ink-2)}
+.empty-state b{display:block;color:var(--ink);font-size:1.0rem;margin-bottom:7px;letter-spacing:-.02em}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--ink);color:#fff;
+  padding:11px 19px;border-radius:999px;font-size:0.875rem;font-weight:600;z-index:80;box-shadow:var(--shadow)}
+.notice{display:flex;gap:11px;text-wrap:pretty;padding:13px 15px;border-radius:var(--r-md);background:var(--cobalt-soft);
+  font-size:0.85rem;color:var(--navy);line-height:1.55}
+.notice b{font-weight:700}
+.kws{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
+.kw{border-radius:999px;padding:5px 12px;background:var(--cobalt-soft);color:var(--navy);font-weight:700;line-height:1.3}
+.gate{max-width:420px;margin:9vh auto;text-align:center}
+.gate .card{padding:30px 26px}
+.gate h2{font-size:1.25rem;letter-spacing:-.03em}
+.gate p{color:var(--ink-2);font-size:0.875rem;margin:9px 0 20px}
+.mini-note{font-size:0.7875rem;color:var(--ink-3);margin-top:14px;line-height:1.55;text-wrap:pretty}
+@media print{
+  .masthead,.dash-tools,.tabs,.btn{display:none!important}
+  body{background:#fff}
+  .panel,.kpi,.cl{break-inside:avoid;box-shadow:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="masthead-in">
+    <div class="wordmark">HANYANG UNIVERSITY<span>대학원전략팀</span></div>
+    <nav class="masthead-nav" id="nav" aria-label="주요 화면">
+      <button data-go="survey">참여의향 조사</button>
+      <button data-go="admin">관리자 전용</button>
+    </nav>
+  </div>
+</header>
+<main id="app" aria-live="polite"></main>
+<div id="layer"></div>
+<script>
+/* =====================================================================
+   5단계 BK21 교원 참여의향 조사
+   - 단독 실행: 데모 데이터(메모리)로 전 기능 동작
+   - Google Apps Script 배포: Index.html 로 넣으면 google.script.run 자동 연결
+   ===================================================================== */
+(function () {
+"use strict";
+
+function shiftDays(n) {
+  var d = new Date(); d.setDate(d.getDate() + n);
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+
+/* ── 조사 설정 (실배포 시 Code.gs의 CONFIG와 함께 수정) ───────────── */
+var BUILD = "2026.09.09-r23";
+var CONFIG = {
+  title: "5단계 BK21사업 개별 교원 참여의향 조사",
+  owner: "대학원전략팀",
+  opensAt: shiftDays(-8),    // 데모: 오늘 기준으로 기간을 잡는다 (실배포 시 실제 날짜 문자열로 교체)
+  closesAt: shiftDays(10),
+  targetCount: 412,          // 조사 대상 전임교원 수 (응답률 분모)
+  minFacultyPerUnit: 7,      // 교육연구단 후보 판정 가정치
+  minDeptsPerUnit: 3
+};
+
+var COLLEGES = {
+  "공과대학": ["건축학부", "건축공학부", "건설환경공학과", "도시공학과", "자원환경공학과", "융합전자공학부", "컴퓨터소프트웨어학부", "정보시스템학과", "전기·생체공학부 전기공학전공", "전기·생체공학부 바이오메디컬공학전공", "신소재공학부", "화학공학과", "생명공학과", "유기나노공학과", "에너지공학과", "기계공학부", "원자력공학과", "산업공학과", "미래자동차공학과", "데이터사이언스학부", "반도체공학과"],
+  "의과대학": ["의예과", "의학과 해부·세포생물학교실", "의학과 생리학교실", "의학과 생화학·분자생물학교실", "의학과 병리학교실", "의학과 미생물학교실", "의학과 환경의생물학교실", "의학과 약리학교실", "의학과 예방의학교실", "의학과 유전학교실", "의학과 의공학교실", "의학과 내과학교실", "의학과 신경과학교실", "의학과 외과학교실", "의학과 정형외과학교실", "의학과 신경외과학교실", "의학과 흉부외과학교실", "의학과 마취통증의학교실", "의학과 소아·청소년과학교실", "의학과 산부인과학교실", "의학과 정신건강의학교실", "의학과 피부과학교실", "의학과 비뇨기과학교실", "의학과 이비인후과학교실", "의학과 안과학교실", "의학과 영상의학과학교실", "의학과 방사선종양학교실", "의학과 진단검사의학교실", "의학과 치과학교실", "의학과 성형외과학교실", "의학과 재활의학교실", "의학과 가정의학교실", "의학과 직업환경의학교실", "의학과 핵의학교실", "의학과 응급의학교실", "의학과 의학교육학교실", "의학과 의료인문학교실", "의학과 교육협력지원교실"],
+  "간호대학": ["간호학과"],
+  "인문과학대학": ["국어국문학과", "중어중문학과", "영어영문학과", "독어독문학과", "사학과", "철학과"],
+  "사회과학대학": ["정치외교학과", "사회학과", "미디어커뮤니케이션학과", "관광학부"],
+  "자연과학대학": ["수학과", "물리학과", "화학과", "생명과학과"],
+  "정책과학대학": ["정책학과", "행정학과"],
+  "경제금융대학": ["경제금융학부"],
+  "경영대학": ["경영학부", "파이낸스경영학과"],
+  "사범대학": ["교육학과", "교육공학과", "국어교육과", "영어교육과", "수학교육과", "응용미술교육과"],
+  "생활과학대학": ["의류학과", "식품영양학과", "실내건축디자인학과"],
+  "음악대학": ["성악과", "작곡과", "피아노과", "관현악과", "국악과"],
+  "예술·체육대학": ["스포츠산업과학부 스포츠매니지먼트전공", "스포츠산업과학부 스포츠사이언스전공", "연극영화학과", "무용학과"],
+  "국제대학": ["국제학부", "글로벌콘텐츠융합학부"],
+  "기술혁신대학": ["산업융합학부"],
+  "한양YK인터칼리지": ["한양인터칼리지학부"],
+  "도시대학원": ["도시·지역개발경영학과 도시개발경영전공", "도시·지역개발경영학과 부동산학 전공", "도시·지역개발경영학과 도시재생설계전공", "도시·지역개발경영학과 랜드스케이프어바니즘전공"],
+  "국제대학원": ["동아시아학과", "지속가능경제학과", "글로벌 전략‧정보학과", "한국학과"],
+  "경영전문대학원": ["경영전문대학원"],
+  "법학전문대학원": ["법학전문대학원"],
+  "의생명공학전문대학원": ["의생명과학과", "생체의공학과", "임상의과학자", "생명의료정보학과"],
+  "기술경영전문대학원": ["기술경영학과"]
+};
+var DEPTS = [];
+var DEPT_COLLEGE = {};
+Object.keys(COLLEGES).forEach(function (c) {
+  COLLEGES[c].forEach(function (d) { DEPTS.push(d); DEPT_COLLEGE[d] = c; });
+});
+
+var TECH19 = ["바이오","반도체","클린에너지·환경","육상 모빌리티","콘텐츠 기술","이차전지","AI/SW","로봇","기계·장비","소재·부품","수소","양자","우주·항공","방위산업","디스플레이","사이버보안","통신","원자력","조선·해양"];
+var FUSION_TYPES = ["인문사회분야융복합","과학기술분야융복합","인문사회과학기술융복합","인공지능 융합형(AI+X)"];
+var RANKS = ["교수","부교수","조교수","석좌·특훈교수","연구교수","기타"];
+var INTENTS = ["참여", "불참"];
+var INTENT_COLOR = { "참여": "var(--go)", "불참": "var(--off)" };
+var TRACKS = ["미래인재", "AI 융합인재"];
+var TRACK_COLOR = { "미래인재": "var(--cobalt)", "AI 융합인재": "var(--navy)" };
+
+/* ── 유틸 ─────────────────────────────────────────────────────────── */
+function $(s, r) { return (r || document).querySelector(s); }
+function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+function esc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  });
+}
+function pct(n, d) { return d ? Math.round((n / d) * 1000) / 10 : 0; }
+function uniq(a) { return a.filter(function (v, i) { return a.indexOf(v) === i; }); }
+function todayISO() { return new Date().toISOString().slice(0, 10); }
+function fmtDate(iso) {
+  if (!iso) return "-";
+  var d = new Date(iso);
+  if (isNaN(d)) return String(iso);
+  return d.getFullYear() + "." + String(d.getMonth() + 1).padStart(2, "0") + "." + String(d.getDate()).padStart(2, "0");
+}
+function toast(msg) {
+  var t = document.createElement("div");
+  t.className = "toast"; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 2400);
+}
+/* 결정적 난수 (데모 데이터 재현성) */
+function rng(seed) {
+  var s = seed >>> 0;
+  return function () { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; };
+}
+
+/* ── 데모 응답 생성 ───────────────────────────────────────────────── */
+var SURNAME = "김이박최정강조윤장임한오서신권황안송류전홍고문양손배";
+var GIVEN = ["지훈","서연","민준","도현","예린","성호","하윤","재원","수빈","태민","현우","은지","건우","다인","准호","선우","가온","律","윤슬","해든"];
+var TOPIC_BANK = {
+  "AI/SW": ["대규모 언어모델의 추론 신뢰도를 어떻게 정량 검증할 수 있는가?","도메인 특화 소형 모델은 어떤 조건에서 범용 모델을 능가하는가?","AI 학습 데이터의 저작권 리스크를 어떻게 설계 단계에서 차단할 것인가?"],
+  "반도체": ["3nm 이하 공정에서 열 저항을 어떻게 예측·제어할 것인가?","이종집적 패키징의 신뢰성 저하 요인은 무엇인가?","AI 가속기 메모리 병목을 아키텍처 수준에서 어떻게 해소할 것인가?"],
+  "바이오": ["다중오믹스 데이터로 질환 아형을 어떻게 재정의할 것인가?","오가노이드 모델은 임상 예측력을 어디까지 대체할 수 있는가?","유전자 치료의 장기 안전성을 어떤 지표로 감시할 것인가?"],
+  "이차전지": ["전고체 전지 계면 저항을 어떻게 낮출 것인가?","배터리 수명 예측 모델의 현장 일반화 한계는 무엇인가?","사용후 배터리 재자원화의 경제성 임계점은 어디인가?"],
+  "로봇": ["비정형 환경에서 로봇 조작 정책을 어떻게 일반화할 것인가?","인간-로봇 협업의 안전 기준을 어떻게 정량화할 것인가?"],
+  "클린에너지·환경": ["탄소중립 전환의 지역별 비용 분담은 어떻게 설계되어야 하는가?","재생에너지 변동성을 수요반응으로 어디까지 흡수할 수 있는가?"],
+  "육상 모빌리티": ["자율주행 판단의 책임 소재를 어떻게 제도화할 것인가?","도심 물류 자동화가 교통 혼잡에 미치는 순효과는 무엇인가?"],
+  "콘텐츠 기술": ["생성형 AI 시대에 창작 노동의 가치는 어떻게 재평가되는가?","실감 콘텐츠의 몰입도를 어떤 생체지표로 측정할 것인가?"],
+  "소재·부품": ["데이터 기반 신소재 탐색은 실험 주기를 얼마나 단축하는가?","공급망 단절에 강인한 소재 대체 경로는 어떻게 설계되는가?"],
+  "양자": ["잡음 환경에서 양자 알고리즘의 실효 이득은 언제 발생하는가?","양자 내성 암호 전환의 사회적 비용은 얼마인가?"],
+  "사이버보안": ["AI 에이전트 확산이 공격 표면을 어떻게 바꾸는가?","공급망 소프트웨어 신뢰를 어떻게 검증할 것인가?"],
+  "기계·장비": ["디지털 트윈 기반 예지보전의 실제 회수 기간은 얼마인가?","극한 환경 구조물의 피로 수명을 어떻게 예측할 것인가?"],
+  "수소": ["수소 밸류체인의 병목은 생산인가 저장인가?","암모니아 혼소 전환의 환경 편익은 얼마인가?"],
+  "우주·항공": ["초소형 위성 군집의 운용 자동화는 어디까지 가능한가?","도심항공교통의 사회적 수용성을 결정하는 요인은 무엇인가?"],
+  "디스플레이": ["마이크로 LED 전사 공정의 수율 한계는 무엇인가?","시각 피로를 최소화하는 디스플레이 설계 조건은 무엇인가?"],
+  "통신": ["6G 시대 네트워크 에너지 효율의 이론적 상한은 얼마인가?","네트워크 슬라이싱의 공정 배분 원칙은 무엇이어야 하는가?"],
+  "원자력": ["소형모듈원자로의 규제 프레임은 어떻게 재설계되어야 하는가?","방사성 폐기물 관리의 세대 간 형평성을 어떻게 반영할 것인가?"],
+  "조선·해양": ["친환경 연료 추진선의 총소유비용 전환점은 언제인가?","자율운항 선박의 국제 규범 공백은 무엇인가?"],
+  "방위산업": ["국방 AI의 인간 통제 원칙을 어떻게 설계할 것인가?","민군 겸용 기술의 수출 통제 기준은 어디에 있어야 하는가?"],
+  "_공통": ["초미세 공정 및 AI 반도체의 한계를 극복할 수 있는가?","기술 수용의 사회적 격차는 어떻게 완화될 수 있는가?","노화는 치료 가능한 질환으로 재정의될 수 있는가?","에너지 전환은 성장과 양립할 수 있는가?"]
+};
+var DECLINE_BANK = [
+  "정년 및 안식년 일정과 겹칩니다.",
+  "이미 다른 국책사업에 참여하고 있어 중복이 어렵습니다.",
+  "연구실 규모상 대학원생 정원을 채우기 어렵습니다.",
+  "학과 사정으로 이번 단계에는 참여하지 않기로 했습니다.",
+  "임용 초기라 다음 단계에 참여를 검토하겠습니다."
+];
+var FUTURE_BANK = [
+  "인구구조 변화에 대응하는 지역 돌봄 체계 연구",
+  "고전 문헌의 디지털 편찬과 해석 방법론 정립",
+  "기초과학 분야 차세대 연구자 양성을 위한 장기 연구 트랙",
+  "지역 문화자원의 보존과 재해석에 관한 학제적 연구",
+  "수학·통계 기초이론의 응용 확장 연구",
+  "공공정책 평가 방법론의 고도화와 현장 적용"
+];
+var PROBLEM_BANK = [
+  "과학기술분야융복합 — 제조 현장의 산업재해를 데이터로 예측하고 줄이는 문제",
+  "인공지능 융합형(AI+X) — 고령화 지역의 이동권 격차 해소",
+  "인문사회과학기술융복합 — 기술 전환기의 노동 재배치와 재교육",
+  "인문사회분야융복합 — 지역 소멸 대응과 생활 인프라 재설계",
+  "인공지능 융합형(AI+X) — 임상 현장의 진단 오류를 줄이는 의사결정 지원",
+  "과학기술분야융복합 — 탄소중립 전환 과정의 에너지 비용 형평성",
+  "돌봄 인력 부족을 기술과 제도 양쪽에서 푸는 문제",
+  "인문사회과학기술융복합 — 생성형 AI 확산에 따른 창작 생태계 재편"
+];
+var VISION_BANK = [
+  "학과 경계를 넘는 데이터 기반 융합연구 클러스터를 만들고, 대학원생이 산업 현장 문제를 직접 정의하는 과정을 두고 싶습니다.",
+  "AI를 도구가 아니라 방법론으로 다루는 교육과정을 설계하고, 전 과정에 산업체 멘토링을 결합하려 합니다.",
+  "핵심은 소수 정예 공동지도 체계입니다. 두 학과 이상의 지도교수가 한 학생을 공동 지도하는 구조를 제안합니다.",
+  "국제 공동학위와 연계한 트랙을 두고, 해외 연구기관 파견을 정규 학사 요건에 포함시키고자 합니다.",
+  "지역 산업 문제 해결형 캡스톤을 대학원 단위로 확대하고, 성과를 창업으로 연결하는 경로를 만들고 싶습니다."
+];
+
+var STEM_COLLEGES = ["공과대학", "자연과학대학", "의과대학", "간호대학", "생활과학대학",
+  "의생명공학전문대학원", "기술혁신대학", "도시대학원"];
+
+/* 분야 인기도(가중 추첨용) — 실제 응답 분포처럼 편차를 준다 */
+var TECH_WEIGHT = { "AI/SW": 9, "반도체": 7, "바이오": 6, "이차전지": 5, "로봇": 4, "소재·부품": 4,
+  "클린에너지·환경": 4, "디스플레이": 3, "통신": 3, "기계·장비": 3, "육상 모빌리티": 3, "콘텐츠 기술": 3,
+  "사이버보안": 2, "수소": 2, "양자": 2, "우주·항공": 1, "원자력": 1, "방위산업": 1, "조선·해양": 1 };
+var STEM_POOL = [];
+TECH19.forEach(function (t) { for (var i = 0; i < (TECH_WEIGHT[t] || 1); i++) STEM_POOL.push(t); });
+var SOC_POOL = ["AI/SW","AI/SW","AI/SW","콘텐츠 기술","콘텐츠 기술","바이오","클린에너지·환경","사이버보안","육상 모빌리티"];
+
+function makeDemo(n) {
+  var r = rng(20260908), out = [], i;
+  var startDay = new Date(CONFIG.opensAt + "T09:00:00").getTime();
+  var span = Math.max(1, Math.round((Date.now() - startDay) / 86400000));
+  for (i = 0; i < n; i++) {
+    var dept = DEPTS[Math.floor(r() * DEPTS.length)];
+    var college = DEPT_COLLEGE[dept];
+    var stem = STEM_COLLEGES.indexOf(college) >= 0;
+    var p = r();
+    var intent = p < 0.84 ? "참여" : "불참";
+    var track = intent === "불참" ? "" : (r() < 0.36 ? "미래인재" : "AI 융합인재");
+    var isAI = track === "AI 융합인재";
+    var picks = [];
+    var k = 1 + Math.floor(r() * (stem ? 3 : 2));
+    var weighted = stem ? STEM_POOL : SOC_POOL;
+    var guard = 0;
+    while (picks.length < k && guard++ < 40) {
+      var t = weighted[Math.floor(r() * weighted.length)];
+      if (picks.indexOf(t) < 0) picks.push(t);
+    }
+    if (r() < 0.30 && picks.indexOf("AI/SW") < 0) picks.push("AI/SW");
+    var topics = [];
+    var bank = uniq((TOPIC_BANK[picks[0]] || []).concat(picks[1] ? (TOPIC_BANK[picks[1]] || []) : []));
+    var tn = isAI ? (r() < 0.75 ? 3 : 2) : 0;
+    var g2 = 0;
+    while (topics.length < tn && g2++ < 30) {
+      var pool = (topics.length < bank.length) ? bank : TOPIC_BANK._공통;
+      var cand = pool[Math.floor(r() * pool.length)];
+      if (topics.indexOf(cand) < 0) topics.push(cand);
+    }
+    var day = Math.floor(Math.pow(r(), 0.85) * span);
+    out.push({
+      id: "R" + String(1000 + i),
+      submittedAt: new Date(Math.min(Date.now() - 60000, startDay + day * 86400000 + Math.floor(r() * 9) * 3600000)).toISOString(),
+      name: SURNAME[Math.floor(r() * SURNAME.length)] + (["지훈","서연","민준","도현","예린","성호","하윤","재원","수빈","태민","현우","은지","건우","다인","선우","가온","윤슬","해든","정우","보경"][Math.floor(r() * 20)]),
+      dept: dept, college: college,
+      rank: RANKS[Math.floor(r() * (r() < .8 ? 3 : RANKS.length))],
+      email: "faculty" + (100 + i) + "@hanyang.ac.kr",
+      intent: intent,
+      track: track,
+      declineReason: intent === "불참" ? DECLINE_BANK[Math.floor(r() * DECLINE_BANK.length)] : "",
+      futureTopic: track === "미래인재" ? FUTURE_BANK[Math.floor(r() * FUTURE_BANK.length)] : "",
+      topics: isAI ? topics : [],
+      techs: isAI ? picks : [],
+      problem: isAI ? PROBLEM_BANK[Math.floor(r() * PROBLEM_BANK.length)] : "",
+      coreField: isAI ? (picks[0] + " 기반 " + (stem ? "융합연구 클러스터" : "사회문제 해결형 융합교육")) : "",
+      vision: isAI && r() < .55 ? VISION_BANK[Math.floor(r() * VISION_BANK.length)] : ""
+    });
+  }
+  return out;
+}
+
+/* ── 백엔드 어댑터 ─────────────────────────────────────────────────
+   GAS 환경이면 google.script.run, 아니면 메모리 저장소를 사용한다.  */
+var hasGAS = (typeof google !== "undefined" && google.script && google.script.run);
+var REMOTE = "https://script.google.com/macros/s/AKfycbxH4-5A_i8n6O3vUnhb2A_bPZJVPSjAoeCD6v9ckGO8X1h75pSxvDlXBGxzcpND_YrvGA/exec";            /* ★ GitHub Pages 등 외부에 올릴 때, Apps Script 웹 앱의 /exec 주소를 여기에 넣으세요 */
+var memory = null;
+var adminEntry = !hasGAS && !REMOTE;   // ?view=admin 으로 들어왔을 때 true
+var adminCodeEntered = "";  // 담당자가 입력한 관리자 코드 (서버 검증용, 화면에 표시하지 않음)
+
+/* 외부 호스팅에서 Apps Script 를 부를 때 쓰는 통신.
+   1순위 fetch POST(단순 요청이라 사전 확인 없이 통과), 실패하면 JSONP 로 재시도한다. */
+function jsonp(body) {
+  return new Promise(function (res, rej) {
+    var cb = "__bk" + Date.now() + Math.floor(Math.random() * 10000);
+    var url = REMOTE + "?action=" + encodeURIComponent(body.action) + "&callback=" + cb +
+      (body.code ? "&code=" + encodeURIComponent(body.code) : "") +
+      (body.data ? "&data=" + encodeURIComponent(JSON.stringify(body.data)) : "");
+    var el = document.createElement("script");
+    var timer = setTimeout(function () { done(); rej(new Error("서버 응답이 없습니다.")); }, 25000);
+    function done() {
+      clearTimeout(timer);
+      try { delete window[cb]; } catch (e) { window[cb] = undefined; }
+      if (el.parentNode) el.parentNode.removeChild(el);
+    }
+    window[cb] = function (data) { done(); res(data); };
+    el.onerror = function () { done(); rej(new Error("서버에 연결하지 못했습니다.")); };
+    el.src = url;
+    document.body.appendChild(el);
+  });
+}
+function callRemote(body) {
+  if (typeof fetch !== "function") return jsonp(body);
+  return fetch(REMOTE, { method: "POST", body: JSON.stringify(body) })
+    .then(function (r) { return r.json(); })
+    .catch(function () { return jsonp(body); });
+}
+
+var Backend = {
+  mode: hasGAS ? "gas" : (REMOTE ? "remote" : "demo"),
+  list: function () {
+    if (hasGAS) {
+      return new Promise(function (res, rej) {
+        google.script.run.withSuccessHandler(res).withFailureHandler(rej).apiList(adminCodeEntered);
+      });
+    }
+    if (REMOTE) {
+      return callRemote({ action: "list", code: adminCodeEntered }).then(function (r) {
+        if (!r || !r.ok) throw new Error((r && r.error) || "열람 권한이 없습니다.");
+        return r.rows;
+      });
+    }
+    if (!memory) memory = makeDemo(148);
+    return Promise.resolve(memory.slice());
+  },
+  whoAmI: function () {
+    if (hasGAS) {
+      return new Promise(function (res, rej) {
+        google.script.run.withSuccessHandler(res).withFailureHandler(rej).apiAdminInfo();
+      });
+    }
+    if (REMOTE) return Promise.resolve({ isAdmin: false, email: "" });
+    return Promise.resolve({ isAdmin: true, email: "(데모 모드)" });
+  },
+  submit: function (row) {
+    if (hasGAS) {
+      return new Promise(function (res, rej) {
+        google.script.run.withSuccessHandler(res).withFailureHandler(rej).apiSubmit(row);
+      });
+    }
+    if (REMOTE) {
+      return callRemote({ action: "submit", data: row }).then(function (r) {
+        if (!r || !r.ok) throw new Error((r && r.error) || "저장에 실패했습니다.");
+        return r;
+      });
+    }
+    if (!memory) memory = makeDemo(148);
+    row.id = "R" + String(1000 + memory.length);
+    row.submittedAt = new Date().toISOString();
+    memory.push(row);
+    return new Promise(function (res) { setTimeout(function () { res({ ok: true, id: row.id }); }, 420); });
+  }
+};
+
+
+/* ── 집계 로직 (순수 함수) ────────────────────────────────────────── */
+var STOP = ["어떻게","무엇인가","무엇","어디","언제","어떤","얼마","위해","통해","대한","대해","있는가","있는","하는","되는","것인가","것인","것","수","및","등","가능","연구","방법","활용","적용","이하","우리","경우","한다","한가","까지","부터","때문","관련","이러한","그리고","또한","가장","매우","모든","무엇이","어디에","시대","실제","현장","사이","다시","오는","한편",
+  "바꾸","늘리","줄이","높이","낮추","만들","이루","다루","가지","지니","이끌","넘어"];
+/* 조사·어미를 떼고 명사에 가까운 토큰만 남긴다 (경량 휴리스틱) */
+function tokenize(text) {
+  return String(text || "").split(/[^가-힣A-Za-z0-9+·]+/).map(function (w) {
+    w = w.replace(/(인가|한가|는가|일까|을까|던가)$/, "");
+    return w.replace(/(으로써|으로서|이라는|에서의|에게서|으로|에서|에게|라는|들의|와의|과의|의|를|을|은|는|이|가|에|와|과|로|도|만|란)$/, "");
+  }).filter(function (w) {
+    if (w.length < 2 || /^\d+$/.test(w)) return false;
+    if (STOP.indexOf(w) >= 0) return false;
+    /* 용언 활용형 제거: ~하는/되는/있는/없는/될/된/한/할 + 종결어미 */
+    if (/(하는가|되는가|인가|한가|되어야|되는|하는|있는|없는|이는|지는|오는|가는|나는|되며|하며|한다|된다|이다|였다|졌다|린다|간다|온다|낸다|든다|든가|을까|ㄹ까)$/.test(w)) return false;
+    if (w.length >= 3 && /(될|된|한|할|해|져|줄|낼|볼|들|킬|칠|릴|하|되|지|시켜|시킬)$/.test(w)) return false;
+    return true;
+  });
+}
+
+/* 자유 기재된 산업·사회 문제 해결 분야를 예시 4개 범주로 자동 분류 */
+function classifyProblem(text) {
+  var t = String(text || "").replace(/\s/g, "");
+  if (!t) return "";
+  if (t.indexOf("인문사회과학기술") >= 0) return "인문사회과학기술융복합";
+  if (t.indexOf("인문사회") >= 0) return "인문사회분야융복합";
+  if (t.indexOf("과학기술") >= 0) return "과학기술분야융복합";
+  if (t.indexOf("인공지능") >= 0 || /AI/i.test(t)) return "인공지능 융합형(AI+X)";
+  return "그 밖의 분야 (직접 기재)";
+}
+
+function analyze(rows) {
+  var a = {
+    rows: rows, total: rows.length,
+    intent: { "참여": 0, "불참": 0 },
+    track: { "미래인재": 0, "AI 융합인재": 0 },
+    declines: [], futureTopics: [],
+    byCollege: {}, byDept: {},
+    tech: {}, techDept: {}, heat: {},
+    fusionType: {},
+    keywords: {}, topics: [], daily: [],
+    active: []
+  };
+  rows.forEach(function (r) {
+    a.intent[r.intent] = (a.intent[r.intent] || 0) + 1;
+    var col = r.college || DEPT_COLLEGE[r.dept] || "기타";
+    if (!a.byCollege[col]) a.byCollege[col] = { total: 0, "참여": 0, "불참": 0, depts: [] };
+    var c = a.byCollege[col];
+    c.total++; c[r.intent]++;
+    if (c.depts.indexOf(r.dept) < 0) c.depts.push(r.dept);
+    a.byDept[r.dept] = (a.byDept[r.dept] || 0) + 1;
+    if (r.intent === "불참") {
+      if (r.declineReason) a.declines.push({ text: r.declineReason, name: r.name, dept: r.dept });
+      return;
+    }
+    if (r.track) a.track[r.track] = (a.track[r.track] || 0) + 1;
+    if (r.track === "미래인재") {
+      if (r.futureTopic) a.futureTopics.push({ text: r.futureTopic, dept: r.dept, college: col, name: r.name, techs: [] });
+      tokenize(r.futureTopic).forEach(function (w) { a.keywords[w] = (a.keywords[w] || 0) + 1; });
+      return;
+    }
+    a.active.push(r);
+    var ft = classifyProblem(r.problem);
+    if (ft) a.fusionType[ft] = (a.fusionType[ft] || 0) + 1;
+    (r.techs || []).forEach(function (t) {
+      a.tech[t] = (a.tech[t] || 0) + 1;
+      if (!a.techDept[t]) a.techDept[t] = [];
+      if (a.techDept[t].indexOf(r.dept) < 0) a.techDept[t].push(r.dept);
+      if (!a.heat[col]) a.heat[col] = {};
+      a.heat[col][t] = (a.heat[col][t] || 0) + 1;
+    });
+    (r.topics || []).forEach(function (t) {
+      if (!t) return;
+      a.topics.push({ text: t, dept: r.dept, college: col, name: r.name, techs: r.techs || [] });
+      tokenize(t).forEach(function (w) { a.keywords[w] = (a.keywords[w] || 0) + 1; });
+    });
+  });
+
+  // 일자별 누적
+  var byDay = {};
+  rows.forEach(function (r) {
+    var d = String(r.submittedAt || "").slice(0, 10);
+    if (d) byDay[d] = (byDay[d] || 0) + 1;
+  });
+  var acc = 0;
+  Object.keys(byDay).sort().forEach(function (d) { acc += byDay[d]; a.daily.push({ date: d, n: byDay[d], cum: acc }); });
+
+  var seen = {};
+  rows.forEach(function (r) {
+    var k = String(r.name || "").trim() + "|" + String(r.dept || "").trim();
+    if (!seen[k]) seen[k] = [];
+    seen[k].push(r);
+  });
+  a.dupes = Object.keys(seen).filter(function (k) { return seen[k].length > 1; })
+    .map(function (k) { return { label: k.replace("|", " · "), n: seen[k].length }; });
+
+  a.responseRate = pct(a.total, CONFIG.targetCount);
+  a.joined = a.intent["참여"];
+  a.activeDepts = uniq(rows.filter(function (r) { return r.intent === "참여"; }).map(function (r) { return r.dept; }));
+  a.techRank = Object.keys(a.tech).map(function (t) {
+    return { tech: t, n: a.tech[t], depts: (a.techDept[t] || []).length };
+  }).sort(function (x, y) { return y.n - x.n || y.depts - x.depts; });
+  a.kwRank = Object.keys(a.keywords).map(function (k) { return { w: k, n: a.keywords[k] }; })
+    .filter(function (x) { return x.n > 1; }).sort(function (x, y) { return y.n - x.n; });
+  return a;
+}
+
+/* 교육연구단 후보 클러스터 */
+function clusters(a) {
+  return a.techRank.map(function (t) {
+    var members = a.active.filter(function (r) { return (r.techs || []).indexOf(t.tech) >= 0; });
+    var depts = uniq(members.map(function (m) { return m.dept; }));
+    var cols = uniq(members.map(function (m) { return m.college || DEPT_COLLEGE[m.dept]; }));
+    var firm = members.filter(function (m) { return m.intent === "참여"; }).length;
+    var sizeS = Math.min(1, Math.log(1 + members.length) / Math.log(1 + CONFIG.minFacultyPerUnit * 3));
+    var deptS = Math.min(1, depts.length / CONFIG.minDeptsPerUnit);
+    var score = Math.round((sizeS * 0.60 + deptS * 0.40) * 100);
+    var status = (members.length >= CONFIG.minFacultyPerUnit && depts.length >= CONFIG.minDeptsPerUnit)
+      ? "요건 충족" : (members.length >= Math.ceil(CONFIG.minFacultyPerUnit * 0.6) ? "보완 필요" : "형성 초기");
+    var topics = [];
+    var primary = members.filter(function (m) { return (m.techs || [])[0] === t.tech; });
+    primary.concat(members).forEach(function (m) {
+      (m.topics || []).forEach(function (x) { if (x && topics.indexOf(x) < 0) topics.push(x); });
+    });
+    return {
+      tech: t.tech, members: members, n: members.length, firm: firm,
+      depts: depts, colleges: cols, score: score, status: status,
+      topics: topics.slice(0, 3)
+    };
+  }).sort(function (x, y) { return y.score - x.score || y.n - x.n; });
+}
+
+/* ── 라우터 ──────────────────────────────────────────────────────── */
+var app = document.getElementById("app");
+var route = "cover";
+function go(r) { route = r; location.hash = "#/" + r; render(); window.scrollTo({ top: 0, behavior: "instant" in document.documentElement.style ? "instant" : "auto" }); }
+function paintNav() {
+  $$("#nav button").forEach(function (b) {
+    var isAdminBtn = b.dataset.go === "admin";
+    b.style.display = (isAdminBtn && !adminEntry) ? "none" : "";
+    var on = isAdminBtn ? (route === "admin") : (route !== "admin");
+    if (on) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+  });
+}
+function render() {
+  paintNav();
+  if (route === "admin") return renderAdmin();
+  if (route === "survey") return renderSurvey();
+  if (route === "done") return renderDone();
+  return renderCover();
+}
+
+/* ── 설문 상태 ───────────────────────────────────────────────────── */
+var S = null;
+function blank() {
+  return {
+    name: "", college: "", dept: "", deptEtc: "", rank: "",
+    emailId: "", emailDomain: "hanyang.ac.kr", emailDomainEtc: "",
+    intent: "", declineReason: "", track: "", futureTopic: "",
+    topics: ["", "", ""], techs: [], problem: "",
+    coreField: "", vision: ""
+  };
+}
+var STEPS = [
+  { id: "basic", label: "기본정보" },
+  { id: "intent", label: "참여 의향" },
+  { id: "track", label: "희망 트랙" },
+  { id: "future", label: "연구주제" },
+  { id: "topics", label: "연구주제" },
+  { id: "fields", label: "희망 분야" },
+  { id: "review", label: "확인·제출" }
+];
+function activeSteps() {
+  var d = S.data, ids;
+  if (d.intent === "불참") ids = ["basic", "intent", "review"];
+  else if (d.track === "미래인재") ids = ["basic", "intent", "track", "future", "review"];
+  else if (d.track === "AI 융합인재") ids = ["basic", "intent", "track", "topics", "fields", "review"];
+  else ids = ["basic", "intent", "track", "review"];
+  return STEPS.filter(function (st) { return ids.indexOf(st.id) >= 0; });
+}
+function setVal(path, v) {
+  var m = path.split(".");
+  if (m.length === 2) S.data[m[0]][Number(m[1])] = v; else S.data[m[0]] = v;
+}
+function getVal(path) {
+  var m = path.split(".");
+  return m.length === 2 ? S.data[m[0]][Number(m[1])] : S.data[m[0]];
+}
+function deptValue() { return S.data.dept === "__etc" ? S.data.deptEtc : S.data.dept; }
+var EMAIL_DOMAINS = ["hanyang.ac.kr", "gmail.com"];
+function domainValue() {
+  var d = S.data;
+  return d.emailDomain === "__etc" ? d.emailDomainEtc.trim().replace(/^@/, "") : d.emailDomain;
+}
+function emailValue() {
+  var id = S.data.emailId.trim().replace(/@.*$/, ""), dom = domainValue();
+  return id && dom ? id + "@" + dom : "";
+}
+
+function validate(stepId) {
+  var d = S.data, e = {};
+  if (stepId === "basic") {
+    if (!d.name.trim()) e.name = "성명을 입력해 주세요.";
+    if (!d.college) e.college = "단과대학 또는 대학원을 선택해 주세요.";
+    if (d.college && !d.dept) e.dept = "학과(부)를 선택해 주세요.";
+    if (d.dept === "__etc" && !d.deptEtc.trim()) e.deptEtc = "학과(부) 이름을 입력해 주세요.";
+    if (!d.rank) e.rank = "직급을 선택해 주세요.";
+    if (d.emailId.trim() && !domainValue()) e.email = "메일 주소를 고르거나 직접 입력해 주세요.";
+    else if (emailValue() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue())) e.email = "이메일 형식을 확인해 주세요.";
+  }
+  if (stepId === "intent") {
+    if (!d.intent) e.intent = "참여 의향을 선택해 주세요.";
+    if (d.intent === "불참" && !d.declineReason.trim()) e.declineReason = "불참 사유를 작성해 주세요.";
+  }
+  if (stepId === "track") {
+    if (!d.track) e.track = "참여를 희망하는 트랙을 선택해 주세요.";
+  }
+  if (stepId === "future") {
+    if (!d.futureTopic.trim()) e.futureTopic = "연구주제를 작성해 주세요.";
+  }
+  if (stepId === "topics") {
+    if (!d.topics.some(function (t) { return t.trim(); })) e.topics = "연구주제를 최소 1개 작성해 주세요.";
+  }
+  if (stepId === "fields") {
+    if (!d.techs.length) e.techs = "관심 있는 전략기술 분야를 1개 이상 선택해 주세요.";
+  }
+  return e;
+}
+
+/* ── 표지 ────────────────────────────────────────────────────────── */
+function hasDraft() {
+  if (!S || !S.data || S.receipt) return false;
+  var d = S.data;
+  return !!(d.name || d.dept || d.intent || d.techs.length || d.topics.some(function (t) { return t.trim(); }));
+}
+function renderCover() {
+  var draft = hasDraft();
+  app.innerHTML =
+  '<section class="hero">' +
+    '<div class="hero-in">' +
+      '<div>' +
+        '<p class="cover-kicker">' + esc(CONFIG.owner) + ' · 기초조사</p>' +
+        '<h1>5단계 BK21사업<br>개별 교원 참여의향 조사</h1>' +
+        '<div class="hero-rule"></div>' +
+      '</div>' +
+      '<div class="hero-card">' +
+        '<p class="cover-lead">본 조사는 5단계 BK21사업 준비 및 교육연구단 구성 방향 수립을 위한 기초자료로 활용하고자 진행합니다. ' +
+        '아래 문항에 응답하여 주시기 바랍니다.</p>' +
+        '<dl class="meta-rows">' +
+          '<div class="meta-row"><dt>기간</dt><dd>학과회의 종료 후 1주일 이내</dd></div>' +
+          '<div class="meta-row"><dt>문의</dt><dd>대학원전략처 대학원전략팀<br>' +
+            '02-2220-2297 · <a href="mailto:bk21five@hanyang.ac.kr">bk21five@hanyang.ac.kr</a></dd></div>' +
+        '</dl>' +
+        '<div class="btn-row">' +
+          '<button class="btn btn-primary btn-lg" id="start">' + (draft ? "이어서 응답하기" : "응답 시작") + '</button>' +
+          (draft ? '<button class="btn btn-ghost" id="fresh">처음부터 다시</button>' : "") +
+        '</div>' +
+        (draft ? '<p class="mini-note"></p>' : "") +
+      '</div>' +
+    '</div>' +
+  '</section>';
+  $("#start").onclick = function () {
+    if (!draft) S = { step: 0, data: blank(), errors: {}, submitting: false };
+    else S.submitting = false;
+    go("survey");
+  };
+  if (draft) $("#fresh").onclick = function () {
+    S = { step: 0, data: blank(), errors: {}, submitting: false }; go("survey");
+  };
+  if (draft) {
+    var note = $(".mini-note");
+    if (note) note.innerHTML = "작성하던 응답이 남아 있습니다. <b>" + esc(activeSteps()[Math.min(S.step, activeSteps().length - 1)].label) + "</b> 화면부터 이어서 작성합니다.";
+  }
+}
+
+/* ── 설문 본문 ───────────────────────────────────────────────────── */
+function renderSurvey() {
+  if (!S) S = { step: 0, data: blank(), errors: {}, submitting: false };
+  var steps = activeSteps();
+  if (S.step >= steps.length) S.step = steps.length - 1;
+  var cur = steps[S.step];
+  app.innerHTML =
+  '<div class="wrap"><div class="survey-grid">' +
+    '<aside class="rail"><h2>개별 교원 참여의향 조사</h2>' +
+      '<p class="rail-sub">5단계 BK21사업</p><nav id="rail"></nav></aside>' +
+    '<div class="survey-main">' +
+      '<div class="stepbar"><div class="stepbar-in">' +
+        '<div class="stepbar-head"><b>' + esc(cur.label) + '</b><span class="num">' + (S.step + 1) + ' / ' + steps.length + '</span></div>' +
+        '<div class="track"><div class="track-fill" style="width:' + ((S.step + 1) / steps.length * 100) + '%"></div></div>' +
+      '</div></div>' +
+      '<div class="card card-form" id="stepbody"></div>' +
+      '<div class="btn-row" style="margin-top:20px;justify-content:space-between">' +
+        '<button class="btn btn-ghost" id="prev">' + (S.step === 0 ? "표지로" : "이전") + '</button>' +
+        '<button class="btn btn-primary btn-lg" id="next">' + (cur.id === "review" ? "응답 제출" : "다음") + '</button>' +
+      '</div>' +
+    '</div>' +
+  '</div></div>';
+  paintStep();
+  paintRail();
+  $("#prev").onclick = function () {
+    if (S.step === 0) { go("cover"); return; }
+    S.step--; S.errors = {}; renderSurvey(); window.scrollTo(0, 0);
+  };
+  $("#next").onclick = function () {
+    var e = validate(cur.id);
+    S.errors = e;
+    if (Object.keys(e).length) { paintStep(); var bad = $(".err"); if (bad) bad.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
+    if (cur.id === "review") return submit();
+    S.step++; S.errors = {}; renderSurvey(); window.scrollTo(0, 0);
+  };
+}
+
+function paintBar() {
+  var steps = activeSteps();
+  if (S.step >= steps.length) S.step = steps.length - 1;
+  var head = $(".stepbar-head");
+  if (!head) return;
+  head.querySelector("b").textContent = steps[S.step].label;
+  head.querySelector("span").textContent = (S.step + 1) + " / " + steps.length;
+  $(".track-fill").style.width = ((S.step + 1) / steps.length * 100) + "%";
+  var nx = $("#next");
+  if (nx) nx.textContent = steps[S.step].id === "review" ? "응답 제출" : "다음";
+  paintRail();
+}
+function paintRail() {
+  var rail = $("#rail");
+  if (!rail) return;
+  var steps = activeSteps();
+  rail.innerHTML = steps.map(function (st, i) {
+    var state = i < S.step ? "done" : "";
+    return '<button class="rail-item ' + state + '" data-rstep="' + i + '"' +
+      (i === S.step ? ' aria-current="step"' : "") + (i > S.step ? " disabled" : "") + ">" +
+      '<span class="n">' + (i < S.step ? "✓" : (i + 1)) + "</span>" + esc(st.label) + "</button>";
+  }).join("");
+  $$("[data-rstep]", rail).forEach(function (b) {
+    b.onclick = function () {
+      var i = Number(b.dataset.rstep);
+      if (i >= S.step) return;
+      S.step = i; S.errors = {}; renderSurvey(); window.scrollTo(0, 0);
+    };
+  });
+}
+function paintStep(focusSel) {
+  var steps = activeSteps(), cur = steps[S.step];
+  var box = $("#stepbody");
+  if (!box) return;
+  paintBar();
+  box.innerHTML = ({ basic: stepBasic, intent: stepIntent, track: stepTrack, future: stepFuture,
+    topics: stepTopics, fields: stepFields, review: stepReview })[cur.id]();
+  bindStep();
+  if (focusSel) { var f = $(focusSel, box); if (f) f.focus(); }
+}
+function bindStep() {
+  var box = $("#stepbody");
+  $$("[data-k]", box).forEach(function (el) {
+    if (el.tagName === "SELECT") el.onchange = function () {
+      setVal(el.dataset.k, el.value);
+      if (el.dataset.k === "college") { S.data.dept = ""; S.data.deptEtc = ""; delete S.errors.college; }
+      paintStep(el.dataset.k === "college" ? '[data-k="dept"]' : null);
+    };
+    else el.oninput = function () { setVal(el.dataset.k, el.value); if (el.dataset.live) paintLive(el); };
+  });
+  $$("[data-pick]", box).forEach(function (el) {
+    el.onclick = function () {
+      var g = el.dataset.pick, v = el.dataset.v;
+      if (g === "intent") { S.data.intent = v; if (v === "불참") { S.data.track = ""; } }
+      else if (g === "track") S.data.track = v;
+      else if (g === "tech") {
+        var i = S.data.techs.indexOf(v);
+        if (i >= 0) S.data.techs.splice(i, 1); else S.data.techs.push(v);
+      } else if (g === "topicfill") {
+        var slot = S.data.topics.findIndex(function (t) { return !t.trim(); });
+        if (slot < 0) slot = 0;
+        S.data.topics[slot] = v;
+      }
+      delete S.errors[g === "tech" ? "techs" : g];
+      paintStep('[data-pick="' + g + '"][data-v="' + (window.CSS && CSS.escape ? CSS.escape(v) : v) + '"]');
+    };
+  });
+  var db = $("#domBack", box);
+  if (db) db.onclick = function () {
+    S.data.emailDomain = EMAIL_DOMAINS[0];
+    S.data.emailDomainEtc = "";
+    paintStep('[data-k="emailDomain"]');
+  };
+  $$("[data-jump]", box).forEach(function (el) {
+    el.onclick = function () {
+      var id = el.dataset.jump, steps = activeSteps();
+      var i = steps.findIndex(function (s) { return s.id === id; });
+      if (i >= 0) { S.step = i; S.errors = {}; renderSurvey(); window.scrollTo(0, 0); }
+    };
+  });
+}
+function paintLive(el) {
+  if (el.dataset.live === "email") {
+    var pv = $("#emailPreview");
+    if (pv) pv.textContent = emailValue() ? emailValue() + " 로 접수증을 보내드립니다." : "";
+    return;
+  }
+  var box = el.closest(".topic");
+  if (!box) return;
+  var w = box.querySelector(".warn");
+  var v = el.value.trim();
+  var bad = v.length > 5 && !/[?？]\s*$/.test(v);
+  if (w) w.style.display = bad ? "block" : "none";
+}
+function errHtml(k) { return S.errors[k] ? '<p class="err">' + esc(S.errors[k]) + "</p>" : ""; }
+
+function stepBasic() {
+  var d = S.data;
+  var colOpts = '<option value="">단과대학·대학원 선택</option>' + Object.keys(COLLEGES).map(function (c) {
+    return '<option' + (d.college === c ? " selected" : "") + ">" + esc(c) + "</option>";
+  }).join("");
+  var deptOpts = '<option value="">' + (d.college ? "학과(부) 선택" : "단과대학·대학원을 먼저 선택하세요") + "</option>" +
+    (COLLEGES[d.college] || []).map(function (x) {
+      return '<option value="' + esc(x) + '"' + (d.dept === x ? " selected" : "") + ">" + esc(x) + "</option>";
+    }).join("") +
+    (d.college ? '<option value="__etc"' + (d.dept === "__etc" ? " selected" : "") + ">목록에 없음 (직접 입력)</option>" : "");
+  return '<div class="q">' +
+    '<h2 class="q-title"><span class="idx">1</span>기본정보를 알려주세요.</h2>' +
+    '<p class="q-help">응답 확인과 학과별 집계에만 사용하며, 개별 응답 내용은 교육연구단 구성 검토 목적 외로 공개하지 않습니다.</p>' +
+    '<div class="q-body">' +
+      '<div class="row-2">' +
+        '<label class="field"><span class="field-label">성명</span>' +
+          '<input class="input' + (S.errors.name ? " is-bad" : "") + '" data-k="name" value="' + esc(d.name) + '" placeholder="홍길동" autocomplete="name">' + errHtml("name") + '</label>' +
+        '<label class="field"><span class="field-label">직급</span>' +
+          '<select class="input' + (S.errors.rank ? " is-bad" : "") + '" data-k="rank"><option value="">선택해 주세요</option>' +
+          RANKS.map(function (r) { return '<option' + (d.rank === r ? " selected" : "") + ">" + esc(r) + "</option>"; }).join("") +
+          "</select>" + errHtml("rank") + "</label>" +
+      "</div>" +
+      '<div class="row-2">' +
+        '<label class="field"><span class="field-label">소속 단과대학 / 소속 대학원</span>' +
+          '<select class="input' + (S.errors.college ? " is-bad" : "") + '" data-k="college">' + colOpts + "</select>" + errHtml("college") + "</label>" +
+        '<label class="field"><span class="field-label">소속 학과(부)</span>' +
+          '<select class="input' + (S.errors.dept ? " is-bad" : "") + '" data-k="dept"' + (d.college ? "" : " disabled") + ">" + deptOpts + "</select>" + errHtml("dept") + "</label>" +
+      "</div>" +
+      (d.dept === "__etc" ? '<label class="field"><span class="field-label">학과(부) 직접 입력</span>' +
+        '<input class="input' + (S.errors.deptEtc ? " is-bad" : "") + '" data-k="deptEtc" value="' + esc(d.deptEtc) + '" placeholder="예: 지능형로봇학과">' + errHtml("deptEtc") + "</label>" : "") +
+      '<div class="field" style="margin-bottom:0"><span class="field-label">이메일 <span style="font-weight:500;color:var(--ink-3)">(선택 · 응답 접수증과 후속 안내 발송)</span></span>' +
+        '<div class="email-row">' +
+          '<input class="input' + (S.errors.email ? " is-bad" : "") + '" data-k="emailId" data-live="email" value="' + esc(d.emailId) + '" placeholder="아이디" inputmode="email" autocomplete="username" aria-label="이메일 아이디">' +
+          '<span class="at">@</span>' +
+          (d.emailDomain === "__etc"
+            ? '<input class="input' + (S.errors.email ? " is-bad" : "") + '" data-k="emailDomainEtc" data-live="email" value="' +
+              esc(d.emailDomainEtc) + '" placeholder="naver.com" aria-label="메일 주소 직접 입력">'
+            : '<select class="input" data-k="emailDomain" aria-label="메일 주소">' +
+              EMAIL_DOMAINS.map(function (x) { return '<option' + (d.emailDomain === x ? " selected" : "") + ">" + esc(x) + "</option>"; }).join("") +
+              '<option value="__etc">직접 입력</option></select>') +
+        "</div>" +
+        (d.emailDomain === "__etc" ? '<button class="linkish" id="domBack" style="font-size:0.8rem;margin-top:8px">목록에서 고르기</button>' : "") +
+        errHtml("email") +
+        '<p class="hint" id="emailPreview">' + (emailValue() ? esc(emailValue()) + " 로 접수증을 보내드립니다." : "") + "</p>" +
+      "</div>" +
+    "</div></div>";
+}
+
+function stepIntent() {
+  var d = S.data;
+  var CH = [
+    { v: "참여", t: "참여", s: "5단계 교육연구단에 참여할 의향이 있습니다." },
+    { v: "불참", t: "불참", s: "이번 사업에는 참여하지 않겠습니다." }
+  ];
+  var h = '<div class="q">' +
+    '<h2 class="q-title"><span class="idx">2</span>5단계 BK21사업 교육연구단에 참여하시겠습니까?</h2>' +
+    '<p class="q-help">지금 선택은 확정이 아닙니다. 교육연구단 규모와 조합을 가늠하기 위한 것으로, 마감 전까지 바꿀 수 있습니다.</p>' +
+    '<div class="q-body"><div class="choices choice-inline">' +
+    CH.map(function (c) {
+      return '<button class="choice" data-pick="intent" data-v="' + c.v + '" aria-pressed="' + (d.intent === c.v) + '">' +
+        '<span class="dot"></span><span><b>' + c.t + "</b><small>" + c.s + "</small></span></button>";
+    }).join("") + "</div>" + errHtml("intent") + "</div></div>";
+
+  if (d.intent === "불참") {
+    h += '<div class="q"><h2 class="q-title"><span class="idx">2.1</span>불참을 선택하신 이유를 알려주세요.</h2>' +
+      '<p class="q-help">사업 설계에 참고할 자료로만 활용하며, 개별 사유는 공개하지 않습니다.</p>' +
+      '<div class="q-body"><textarea class="input' + (S.errors.declineReason ? " is-bad" : "") +
+      '" data-k="declineReason" rows="3" placeholder="예: 정년·안식년 일정, 타 사업 중복 참여 등">' +
+      esc(d.declineReason) + "</textarea>" + errHtml("declineReason") + "</div></div>";
+  }
+  return h;
+}
+
+function stepTrack() {
+  var d = S.data;
+  return '<div class="q">' +
+    '<h2 class="q-title"><span class="idx">3</span>5단계 BK21사업에 참여를 희망하는 트랙을 선택해 주세요.</h2>' +
+    '<div class="q-body" style="margin-top:4px"><div class="choices choice-inline">' +
+    TRACKS.map(function (v) {
+      return '<button class="choice" data-pick="track" data-v="' + esc(v) + '" aria-pressed="' + (d.track === v) + '">' +
+        '<span class="dot"></span><b>' + esc(v) + " 교육연구단</b></button>";
+    }).join("") + "</div>" + errHtml("track") + "</div></div>";
+}
+
+function stepFuture() {
+  var d = S.data;
+  return '<div class="q">' +
+    '<h2 class="q-title"><span class="idx">4</span>미래인재 교육연구단의 연구주제를 적어주세요.</h2>' +
+    '<p class="q-help">교육연구단에서 다루고자 하는 연구주제를 자유롭게 작성해 주시기 바랍니다.</p>' +
+    '<div class="q-body"><textarea class="input' + (S.errors.futureTopic ? " is-bad" : "") +
+    '" data-k="futureTopic" rows="6" placeholder="예: 인구구조 변화에 대응하는 지역 돌봄 체계 연구">' +
+    esc(d.futureTopic) + "</textarea>" + errHtml("futureTopic") + "</div></div>";
+}
+
+var COLLEGE_EXAMPLE = {
+  "공과대학": "기계·장비", "자연과학대학": "양자", "의과대학": "바이오", "간호대학": "바이오",
+  "의생명공학전문대학원": "바이오", "생활과학대학": "바이오", "도시대학원": "클린에너지·환경",
+  "예술·체육대학": "콘텐츠 기술", "음악대학": "콘텐츠 기술", "국제대학": "콘텐츠 기술",
+  "기술혁신대학": "AI/SW", "기술경영전문대학원": "AI/SW", "한양YK인터칼리지": "AI/SW"
+};
+TOPIC_BANK._사회 = [
+  "기술 전환기의 노동 격차는 어떤 정책으로 완화되는가?",
+  "생성형 AI는 조직의 의사결정 구조를 어떻게 바꾸는가?",
+  "데이터 기반 정책 평가는 현장의 무엇을 놓치는가?"
+];
+/* 문항 4에서 보여줄 고정 예시 — 답이 정해지지 않은 큰 물음으로 */
+var TOPIC_EXAMPLES = [
+  "초미세 공정 및 AI 반도체의 한계를 극복할 수 있는가?",
+  "기술 수용의 사회적 격차는 어떻게 완화될 수 있는가?",
+  "노화는 치료 가능한 질환으로 재정의될 수 있는가?"
+];
+function stepTopics() {
+  var d = S.data;
+  var ex = TOPIC_EXAMPLES;
+  return '<div class="q">' +
+    '<h2 class="q-title"><span class="idx">4</span>교육연구단에서 다루고 싶은 질문형 연구주제를 적어주세요.</h2>' +
+    '<p class="q-help">답이 정해지지 않은 물음 형태로 써주세요. 이 문장들이 모여 교육연구단의 연구 아젠다 초안이 됩니다.' +
+    " 3개까지 쓸 수 있고, 최소 1개는 필요합니다.</p>" +
+    '<div class="q-body">' +
+    d.topics.map(function (t, i) {
+      return '<div class="topic"><span class="topic-n' + (i > 0 ? " opt" : "") + '">' + (i + 1) + "</span>" +
+        '<div style="flex:1"><textarea class="input" data-k="topics.' + i + '" data-live="1" rows="2" placeholder="' +
+        (i === 0 ? "예: " + esc(ex[0]) : "선택 입력") + '">' + esc(t) + "</textarea>" +
+        '<p class="warn" style="display:' + (t.trim().length > 5 && !/[?？]\s*$/.test(t.trim()) ? "block" : "none") + '">물음표로 끝나는 질문형 문장으로 다듬어 주세요.</p></div></div>';
+    }).join("") +
+    errHtml("topics") +
+    '<div class="example"><h5>이렇게 쓰면 좋습니다 — 눌러서 채우기</h5><div class="chips" style="margin-top:8px">' +
+    ex.slice(0, 3).map(function (x) { return '<button class="chip chip-sm" data-pick="topicfill" data-v="' + esc(x) + '">' + esc(x) + "</button>"; }).join("") +
+    "</div></div></div></div>";
+}
+
+function stepFields() {
+  var d = S.data;
+  return '<div class="q q-major">' +
+    '<h2 class="q-title"><span class="idx">5-Ⅰ</span>참여를 희망하는 AI 융합인재 트랙을 골라주세요.</h2>' +
+    '<p class="q-help">19개 국가전략기술 분야 중 복수 선택할 수 있습니다. 실제 연구 역량이 닿는 범위로 2~3개 안쪽을 권합니다.</p>' +
+    '<div class="q-body"><div class="chips">' +
+    TECH19.map(function (t) {
+      return '<button class="chip" data-pick="tech" data-v="' + esc(t) + '" aria-pressed="' + (d.techs.indexOf(t) >= 0) + '">' + esc(t) + "</button>";
+    }).join("") + "</div>" +
+    (d.techs.length > 3 ? '<p class="warn">' + d.techs.length + "개를 선택하셨습니다. 핵심 분야 위주로 줄이면 매칭 정확도가 올라갑니다.</p>" : "") +
+    errHtml("techs") + "</div></div>" +
+
+    '<div class="q q-major"><h2 class="q-title"><span class="idx">5-Ⅱ</span>참여를 희망하는 산업·사회 문제 해결 분야를 기재하여 주시기 바랍니다.</h2>' +
+    '<div class="q-body">' +
+    '<textarea class="input" data-k="problem" rows="3" placeholder="자유롭게 작성해 주세요">' + esc(d.problem) + "</textarea>" +
+    '<div class="example example-quiet"><h5>예시</h5><p class="example-list">' +
+    FUSION_TYPES.map(esc).join(", ") + "</p></div>" +
+    "</div></div>" +
+
+    '<div class="q q-major"><h2 class="q-title"><span class="idx">5-Ⅲ</span>생각하고 계시거나 희망하는 5단계 BK21사업 교육연구단은 어떤 모습입니까?</h2>' +
+    '<p class="q-help">교육연구단 핵심 연구·교육 분야, 융합하고자 하는 학문 분야 등을 자유롭게 작성하여 주시기 바랍니다.</p>' +
+    '<div class="q-body">' +
+    '<label class="field"><span class="field-label">핵심 연구·교육 분야</span>' +
+    '<input class="input" data-k="coreField" value="' + esc(d.coreField) + '" placeholder="예: 인공지능·빅데이터 기반 융합연구 클러스터"></label>' +
+    '<label class="field" style="margin-bottom:0"><span class="field-label">융합하고자 하는 학문 분야 등</span>' +
+    '<textarea class="input" data-k="vision" rows="4" placeholder="예: 인문학·경영학·디지털 기술 역량을 묶어 다중격차 분석을 다루는 공동지도 트랙을 만들고 싶습니다.">' + esc(d.vision) + "</textarea></label>" +
+    '<div class="example example-quiet"><h5>주요 예시 — 여기에 한정되지 않습니다</h5><ul>' +
+    "<li>사회과학: 다중격차 분석역량 융합교육</li>" +
+    "<li>인공지능·빅데이터: 기술 기반 융합연구 클러스터 형성</li>" +
+    "<li>융합 희망 학문: 인문학, 경영학, 디지털 기술 역량</li>" +
+    "</ul></div></div></div>";
+}
+
+function stepReview() {
+  var d = S.data;
+  function row(label, val, jump) {
+    var body = (val === "" || val == null || (Array.isArray(val) && !val.length))
+      ? '<span class="empty">응답하지 않음</span>' : esc(Array.isArray(val) ? val.join(", ") : val);
+    return '<div class="review-row"><dt>' + esc(label) + "</dt><dd>" + body +
+      (jump ? ' <button class="linkish" data-jump="' + jump + '" style="font-size:0.8rem;margin-left:6px">수정</button>' : "") + "</dd></div>";
+  }
+  var topics = d.topics.filter(function (t) { return t.trim(); });
+  var h = '<div class="q" style="padding-top:0">' +
+    '<h2 class="q-title">응답 내용을 확인해 주세요.</h2>' +
+    '<p class="q-help">제출 후에도 같은 링크로 다시 응답하면 마지막 내용으로 갱신됩니다.</p>' +
+    '<div class="q-body review"><dl>' +
+    row("성명", d.name, "basic") + row("소속", (d.college ? d.college + " · " : "") + deptValue(), "basic") + row("직급", d.rank, "basic") +
+    (emailValue() ? row("이메일", emailValue(), "basic") : "") +
+    row("참여 의향", d.intent, "intent");
+  if (d.intent === "불참") {
+    h += row("불참 사유", d.declineReason, "intent");
+  } else {
+    h += row("희망 트랙", d.track, "track");
+    if (d.track === "미래인재") {
+      h += row("연구주제", d.futureTopic, "future");
+    } else if (d.track === "AI 융합인재") {
+      h += row("질문형 연구주제", topics.length ? topics.map(function (t, i) { return (i + 1) + ". " + t; }).join("\n") : "", "topics") +
+        row("전략기술 분야", d.techs, "fields") +
+        row("산업·사회 문제 해결 분야", d.problem, "fields") + row("핵심 연구·교육 분야", d.coreField, "fields") +
+        row("교육연구단 구상", d.vision, "fields");
+    }
+  }
+  h += "</dl>";
+  if (Backend.mode === "demo") {
+    h += '<div class="notice" style="margin-top:18px"><span><b>데모 모드</b>로 실행 중입니다. 제출한 응답은 이 브라우저 세션에만 남고, 관리자 전용 화면의 집계에 바로 반영됩니다.</span></div>';
+  }
+  return h + "</div></div>";
+}
+
+function submit() {
+  if (S.submitting) return;
+  var ids = ["basic", "intent", "track", "future", "topics", "fields"], all = {};
+  activeSteps().forEach(function (s) {
+    if (ids.indexOf(s.id) < 0) return;
+    var e = validate(s.id);
+    Object.keys(e).forEach(function (k) { all[k] = e[k]; });
+  });
+  if (Object.keys(all).length) {
+    S.errors = all;
+    var steps = activeSteps();
+    for (var i = 0; i < steps.length; i++) {
+      if (Object.keys(validate(steps[i].id)).length) { S.step = i; break; }
+    }
+    renderSurvey(); toast("빠진 항목이 있어 해당 화면으로 이동했습니다."); return;
+  }
+  S.submitting = true;
+  var btn = $("#next"); if (btn) { btn.disabled = true; btn.textContent = "제출 중…"; }
+  var d = S.data;
+  var payload = {
+    name: d.name.trim(), dept: deptValue(), college: d.college || DEPT_COLLEGE[deptValue()] || "기타",
+    rank: d.rank, email: emailValue(), intent: d.intent,
+    declineReason: d.intent === "불참" ? d.declineReason.trim() : "",
+    track: d.intent === "불참" ? "" : d.track,
+    futureTopic: d.track === "미래인재" ? d.futureTopic.trim() : "",
+    topics: d.track === "AI 융합인재" ? d.topics.map(function (t) { return t.trim(); }).filter(Boolean) : [],
+    techs: d.track === "AI 융합인재" ? d.techs.slice() : [],
+    problem: d.track === "AI 융합인재" ? d.problem.trim() : "",
+    coreField: d.track === "AI 융합인재" ? d.coreField.trim() : "",
+    vision: d.track === "AI 융합인재" ? d.vision.trim() : ""
+  };
+  Backend.submit(payload).then(function (res) {
+    S.receipt = { id: (res && res.id) || "-", at: new Date(), name: payload.name, intent: payload.intent, email: payload.email };
+    cache = null;
+    go("done");
+  }).catch(function (err) {
+    S.submitting = false;
+    if (btn) { btn.disabled = false; btn.textContent = "응답 제출"; }
+    toast("제출에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+    console.error(err);
+  });
+}
+
+function renderDone() {
+  var r = (S && S.receipt) || { id: "-", at: new Date(), name: "", intent: "" };
+  app.innerHTML =
+  '<div class="wrap wrap-tight" style="padding-top:56px"><div class="card done">' +
+    '<div class="done-mark"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
+    '<path d="M4 12.5l5.2 5.2L20 7" stroke="#1B6F55" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
+    "<h2>응답이 접수되었습니다.</h2>" +
+    "<p>" + esc(r.name) + " 교수님의 응답은 교육연구단 구성 검토 자료로만 사용됩니다.<br>" +
+    (r.email ? "접수증을 " + esc(r.email) + " 으로 보내드렸습니다." : "마감일 " + fmtDate(CONFIG.closesAt) + " 전까지 다시 제출하면 내용이 갱신됩니다.") + "</p>" +
+    '<div class="receipt">' +
+      "<div><span>접수번호</span><b>" + esc(r.id) + "</b></div>" +
+      "<div><span>접수일시</span><b>" + r.at.toLocaleString("ko-KR", { dateStyle: "medium", timeStyle: "short" }) + "</b></div>" +
+      "<div><span>참여 의향</span><b>" + esc(r.intent) + "</b></div>" +
+    "</div>" +
+    '<div class="btn-row" style="justify-content:center;margin-top:26px">' +
+      '<button class="btn btn-ghost" id="again">다시 응답하기</button>' +
+    "</div>" +
+  "</div></div>";
+  $("#again").onclick = function () { S = { step: 0, data: blank(), errors: {}, submitting: false }; go("survey"); };
+}
+
+/* ── 관리자 전용 화면 ────────────────────────────────────────────────────── */
+var cache = null;              // 응답 캐시
+var A = null;                  // 집계 결과
+var unlocked = false;
+var adminInfo = null;   // { isAdmin, email } — 서버가 인식한 접속 계정
+var tab = "overview";
+var filters = { q: "", intent: "", college: "", tech: "", track: "" };
+
+function renderAdmin() {
+  if (!unlocked) {
+    app.innerHTML = '<div class="wrap"><div class="empty-state">권한을 확인하는 중…</div></div>';
+    Backend.whoAmI().then(function (info) {
+      adminInfo = info || null;
+      if (info && info.isAdmin) { unlocked = true; renderAdmin(); }
+      else renderGate();
+    }).catch(function () { renderGate(); });
+    return;
+  }
+  app.innerHTML = '<div class="wrap"><div class="empty-state">집계를 불러오는 중…</div></div>';
+  var p = cache ? Promise.resolve(cache) : Backend.list();
+  p.then(function (rows) {
+    cache = rows; A = analyze(rows); paintAdmin();
+  }).catch(function (e) {
+    console.error(e);
+    var msg = (e && (e.message || e.toString())) || "원인 불명";
+    app.innerHTML = '<div class="wrap"><div class="card empty-state"><b>응답을 불러오지 못했습니다.</b>' +
+      '<p>아래 메시지를 확인한 뒤 다시 시도해 주세요.</p>' +
+      '<p style="margin-top:14px;padding:12px 14px;background:#FDF6F6;border:1px solid #F0DADA;' +
+      'border-radius:8px;color:#8C4B49;font-size:0.84rem;text-align:left;word-break:break-all">' + esc(msg) + "</p>" +
+      '<div class="btn-row" style="justify-content:center;margin-top:18px">' +
+      '<button class="btn btn-ghost" id="retry">다시 시도</button></div></div></div>';
+    var rb = $("#retry");
+    if (rb) rb.onclick = function () { cache = null; renderAdmin(); };
+  });
+}
+function renderGate(msg) {
+  app.innerHTML =
+  '<div class="wrap"><div class="gate"><div class="card">' +
+    "<h2>관리자 전용</h2><p>대학원전략팀 담당자용 화면입니다.<br>관리자 코드를 입력해 주세요.</p>" +
+    '<input class="input" id="code" type="password" placeholder="관리자 코드" autocomplete="off">' +
+    '<p class="err" id="codeErr" style="display:' + (msg ? "block" : "none") + '">' + esc(msg || "코드가 맞지 않습니다.") + "</p>" +
+    '<button class="btn btn-primary" id="enter" style="width:100%;margin-top:12px">열기</button>' +
+    '<button class="btn btn-quiet" id="backSurvey" style="width:100%;margin-top:6px">조사 화면으로</button>' +
+    '<p class="mini-note">코드가 필요하시면 대학원전략팀(02-2220-2297)으로 문의해 주세요.</p>' +
+  "</div></div></div>";
+  var err = $("#codeErr");
+  function tryEnter() {
+    var v = $("#code").value.trim();
+    if (!v) return;
+    adminCodeEntered = v;
+    $("#enter").disabled = true;
+    $("#enter").textContent = "확인 중…";
+    Backend.list().then(function (rows) {
+      unlocked = true; cache = rows; A = analyze(rows); paintAdmin();
+    }).catch(function () {
+      adminCodeEntered = "";
+      err.style.display = "block";
+      $("#code").classList.add("is-bad");
+      $("#enter").disabled = false;
+      $("#enter").textContent = "열기";
+    });
+  }
+  $("#enter").onclick = tryEnter;
+  $("#code").onkeydown = function (e) { if (e.key === "Enter") tryEnter(); };
+  $("#backSurvey").onclick = function () { go("cover"); };
+  $("#code").focus();
+}
+
+function paintAdmin() {
+  var TABS = [["overview", "응답 현황"], ["matching", "분야·교육연구단 매칭"], ["topics", "연구주제"], ["responses", "응답 목록"], ["settings", "설정"]];
+  app.innerHTML =
+  '<div class="wrap">' +
+    '<div class="dash-head">' +
+      "<div><h1>" + esc(CONFIG.title) + "</h1>" +
+      '<p class="sub">마지막 갱신 ' +
+      new Date().toLocaleString("ko-KR", { dateStyle: "short", timeStyle: "short" }) + "</p></div>" +
+      '<div class="dash-tools">' +
+        '<button class="btn btn-ghost" id="reload">새로고침</button>' +
+        '<button class="btn btn-ghost" id="csv">CSV 내보내기</button>' +
+        '<button class="btn btn-primary" id="print">보고용 인쇄</button>' +
+      "</div>" +
+    "</div>" +
+    '<div class="tabs" role="tablist">' + TABS.map(function (t) {
+      return '<button class="tab" role="tab" data-tab="' + t[0] + '" aria-selected="' + (tab === t[0]) + '">' + t[1] + "</button>";
+    }).join("") + "</div>" +
+    '<div id="tabbody"></div>' +
+  "</div>";
+  $("#reload").onclick = function () { cache = null; toast("최신 응답을 불러왔습니다."); renderAdmin(); };
+  $("#csv").onclick = exportCSV;
+  $("#print").onclick = function () { window.print(); };
+  $$("[data-tab]").forEach(function (b) { b.onclick = function () { tab = b.dataset.tab; paintAdmin(); }; });
+  paintTab();
+}
+function paintTab() {
+  var box = $("#tabbody");
+  box.innerHTML = ({ overview: tabOverview, matching: tabMatching, topics: tabTopics, responses: tabResponses, settings: tabSettings })[tab]();
+  if (tab === "matching") bindMatching();
+  if (tab === "responses") bindResponses();
+  if (tab === "settings") bindSettings();
+  if (tab === "topics") bindTopics();
+}
+
+/* 작은 차트 헬퍼 */
+function barRow(name, value, max, color) {
+  return '<div class="brow"><span class="nm">' + esc(name) + "</span>" +
+    '<span class="bar-t"><i style="width:' + (max ? (value / max * 100) : 0) + "%;background:" + (color || "var(--navy-2)") + '"></i></span>' +
+    '<span class="vl num">' + value + "</span></div>";
+}
+function spark(daily) {
+  if (!daily.length) return '<p class="hint">아직 응답이 없습니다.</p>';
+  var w = 100, h = 42, maxc = daily[daily.length - 1].cum;
+  var pts = daily.map(function (d, i) {
+    var x = daily.length === 1 ? 0 : (i / (daily.length - 1)) * w;
+    var y = h - (d.cum / (maxc || 1)) * (h - 4) - 2;
+    return x.toFixed(1) + "," + y.toFixed(1);
+  });
+  return '<svg viewBox="0 0 ' + w + " " + h + '" preserveAspectRatio="none" style="width:100%;height:64px;display:block" aria-hidden="true">' +
+    '<polyline points="' + pts.join(" ") + '" fill="none" stroke="var(--navy-2)" stroke-width="1.4" vector-effect="non-scaling-stroke"/>' +
+    '<polyline points="0,' + h + " " + pts.join(" ") + " " + w + "," + h + '" fill="rgba(47,111,208,.10)" stroke="none"/></svg>' +
+    '<div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--ink-3);margin-top:6px">' +
+    "<span>" + fmtDate(daily[0].date) + "</span><span>" + fmtDate(daily[daily.length - 1].date) + " · 누적 " + maxc + "명</span></div>";
+}
+
+function tabOverview() {
+  var noResp = DEPTS.filter(function (d) { return !A.byDept[d]; });
+  var cols = Object.keys(A.byCollege).sort(function (x, y) { return A.byCollege[y].total - A.byCollege[x].total; });
+  var maxCol = Math.max.apply(null, cols.map(function (c) { return A.byCollege[c].total; }).concat([1]));
+  var ft = Object.keys(A.fusionType).sort(function (x, y) { return A.fusionType[y] - A.fusionType[x]; });
+  var maxFt = Math.max.apply(null, ft.map(function (f) { return A.fusionType[f]; }).concat([1]));
+
+  return (A.dupes.length
+    ? '<div class="notice" style="margin-bottom:16px;background:#FDF6F6;color:#8C4B49">' +
+      '<span><b>같은 이름·학과가 두 번 이상 접수되었습니다 (' + A.dupes.length + '건).</b> ' +
+      '이메일을 다르게 적어 재제출한 경우일 수 있습니다. 응답 목록에서 확인하고 오래된 행을 시트에서 지워주세요.<br>' +
+      A.dupes.slice(0, 6).map(function (d) { return esc(d.label) + " (" + d.n + "회)"; }).join(" · ") +
+      (A.dupes.length > 6 ? " 외 " + (A.dupes.length - 6) + "건" : "") + "</span></div>"
+    : "") +
+  '<dl class="kpis">' +
+    kpi("응답 접수", A.total, "명", "대상 " + CONFIG.targetCount + "명 중 " + A.responseRate + "%", A.responseRate) +
+    kpi("참여", A.joined, "명", "응답자 대비 " + pct(A.joined, A.total || 1) + "%", pct(A.joined, A.total || 1)) +
+    kpi("참여 희망 학과", A.activeDepts.length, "곳", "전체 " + DEPTS.length + "개 학과 중 " + pct(A.activeDepts.length, DEPTS.length) + "%", pct(A.activeDepts.length, DEPTS.length)) +
+    kpi("AI 융합인재 트랙", A.track["AI 융합인재"], "명", "미래인재 " + A.track["미래인재"] + "명", pct(A.track["AI 융합인재"], A.joined || 1)) +
+  "</dl>" +
+
+  '<div class="cols-2" style="margin-bottom:16px">' +
+    '<div class="panel"><div class="panel-head"><h3>참여 의향 구성</h3><span class="note">응답자 ' + A.total + "명 기준</span></div>" +
+      '<div class="stack">' + INTENTS.map(function (i) {
+        return '<i style="width:' + pct(A.intent[i], A.total || 1) + "%;background:" + INTENT_COLOR[i] + '"></i>';
+      }).join("") + "</div>" +
+      '<div class="legend">' + INTENTS.map(function (i) {
+        return '<span><i style="background:' + INTENT_COLOR[i] + '"></i>' + i + " <b class=\"num\">" + A.intent[i] + "</b>명 (" + pct(A.intent[i], A.total || 1) + "%)</span>";
+      }).join("") + "</div>" +
+      '<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--line-2)">' +
+      '<div class="panel-head" style="margin-bottom:10px"><h3 style="font-size:0.9062rem">희망 트랙</h3>' +
+      '<span class="note">참여 ' + A.joined + "명 기준</span></div>" +
+      (A.joined ? '<div class="stack">' + TRACKS.map(function (t) {
+        return '<i style="width:' + pct(A.track[t], A.joined) + "%;background:" + TRACK_COLOR[t] + '"></i>';
+      }).join("") + "</div>" +
+      '<div class="legend">' + TRACKS.map(function (t) {
+        return '<span><i style="background:' + TRACK_COLOR[t] + '"></i>' + t + ' <b class="num">' + A.track[t] + "</b>명 (" + pct(A.track[t], A.joined) + "%)</span>";
+      }).join("") + "</div>" : '<p class="hint">아직 응답이 없습니다.</p>') +
+      "</div>" +
+      '<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--line-2)">' +
+      '<div class="panel-head" style="margin-bottom:10px"><h3 style="font-size:0.9062rem">산업·사회 문제 해결 분야</h3>' +
+      '<span class="note">AI 융합인재 트랙</span></div>' +
+      (ft.length ? ft.map(function (f) { return barRow(f, A.fusionType[f], maxFt, "var(--cobalt)"); }).join("") : '<p class="hint">아직 응답이 없습니다.</p>') +
+      "</div></div>" +
+
+    '<div class="panel"><div class="panel-head"><h3>응답 추이</h3><span class="note">일자별 누적</span></div>' +
+      spark(A.daily) +
+      '<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--line-2)">' +
+      '<div class="panel-head" style="margin-bottom:10px"><h3 style="font-size:0.9062rem">응답이 없는 학과 ' +
+      '<span class="num" style="color:var(--danger)">' + noResp.length + "</span></h3>" +
+      '<span class="note">독려 대상</span></div>' +
+      (noResp.length ? gapRows(noResp) : '<p class="hint">모든 학과에서 응답이 접수되었습니다.</p>') +
+      "</div></div>" +
+  "</div>" +
+
+  (A.declines.length ? '<div class="panel" style="margin-bottom:16px"><div class="panel-head"><h3>불참 사유</h3>' +
+    '<span class="note">' + A.declines.length + "건</span></div>" +
+    '<div class="tbl-wrap"><table class="data" style="min-width:0"><thead><tr>' +
+    "<th>성명</th><th>소속 학과</th><th>사유</th></tr></thead><tbody>" +
+    A.declines.slice(0, 40).map(function (x) {
+      return "<tr><td>" + esc(x.name) + "</td><td>" + esc(x.dept) + "</td><td>" + esc(x.text) + "</td></tr>";
+    }).join("") + "</tbody></table></div>" +
+    (A.declines.length > 40 ? '<p class="mini-note">상위 40건만 표시합니다. 전체는 CSV로 확인하세요.</p>' : "") + "</div>" : "") +
+  '<div class="panel"><div class="panel-head"><h3>단과대학·대학원별 응답 현황</h3>' +
+    '<span class="note">막대 안 색은 참여·불참 구성</span></div>' +
+    cols.map(function (c) {
+      var v = A.byCollege[c], w = v.total / maxCol * 100;
+      return '<div class="brow"><span class="nm">' + esc(c) + "</span>" +
+        '<span style="display:block;width:' + w + '%;min-width:2px"><span class="stack" style="height:11px">' +
+        INTENTS.map(function (i) { return '<i style="width:' + pct(v[i], v.total) + "%;background:" + INTENT_COLOR[i] + '"></i>'; }).join("") +
+        '</span></span><span class="vl num">' + v.total + "</span></div>";
+    }).join("") +
+    '<div class="legend">' + INTENTS.map(function (i) {
+      return '<span><i style="background:' + INTENT_COLOR[i] + '"></i>' + i + "</span>";
+    }).join("") + "</div></div>";
+}
+/* 미응답 학과를 소속 기관 단위로 묶어 독려 우선순위를 보여준다 */
+function gapRows(noResp) {
+  var by = {};
+  noResp.forEach(function (d) {
+    var c = DEPT_COLLEGE[d] || "기타";
+    if (!by[c]) by[c] = [];
+    by[c].push(d);
+  });
+  var list = Object.keys(by).map(function (c) {
+    return { col: c, miss: by[c].length, all: (COLLEGES[c] || []).length, depts: by[c] };
+  }).sort(function (x, y) { return y.miss - x.miss; });
+  var max = list[0].miss;
+  return list.slice(0, 8).map(function (x) {
+    return '<div class="brow" title="' + esc(x.depts.join(", ")) + '"><span class="nm">' + esc(x.col) + "</span>" +
+      '<span class="bar-t"><i style="width:' + (x.miss / max * 100) + '%;background:#C56B69"></i></span>' +
+      '<span class="vl num">' + x.miss + "/" + x.all + "</span></div>";
+  }).join("") +
+  (list.length > 8 ? '<p class="mini-note">그 밖의 기관 ' + (list.length - 8) + "곳에도 미응답 학과가 있습니다. 기관명에 마우스를 올리면 학과 목록이 보입니다.</p>" : '<p class="mini-note">기관명에 마우스를 올리면 미응답 학과 목록이 보입니다.</p>');
+}
+function kpi(label, value, unit, foot, barPct) {
+  return '<div class="kpi"><dt>' + esc(label) + '</dt><dd class="num">' + value + "<small>" + unit + "</small></dd>" +
+    '<div class="bar"><i style="width:' + Math.max(0, Math.min(100, barPct)) + '%"></i></div>' +
+    '<p class="foot">' + esc(foot) + "</p></div>";
+}
+
+function heatColor(v, max) {
+  if (!v) return "";
+  var i = 0.18 + 0.82 * (v / (max || 1));
+  return "background:rgba(20,71,126," + i.toFixed(2) + ");color:" + (i > 0.52 ? "#fff" : "var(--navy)");
+}
+function tabMatching() {
+  var cl = clusters(A);
+  var maxTech = A.techRank.length ? A.techRank[0].n : 1;
+  var cols = Object.keys(A.heat);
+  var heatMax = 1;
+  cols.forEach(function (c) { TECH19.forEach(function (t) { heatMax = Math.max(heatMax, A.heat[c][t] || 0); }); });
+  return '<div class="notice" style="margin-bottom:16px"><span><b>교육연구단 후보</b>는 전략기술 분야를 축으로 응답자를 묶은 것입니다. ' +
+    "AI 융합인재 트랙 " + A.active.length + "명이 대상이며, 판정 기준(교원 " + CONFIG.minFacultyPerUnit + "명 · " + CONFIG.minDeptsPerUnit + "개 학과 이상)은 설정 탭에서 바꿀 수 있습니다.</span></div>" +
+
+  '<div style="margin-bottom:16px">' +
+    '<div class="panel"><div class="panel-head"><h3>전략기술 분야별 희망 교원</h3><span class="note">AI 융합인재 ' + A.active.length + "명, 복수 선택</span></div>" +
+      (A.techRank.length ? A.techRank.map(function (t, i) {
+        return '<div class="rank"><span class="n num">' + (i + 1) + '</span><span>' + esc(t.tech) +
+          ' <span style="color:var(--ink-3);font-size:0.7812rem">· ' + t.depts + '개 학과</span></span><span class="v">' + t.n + "</span>" +
+          '<span class="track2"><i style="width:' + (t.n / maxTech * 100) + '%"></i></span></div>';
+      }).join("") : '<p class="hint">아직 응답이 없습니다.</p>') + "</div>" +
+  "</div>" +
+
+  '<div class="panel" style="margin-bottom:16px"><div class="panel-head"><h3>소속 기관 × 전략기술 분포</h3>' +
+    '<span class="note">칸의 숫자는 해당 분야를 고른 교원 수</span></div>' +
+    '<div class="heat-scroll"><table class="heat"><thead><tr><th></th>' +
+    TECH19.map(function (t) { return "<th><div>" + esc(t) + "</div></th>"; }).join("") + "</tr></thead><tbody>" +
+    cols.map(function (c) {
+      return "<tr><th>" + esc(c) + "</th>" + TECH19.map(function (t) {
+        var v = A.heat[c][t] || 0;
+        return '<td class="' + (v ? "" : "z") + '" style="' + heatColor(v, heatMax) + '" title="' + esc(c + " · " + t) + ': ' + v + '명">' + (v || "·") + "</td>";
+      }).join("") + "</tr>";
+    }).join("") + "</tbody></table></div>" +
+    '<div class="heat-key"><span>적음</span>' +
+    [0.18, 0.4, 0.6, 0.8, 1].map(function (i) { return '<i style="background:rgba(20,71,126,' + i + ')"></i>'; }).join("") +
+    "<span>많음 (최대 " + heatMax + "명)</span></div></div>" +
+
+  '<div class="panel-head" style="margin:30px 0 12px"><h3>AI 융합인재 교육연구단 후보 ' +
+    '<span class="num" style="color:var(--ink-3);font-weight:600">' + cl.filter(function (c) { return c.status === "요건 충족"; }).length +
+    " / " + cl.length + "</span></h3>" +
+    '<span class="note">가능성 점수 = 규모 60 + 학과 다양성 40</span></div>' +
+  '<div class="clusters">' + cl.slice(0, 9).map(function (c) {
+    var cls = c.status === "요건 충족" ? "ok" : (c.status === "보완 필요" ? "mid" : "low");
+    return '<article class="cl' + (cls === "ok" ? " ok" : "") + '">' +
+      '<div class="cl-top"><div><h4>' + esc(c.tech) + '</h4><span class="pill ' + cls + '" style="margin-top:7px">' + c.status + "</span></div>" +
+      '<div class="cl-score"><b class="num">' + c.score + "</b><span>가능성</span></div></div>" +
+      '<div class="cl-stats"><div><b class="num">' + c.n + "</b><span>희망 교원</span></div>" +
+      "<div><b class=\"num\">" + c.depts.length + "</b><span>참여 학과</span></div>" +
+      "<div><b class=\"num\">" + c.colleges.length + "</b><span>단과대·대학원</span></div></div>" +
+      "<h5>대표 연구주제</h5><ul class=\"cl-topics\">" +
+      (c.topics.length ? c.topics.map(function (t) { return "<li>" + esc(t.length > 58 ? t.slice(0, 58) + "…" : t) + "</li>"; }).join("")
+        : '<li style="color:var(--ink-3)">아직 제안된 주제가 없습니다</li>') +
+      "</ul>" +
+      '<button class="linkish" data-cl="' + esc(c.tech) + '" style="margin-top:13px;font-size:0.8438rem">참여 교원 ' + c.n + "명 보기</button>" +
+      "</article>";
+  }).join("") + "</div>" +
+  futurePanel();
+}
+
+/* 미래인재 트랙은 전략기술 축이 없으므로 소속 기관과 주제로 본다 */
+function futurePanel() {
+  var members = A.rows.filter(function (r) { return r.intent === "참여" && r.track === "미래인재"; });
+  var by = {};
+  members.forEach(function (m) {
+    var c = m.college || DEPT_COLLEGE[m.dept] || "기타";
+    if (!by[c]) by[c] = [];
+    by[c].push(m);
+  });
+  var cols = Object.keys(by).sort(function (x, y) { return by[y].length - by[x].length; });
+  var max = cols.length ? by[cols[0]].length : 1;
+  var depts = uniq(members.map(function (m) { return m.dept; }));
+
+  return '<div class="panel-head" style="margin:30px 0 12px"><h3>미래인재 트랙</h3>' +
+    '<span class="note">' + members.length + "명 · " + depts.length + "개 학과</span></div>" +
+    '<div class="cols-2">' +
+      '<div class="panel"><div class="panel-head"><h3 style="font-size:0.9062rem">소속 기관별 인원</h3></div>' +
+      (cols.length ? cols.map(function (c) { return barRow(c, by[c].length, max, "var(--cobalt)"); }).join("")
+        : '<p class="hint">아직 응답이 없습니다.</p>') +
+      "</div>" +
+      '<div class="panel"><div class="panel-head"><h3 style="font-size:0.9062rem">제안된 연구주제</h3>' +
+      '<span class="note">' + A.futureTopics.length + "건</span></div>" +
+      (A.futureTopics.length
+        ? '<ul class="cl-topics">' + A.futureTopics.slice(0, 8).map(function (t) {
+            return "<li>" + esc(t.text.length > 62 ? t.text.slice(0, 62) + "…" : t.text) +
+              ' <span style="color:var(--ink-3)">— ' + esc(t.dept) + "</span></li>";
+          }).join("") + "</ul>" +
+          (A.futureTopics.length > 8 ? '<p class="mini-note">전체는 연구주제 탭에서 트랙 필터로 확인하세요.</p>' : "")
+        : '<p class="hint">아직 주제가 없습니다.</p>') +
+      "</div>" +
+    "</div>";
+}
+function bindMatching() {
+  $$("[data-cl]").forEach(function (b) {
+    b.onclick = function () {
+      var t = b.dataset.cl;
+      var c = clusters(A).filter(function (x) { return x.tech === t; })[0];
+      if (!c) return;
+      openModal(t + " 교육연구단 후보",
+        '<div class="cl-stats" style="border-top:none;padding-top:0">' +
+        "<div><b class=\"num\">" + c.n + "</b><span>희망 교원</span></div>" +
+        "<div><b class=\"num\">" + c.firm + "</b><span>참여 확정</span></div>" +
+        "<div><b class=\"num\">" + c.colleges.length + "</b><span>단과대·대학원</span></div></div>" +
+        '<h5 style="font-size:0.7812rem;color:var(--ink-3);margin:6px 0 8px">참여 학과 ' + c.depts.length + "개</h5>" +
+        '<div class="chips" style="margin-bottom:18px">' + c.depts.map(function (d) {
+          return '<span class="chip chip-sm" style="cursor:default">' + esc(d) + "</span>";
+        }).join("") + "</div>" +
+        '<div class="tbl-wrap"><table class="data" style="min-width:0">' +
+        "<thead><tr><th>성명</th><th>소속</th><th>직급</th><th>의향</th></tr></thead><tbody>" +
+        c.members.map(function (m) {
+          return "<tr><td>" + esc(m.name) + "</td><td>" + esc(m.dept) + "</td><td>" + esc(m.rank || "-") +
+            "</td><td>" + intentTag(m.intent) + "</td></tr>";
+        }).join("") + "</tbody></table></div>");
+    };
+  });
+}
+function intentTag(i) {
+  return '<span class="st"><i style="background:' + INTENT_COLOR[i] + '"></i>' + esc(i) + "</span>";
+}
+
+function tabTopics() {
+  var kws = A.kwRank.slice(0, 28);
+  var maxKw = kws.length ? kws[0].n : 1;
+  var q = filters.q.trim();
+  var all = A.topics.map(function (t) { return { t: t, track: "AI 융합인재" }; })
+    .concat(A.futureTopics.map(function (t) { return { t: t, track: "미래인재" }; }));
+  var list = all.filter(function (x) {
+    var t = x.t;
+    if (filters.track && x.track !== filters.track) return false;
+    if (filters.tech && (t.techs || []).indexOf(filters.tech) < 0) return false;
+    if (q && (t.text + t.dept + t.name).indexOf(q) < 0) return false;
+    return true;
+  });
+  return '<div class="panel" style="margin-bottom:16px"><div class="panel-head"><h3>연구주제 키워드</h3>' +
+    '<span class="note">' + all.length + "건의 주제에서 2회 이상 등장한 낱말</span></div>" +
+    (kws.length ? '<div class="kws">' + kws.map(function (k) {
+      var s = 0.82 + (k.n / maxKw) * 0.72;
+      var op = 0.42 + (k.n / maxKw) * 0.58;
+      return '<button class="kw" data-kw="' + esc(k.w) + '" style="font-size:' + s.toFixed(2) + "rem;background:rgba(47,111,208," + (op * 0.18).toFixed(2) + ")\">" +
+        esc(k.w) + '<span style="font-weight:600;opacity:.55;margin-left:5px" class="num">' + k.n + "</span></button>";
+    }).join("") + "</div>" : '<p class="hint">아직 주제가 없습니다.</p>') + "</div>" +
+
+    '<div class="panel"><div class="panel-head"><h3>제안된 연구주제</h3><span class="note">' + list.length + "건</span></div>" +
+    '<div class="tbl-tools">' +
+    '<input class="input" id="tq" placeholder="주제·학과·성명 검색" value="' + esc(filters.q) + '">' +
+    '<select class="input" id="ttrack"><option value="">트랙 전체</option>' +
+    TRACKS.map(function (t) { return '<option' + (filters.track === t ? " selected" : "") + ">" + esc(t) + "</option>"; }).join("") + "</select>" +
+    '<select class="input" id="ttech"><option value="">전략기술 전체</option>' +
+    TECH19.map(function (t) { return '<option' + (filters.tech === t ? " selected" : "") + ">" + esc(t) + "</option>"; }).join("") + "</select>" +
+    (q || filters.tech || filters.track ? '<button class="btn btn-quiet" id="tclear">필터 지우기</button>' : "") + "</div>" +
+    (list.length ? '<div class="tbl-wrap"><table class="data"><thead><tr><th style="width:52%">연구주제</th><th>트랙</th><th>제안자</th><th>소속</th><th>전략기술</th></tr></thead><tbody>' +
+      list.slice(0, 120).map(function (x) {
+        var t = x.t;
+        return "<tr><td>" + esc(t.text) + '</td><td><span class="st"><i style="background:' + TRACK_COLOR[x.track] + '"></i>' +
+          esc(x.track) + "</span></td><td>" + esc(t.name) + "</td><td>" + esc(t.dept) + "</td><td>" +
+          esc((t.techs || []).join(", ") || "-") + "</td></tr>";
+      }).join("") + "</tbody></table></div>" +
+      (list.length > 120 ? '<p class="mini-note">상위 120건만 표시합니다. 전체는 CSV로 내보내 확인하세요.</p>' : "")
+      : '<div class="empty-state"><b>조건에 맞는 주제가 없습니다.</b><p>검색어나 분야 필터를 바꿔보세요.</p></div>') + "</div>";
+}
+function bindTopics() {
+  var q = $("#tq");
+  if (q) q.oninput = debounce(function () { filters.q = q.value; paintTab(); var f = $("#tq"); if (f) { f.focus(); f.setSelectionRange(f.value.length, f.value.length); } }, 260);
+  var s = $("#ttech");
+  if (s) s.onchange = function () { filters.tech = s.value; paintTab(); };
+  var tr = $("#ttrack");
+  if (tr) tr.onchange = function () { filters.track = tr.value; paintTab(); };
+  var c = $("#tclear");
+  if (c) c.onclick = function () { filters.q = ""; filters.tech = ""; filters.track = ""; paintTab(); };
+  $$("[data-kw]").forEach(function (b) { b.onclick = function () { filters.q = b.dataset.kw; paintTab(); }; });
+}
+function debounce(fn, ms) {
+  var t; return function () { clearTimeout(t); t = setTimeout(fn, ms); };
+}
+
+function tabResponses() {
+  var q = filters.q.trim();
+  var list = A.rows.filter(function (r) {
+    if (filters.intent && r.intent !== filters.intent) return false;
+    if (filters.track && r.track !== filters.track) return false;
+    if (filters.college && (r.college || DEPT_COLLEGE[r.dept]) !== filters.college) return false;
+    if (q && (r.name + r.dept + (r.track || "") + (r.techs || []).join(",") + (r.topics || []).join(" ") + (r.futureTopic || "")).indexOf(q) < 0) return false;
+    return true;
+  }).sort(function (a, b) { return String(b.submittedAt).localeCompare(String(a.submittedAt)); });
+
+  return '<div class="tbl-tools">' +
+    '<input class="input" id="rq" placeholder="성명·학과·주제 검색" value="' + esc(filters.q) + '">' +
+    '<select class="input" id="rintent"><option value="">의향 전체</option>' +
+    INTENTS.map(function (i) { return '<option' + (filters.intent === i ? " selected" : "") + ">" + esc(i) + "</option>"; }).join("") + "</select>" +
+    '<select class="input" id="rtrack"><option value="">트랙 전체</option>' +
+    TRACKS.map(function (t) { return '<option' + (filters.track === t ? " selected" : "") + ">" + esc(t) + "</option>"; }).join("") + "</select>" +
+    '<select class="input" id="rcollege"><option value="">단과대학·대학원 전체</option>' +
+    Object.keys(COLLEGES).map(function (c) { return '<option' + (filters.college === c ? " selected" : "") + ">" + esc(c) + "</option>"; }).join("") + "</select>" +
+    '<span style="color:var(--ink-3);font-size:0.8125rem;margin-left:auto" class="num">' + list.length + " / " + A.total + "건</span></div>" +
+    (list.length ? '<div class="tbl-wrap"><table class="data"><thead><tr>' +
+      "<th>접수일</th><th>성명</th><th>소속 학과</th><th>직급</th><th>의향</th><th>트랙</th><th>전략기술</th><th></th>" +
+      "</tr></thead><tbody>" + list.slice(0, 200).map(function (r) {
+        return '<tr><td class="num" style="color:var(--ink-3)">' + String(r.submittedAt || "").slice(5, 10).replace("-", ".") + "</td>" +
+          "<td>" + esc(r.name) + "</td><td>" + esc(r.dept) + "</td><td>" + esc(r.rank) + "</td>" +
+          "<td>" + intentTag(r.intent) + "</td>" +
+          "<td>" + (r.track ? '<span class="st"><i style="background:' + TRACK_COLOR[r.track] + '"></i>' + esc(r.track) + "</span>" : "-") + "</td>" +
+          '<td class="clip">' + esc((r.techs || []).join(", ") || "-") + "</td>" +
+          '<td><button class="linkish" data-row="' + esc(r.id) + '">상세</button></td></tr>';
+      }).join("") + "</tbody></table></div>"
+      : '<div class="card empty-state"><b>조건에 맞는 응답이 없습니다.</b><p>필터를 지우면 전체 응답을 볼 수 있습니다.</p></div>');
+}
+function bindResponses() {
+  var q = $("#rq");
+  if (q) q.oninput = debounce(function () { filters.q = q.value; paintTab(); var f = $("#rq"); if (f) { f.focus(); f.setSelectionRange(f.value.length, f.value.length); } }, 260);
+  var i = $("#rintent"); if (i) i.onchange = function () { filters.intent = i.value; paintTab(); };
+  var c = $("#rcollege"); if (c) c.onchange = function () { filters.college = c.value; paintTab(); };
+  var rt = $("#rtrack"); if (rt) rt.onchange = function () { filters.track = rt.value; paintTab(); };
+  $$("[data-row]").forEach(function (b) {
+    b.onclick = function () {
+      var r = A.rows.filter(function (x) { return x.id === b.dataset.row; })[0];
+      if (!r) return;
+      function line(k, v) {
+        return '<div class="review-row"><dt>' + k + "</dt><dd>" +
+          (v && String(v).length ? esc(v) : '<span class="empty">응답 없음</span>') + "</dd></div>";
+      }
+      openModal(r.name + " · " + r.dept,
+        '<div class="review"><dl style="border-top:none">' +
+        line("접수일시", new Date(r.submittedAt).toLocaleString("ko-KR", { dateStyle: "medium", timeStyle: "short" })) +
+        line("직급", r.rank) + line("이메일", r.email) + line("참여 의향", r.intent) +
+        (r.intent === "불참" ? line("불참 사유", r.declineReason) :
+          line("희망 트랙", r.track) +
+          (r.track === "미래인재" ? line("연구주제", r.futureTopic) : "") +
+          line("전략기술 분야", (r.techs || []).join(", ")) +
+          line("산업·사회 문제 해결 분야", r.problem) + line("핵심 연구·교육 분야", r.coreField) +
+          line("질문형 연구주제", (r.topics || []).map(function (t, n) { return (n + 1) + ". " + t; }).join("\n")) +
+          line("교육연구단 구상", r.vision)) +
+        "</dl></div>");
+    };
+  });
+}
+
+function tabSettings() {
+  return '<div class="cols-2">' +
+    '<div class="panel"><div class="panel-head"><h3>조사 기준값</h3></div>' +
+    '<div class="row-2">' +
+    '<label class="field"><span class="field-label">조사 대상 교원 수</span><input class="input num" id="cfgTarget" type="number" min="1" value="' + CONFIG.targetCount + '"></label>' +
+    '<label class="field"><span class="field-label">응답 마감일</span><input class="input" id="cfgClose" type="date" value="' + CONFIG.closesAt + '"></label>' +
+    "</div>" +
+    '<div class="row-2">' +
+    '<label class="field"><span class="field-label">교육연구단 최소 교원 수</span><input class="input num" id="cfgFac" type="number" min="1" value="' + CONFIG.minFacultyPerUnit + '"></label>' +
+    '<label class="field"><span class="field-label">교육연구단 최소 학과 수</span><input class="input num" id="cfgDept" type="number" min="1" value="' + CONFIG.minDeptsPerUnit + '"></label>' +
+    "</div>" +
+    '<button class="btn btn-primary" id="cfgSave">기준값 적용</button>' +
+    '<p class="mini-note">최소 교원·학과 수는 교육연구단 후보 판정에 쓰는 내부 가정치입니다. 실제 사업 공고 요건이 확정되면 그 값으로 바꿔 쓰세요.</p></div>' +
+
+    '<div class="panel"><div class="panel-head"><h3>연결 상태</h3></div>' +
+    '<div class="review"><dl style="border-top:none">' +
+    '<div class="review-row"><dt>데이터 연결</dt><dd>' + (Backend.mode === "gas" ? "Google Sheets (Apps Script 내장)"
+      : Backend.mode === "remote" ? "Google Sheets (외부 호스팅 → Apps Script)"
+      : "데모 모드 · 메모리 저장") + "</dd></div>" +
+    '<div class="review-row"><dt>수집 응답</dt><dd class="num">' + A.total + "건</dd></div>" +
+    '<div class="review-row"><dt>화면 빌드</dt><dd>' + BUILD + "</dd></div>" +
+    '<div class="review-row"><dt>접속 계정</dt><dd>' + esc((adminInfo && adminInfo.email) || "(확인 불가)") + "</dd></div>" +
+    '<div class="review-row"><dt>조사 링크</dt><dd>' + (Backend.mode === "gas" ? "웹 앱 URL (교원 안내용)" : "배포 후 발급됩니다.") + "</dd></div>" +
+    '<div class="review-row"><dt>관리자 링크</dt><dd>조사 URL 끝에 <b>?view=admin</b></dd></div>' +
+    '<div class="review-row"><dt>열람 확인</dt><dd>ADMINS 계정 또는 관리자 코드</dd></div>' +
+    "</dl></div>" +
+    '<div class="notice" style="margin-top:16px"><span>교원에게는 <b>?view=admin</b> 없는 주소만 안내하세요. 그 주소에는 이 화면으로 오는 메뉴가 보이지 않습니다. 응답자가 로그인하지 않는 배포에서는 <b>이메일</b>이 같아야 재제출이 갱신으로 처리됩니다.</span></div>' +
+    (Backend.mode === "demo"
+      ? '<div class="btn-row" style="margin-top:16px"><button class="btn btn-ghost" id="reseed">데모 데이터 다시 생성</button></div>'
+      : "") +
+    "</div></div>";
+}
+function bindSettings() {
+  $("#cfgSave").onclick = function () {
+    CONFIG.targetCount = Math.max(1, Number($("#cfgTarget").value) || CONFIG.targetCount);
+    CONFIG.closesAt = $("#cfgClose").value || CONFIG.closesAt;
+    CONFIG.minFacultyPerUnit = Math.max(1, Number($("#cfgFac").value) || CONFIG.minFacultyPerUnit);
+    CONFIG.minDeptsPerUnit = Math.max(1, Number($("#cfgDept").value) || CONFIG.minDeptsPerUnit);
+    A = analyze(cache);
+    toast("기준값을 적용했습니다.");
+    paintAdmin();
+  };
+  var rs = $("#reseed");
+  if (rs) rs.onclick = function () {
+    memory = null; cache = null; toast("데모 응답을 새로 만들었습니다."); renderAdmin();
+  };
+}
+
+/* 모달 */
+function openModal(title, html) {
+  var layer = $("#layer");
+  layer.innerHTML = '<div class="scrim" id="scrim"><div class="modal" role="dialog" aria-modal="true" aria-label="' + esc(title) + '">' +
+    '<div class="modal-head"><h3>' + esc(title) + '</h3><button id="mx" aria-label="닫기">×</button></div>' +
+    '<div class="modal-body">' + html + "</div></div></div>";
+  function close() { layer.innerHTML = ""; document.removeEventListener("keydown", onKey); }
+  function onKey(e) { if (e.key === "Escape") close(); }
+  $("#mx").onclick = close;
+  $("#scrim").onclick = function (e) { if (e.target.id === "scrim") close(); };
+  document.addEventListener("keydown", onKey);
+  $("#mx").focus();
+}
+
+/* CSV */
+function exportCSV() {
+  var head = ["접수일시", "성명", "단과대학·대학원", "학과", "직급", "이메일", "참여의향", "불참사유", "트랙", "미래인재연구주제", "전략기술", "산업사회문제해결분야", "자동분류", "핵심분야", "주제1", "주제2", "주제3", "교육연구단구상"];
+  var lines = [head];
+  A.rows.forEach(function (r) {
+    var t = r.topics || [];
+    lines.push([r.submittedAt, r.name, r.college || DEPT_COLLEGE[r.dept] || "", r.dept, r.rank, r.email || "",
+      r.intent, r.declineReason || "", r.track || "", r.futureTopic || "", (r.techs || []).join(" / "),
+      r.problem || "", classifyProblem(r.problem), r.coreField || "", t[0] || "", t[1] || "", t[2] || "",
+      r.vision || ""]);
+  });
+  var csv = "\ufeff" + lines.map(function (row) {
+    return row.map(function (c) { return '"' + String(c == null ? "" : c).replace(/"/g, '""') + '"'; }).join(",");
+  }).join("\r\n");
+  try {
+    var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "BK21_참여의향_" + todayISO() + ".csv";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1500);
+    toast("CSV 파일을 내려받았습니다.");
+  } catch (e) {
+    openModal("CSV 데이터 복사", '<p style="font-size:0.8438rem;color:var(--ink-2);margin-bottom:10px">' +
+      "이 환경에서는 파일 저장이 막혀 있습니다. 아래 내용을 복사해 스프레드시트에 붙여 넣으세요.</p>" +
+      '<textarea class="input" rows="12" readonly>' + esc(csv) + "</textarea>");
+  }
+}
+
+/* ── 부팅 ────────────────────────────────────────────────────────── */
+document.addEventListener("click", function (e) {
+  var b = e.target.closest ? e.target.closest("[data-go]") : null;
+  if (b) go(b.dataset.go === "admin" ? "admin" : "cover");
+});
+window.addEventListener("hashchange", function () {
+  var r = location.hash.replace("#/", "") || "cover";
+  if (r !== route) { route = r; render(); }
+});
+route = (location.hash.replace("#/", "") || "cover");
+if (["cover", "survey", "admin", "done"].indexOf(route) < 0) route = "cover";
+if (route === "survey" || route === "done") route = "cover";
+
+/* 교원용 주소에는 관리자 메뉴가 나타나지 않는다.
+   담당자는 주소 끝에 ?view=admin 을 붙여 들어오고, 코드로 한 번 더 확인한다.
+   교내 계정으로 로그인된 상태라면 코드 없이 계정만으로 통과한다. */
+if (hasGAS && google.script.url && google.script.url.getLocation) {
+  app.innerHTML = '<div class="wrap"><div class="empty-state">화면을 준비하는 중…</div></div>';
+  google.script.url.getLocation(function (loc) {
+    var v = (loc && loc.parameter && loc.parameter.view) || "";
+    if (v === "admin") { adminEntry = true; route = "admin"; }
+    render();
+  });
+} else {
+  if (REMOTE && /[?&]view=admin/.test(location.search)) { adminEntry = true; route = "admin"; }
+  render();
+}
+
+})();
+
+</script>
+</body>
+</html>
