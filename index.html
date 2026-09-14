@@ -323,6 +323,16 @@ table.data .clip{max-width:min(320px,28vw);overflow:hidden;text-overflow:ellipsi
 .modal-head button{margin-left:auto;color:var(--ink-3);font-size:1.375rem;line-height:1;padding:2px 6px}
 .modal-body{padding:clamp(16px,2vw,26px) clamp(18px,2.2vw,28px) clamp(20px,2.4vw,30px)}
 
+/* 페이지 나누기 */
+.pager{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;align-items:center;margin-top:18px}
+.pager button{min-width:33px;height:33px;padding:0 9px;border:1px solid var(--line);border-radius:8px;
+  background:#fff;font-size:0.8438rem;font-weight:600;color:var(--ink-2);transition:border-color .12s,color .12s}
+.pager button:hover:not(:disabled){border-color:var(--ink-3);color:var(--ink)}
+.pager button[aria-current="page"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.pager button:disabled{opacity:.35;cursor:default}
+.pager .dots{color:var(--ink-3);padding:0 2px;font-size:0.8125rem}
+.pager-info{text-align:center;font-size:0.7812rem;color:var(--ink-3);margin-top:9px;font-variant-numeric:tabular-nums}
+
 /* 잡다 */
 .empty-state{text-align:center;padding:44px 20px;color:var(--ink-2)}
 .empty-state b{display:block;color:var(--ink);font-size:1.0rem;margin-bottom:7px;letter-spacing:-.02em}
@@ -373,7 +383,7 @@ function shiftDays(n) {
 }
 
 /* ── 조사 설정 (실배포 시 Code.gs의 CONFIG와 함께 수정) ───────────── */
-var BUILD = "2026.09.09-r23";
+var BUILD = "2026.09.10-r27";
 var CONFIG = {
   title: "5단계 BK21사업 개별 교원 참여의향 조사",
   owner: "대학원전략팀",
@@ -1332,6 +1342,52 @@ var unlocked = false;
 var adminInfo = null;   // { isAdmin, email } — 서버가 인식한 접속 계정
 var tab = "overview";
 var filters = { q: "", intent: "", college: "", tech: "", track: "" };
+var PER_PAGE = 10;
+var page = { topics: 1, responses: 1 };
+
+/* 표를 10개씩 끊어 보여주는 페이지 버튼 */
+function pager(key, total) {
+  var last = Math.max(1, Math.ceil(total / PER_PAGE));
+  if (page[key] > last) page[key] = last;
+  var cur = page[key];
+  var from = total ? (cur - 1) * PER_PAGE + 1 : 0;
+  var to = Math.min(cur * PER_PAGE, total);
+  var nums = [];
+  if (last <= 9) { for (var i = 1; i <= last; i++) nums.push(i); }
+  else {
+    nums.push(1);
+    var a = Math.max(2, cur - 2), b = Math.min(last - 1, cur + 2);
+    if (a > 2) nums.push("…");
+    for (var j = a; j <= b; j++) nums.push(j);
+    if (b < last - 1) nums.push("…");
+    nums.push(last);
+  }
+  var h = '<div class="pager">' +
+    '<button data-page="' + key + ':' + (cur - 1) + '"' + (cur === 1 ? " disabled" : "") + ' aria-label="이전">‹</button>' +
+    nums.map(function (n) {
+      if (n === "…") return '<span class="dots">…</span>';
+      return '<button data-page="' + key + ":" + n + '"' + (n === cur ? ' aria-current="page"' : "") + ">" + n + "</button>";
+    }).join("") +
+    '<button data-page="' + key + ':' + (cur + 1) + '"' + (cur === last ? " disabled" : "") + ' aria-label="다음">›</button>' +
+    "</div>" +
+    '<p class="pager-info">' + (total ? from + "–" + to : 0) + " / 전체 " + total + "건</p>";
+  return h;
+}
+function slicePage(key, list) {
+  var last = Math.max(1, Math.ceil(list.length / PER_PAGE));
+  if (page[key] > last) page[key] = last;
+  return list.slice((page[key] - 1) * PER_PAGE, page[key] * PER_PAGE);
+}
+function bindPager() {
+  $$("[data-page]").forEach(function (b) {
+    b.onclick = function () {
+      var v = b.dataset.page.split(":");
+      page[v[0]] = Math.max(1, Number(v[1]));
+      paintTab();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+  });
+}
 
 function renderAdmin() {
   if (!unlocked) {
@@ -1699,25 +1755,25 @@ function tabTopics() {
     TECH19.map(function (t) { return '<option' + (filters.tech === t ? " selected" : "") + ">" + esc(t) + "</option>"; }).join("") + "</select>" +
     (q || filters.tech || filters.track ? '<button class="btn btn-quiet" id="tclear">필터 지우기</button>' : "") + "</div>" +
     (list.length ? '<div class="tbl-wrap"><table class="data"><thead><tr><th style="width:52%">연구주제</th><th>트랙</th><th>제안자</th><th>소속</th><th>전략기술</th></tr></thead><tbody>' +
-      list.slice(0, 120).map(function (x) {
+      slicePage("topics", list).map(function (x) {
         var t = x.t;
         return "<tr><td>" + esc(t.text) + '</td><td><span class="st"><i style="background:' + TRACK_COLOR[x.track] + '"></i>' +
           esc(x.track) + "</span></td><td>" + esc(t.name) + "</td><td>" + esc(t.dept) + "</td><td>" +
           esc((t.techs || []).join(", ") || "-") + "</td></tr>";
-      }).join("") + "</tbody></table></div>" +
-      (list.length > 120 ? '<p class="mini-note">상위 120건만 표시합니다. 전체는 CSV로 내보내 확인하세요.</p>' : "")
+      }).join("") + "</tbody></table></div>" + pager("topics", list.length)
       : '<div class="empty-state"><b>조건에 맞는 주제가 없습니다.</b><p>검색어나 분야 필터를 바꿔보세요.</p></div>') + "</div>";
 }
 function bindTopics() {
   var q = $("#tq");
-  if (q) q.oninput = debounce(function () { filters.q = q.value; paintTab(); var f = $("#tq"); if (f) { f.focus(); f.setSelectionRange(f.value.length, f.value.length); } }, 260);
+  if (q) q.oninput = debounce(function () { filters.q = q.value; page.topics = 1; paintTab(); var f = $("#tq"); if (f) { f.focus(); f.setSelectionRange(f.value.length, f.value.length); } }, 260);
   var s = $("#ttech");
-  if (s) s.onchange = function () { filters.tech = s.value; paintTab(); };
+  if (s) s.onchange = function () { filters.tech = s.value; page.topics = 1; paintTab(); };
   var tr = $("#ttrack");
-  if (tr) tr.onchange = function () { filters.track = tr.value; paintTab(); };
+  if (tr) tr.onchange = function () { filters.track = tr.value; page.topics = 1; paintTab(); };
   var c = $("#tclear");
-  if (c) c.onclick = function () { filters.q = ""; filters.tech = ""; filters.track = ""; paintTab(); };
-  $$("[data-kw]").forEach(function (b) { b.onclick = function () { filters.q = b.dataset.kw; paintTab(); }; });
+  if (c) c.onclick = function () { filters.q = ""; filters.tech = ""; filters.track = ""; page.topics = 1; paintTab(); };
+  $$("[data-kw]").forEach(function (b) { b.onclick = function () { filters.q = b.dataset.kw; page.topics = 1; paintTab(); }; });
+  bindPager();
 }
 function debounce(fn, ms) {
   var t; return function () { clearTimeout(t); t = setTimeout(fn, ms); };
@@ -1744,22 +1800,23 @@ function tabResponses() {
     '<span style="color:var(--ink-3);font-size:0.8125rem;margin-left:auto" class="num">' + list.length + " / " + A.total + "건</span></div>" +
     (list.length ? '<div class="tbl-wrap"><table class="data"><thead><tr>' +
       "<th>접수일</th><th>성명</th><th>소속 학과</th><th>직급</th><th>의향</th><th>트랙</th><th>전략기술</th><th></th>" +
-      "</tr></thead><tbody>" + list.slice(0, 200).map(function (r) {
+      "</tr></thead><tbody>" + slicePage("responses", list).map(function (r) {
         return '<tr><td class="num" style="color:var(--ink-3)">' + String(r.submittedAt || "").slice(5, 10).replace("-", ".") + "</td>" +
           "<td>" + esc(r.name) + "</td><td>" + esc(r.dept) + "</td><td>" + esc(r.rank) + "</td>" +
           "<td>" + intentTag(r.intent) + "</td>" +
           "<td>" + (r.track ? '<span class="st"><i style="background:' + TRACK_COLOR[r.track] + '"></i>' + esc(r.track) + "</span>" : "-") + "</td>" +
           '<td class="clip">' + esc((r.techs || []).join(", ") || "-") + "</td>" +
           '<td><button class="linkish" data-row="' + esc(r.id) + '">상세</button></td></tr>';
-      }).join("") + "</tbody></table></div>"
+      }).join("") + "</tbody></table></div>" + pager("responses", list.length)
       : '<div class="card empty-state"><b>조건에 맞는 응답이 없습니다.</b><p>필터를 지우면 전체 응답을 볼 수 있습니다.</p></div>');
 }
 function bindResponses() {
   var q = $("#rq");
-  if (q) q.oninput = debounce(function () { filters.q = q.value; paintTab(); var f = $("#rq"); if (f) { f.focus(); f.setSelectionRange(f.value.length, f.value.length); } }, 260);
-  var i = $("#rintent"); if (i) i.onchange = function () { filters.intent = i.value; paintTab(); };
-  var c = $("#rcollege"); if (c) c.onchange = function () { filters.college = c.value; paintTab(); };
-  var rt = $("#rtrack"); if (rt) rt.onchange = function () { filters.track = rt.value; paintTab(); };
+  if (q) q.oninput = debounce(function () { filters.q = q.value; page.responses = 1; paintTab(); var f = $("#rq"); if (f) { f.focus(); f.setSelectionRange(f.value.length, f.value.length); } }, 260);
+  var i = $("#rintent"); if (i) i.onchange = function () { filters.intent = i.value; page.responses = 1; paintTab(); };
+  var c = $("#rcollege"); if (c) c.onchange = function () { filters.college = c.value; page.responses = 1; paintTab(); };
+  var rt = $("#rtrack"); if (rt) rt.onchange = function () { filters.track = rt.value; page.responses = 1; paintTab(); };
+  bindPager();
   $$("[data-row]").forEach(function (b) {
     b.onclick = function () {
       var r = A.rows.filter(function (x) { return x.id === b.dataset.row; })[0];
