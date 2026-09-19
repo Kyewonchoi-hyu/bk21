@@ -396,7 +396,7 @@ function shiftDays(n) {
 }
 
 /* ── 조사 설정 (실배포 시 Code.gs의 CONFIG와 함께 수정) ───────────── */
-var BUILD = "2026.09.19-r34";
+var BUILD = "2026.09.19-r35";
 var CONFIG = {
   title: "5단계 BK21사업 개별 교원 참여의향 조사",
   owner: "대학원전략팀",
@@ -681,71 +681,280 @@ var Backend = {
 };
 
 
-/* ── 연구주제 자동 분류 ───────────────────────────────────────────
-   낱말 빈도만으로는 "모델 50, AI 37" 이상을 알 수 없어서,
-   주제 문장을 12개 연구 영역으로 나눈다. AI 없이 키워드 대조로 동작한다. */
-var THEMES = ["AI·데이터", "반도체·전자", "바이오·헬스", "에너지·환경", "소재·제조",
-  "모빌리티·로봇", "정보보안·네트워크", "우주·항공·해양", "인문·문화",
-  "사회·정책", "경영·산업", "교육·인재양성"];
-
-var THEME_WORDS = {
-  "AI·데이터": ["AI", "인공지능", "머신러닝", "딥러닝", "언어모델", "LLM", "생성형", "알고리즘", "데이터", "빅데이터", "학습", "추론", "예측모델", "소형 모델", "범용 모델", "파운데이션", "디지털 트윈", "디지털트윈", "양자", "컴퓨팅", "소프트웨어", "플랫폼", "자동화", "에이전트", "시뮬레이션"],
-  "반도체·전자": ["반도체", "소자", "공정", "웨이퍼", "집적", "패키징", "칩", "메모리", "디스플레이", "회로", "전자", "센서", "광학", "나노"],
-  "바이오·헬스": ["바이오", "유전자", "세포", "단백질", "오믹스", "질환", "임상", "의료", "진단", "치료", "노화", "약물", "신약", "면역", "재생의료", "오가노이드", "건강", "돌봄", "간호", "보건"],
-  "에너지·환경": ["에너지", "탄소", "탄소중립", "재생에너지", "태양광", "풍력", "수소", "전지", "배터리", "이차전지", "원자력", "발전", "환경", "기후", "온실가스", "폐기물", "자원순환", "오염"],
-  "소재·제조": ["소재", "신소재", "부품", "금속", "고분자", "복합재", "제조", "공작", "기계", "장비", "구조물", "피로", "내구", "생산", "품질", "스마트팩토리", "설비", "예지보전", "공급망", "수율", "전사"],
-  "모빌리티·로봇": ["로봇", "자율주행", "모빌리티", "차량", "자동차", "물류", "드론", "조작", "제어", "협업로봇", "교통", "운송"],
-  "정보보안·네트워크": ["보안", "암호", "해킹", "공격", "취약", "네트워크", "통신", "6G", "5G", "무선", "프라이버시", "인증", "공급망보안"],
-  "우주·항공·해양": ["우주", "위성", "항공", "비행", "발사체", "해양", "선박", "조선", "추진", "해저", "국방", "방위"],
-  "인문·문화": ["문헌", "고전", "역사", "철학", "문학", "언어", "번역", "예술", "음악", "문화", "콘텐츠", "창작", "미디어", "서사", "미학", "종교", "윤리"],
-  "사회·정책": ["정책", "제도", "규제", "거버넌스", "법", "격차", "불평등", "복지", "인구", "고령화", "지역", "도시", "공공", "사회", "시민", "참여", "노동", "젠더", "이주"],
-  "경영·산업": ["경영", "조직", "기업", "산업", "시장", "비용", "투자", "경제", "금융", "가치사슬", "공급망", "생산성", "혁신", "창업", "사업화", "전략"],
-  "교육·인재양성": ["교육", "교육과정", "학습자", "대학원", "인재", "양성", "교수법", "평가체계", "역량", "커리큘럼", "훈련", "진로"]
+/* ── 19대 국가전략기술 분류체계 ──────────────────────────────────
+   출처: 범부처 기술관리체계 「공통 기술분야 총괄표」 및 분야별 현황.
+   분야 아래 중분류를 두고, 각 중분류의 세부기술 용어를 그대로 사전에 싣는다.
+   kind 는 그 중분류의 성격이다.
+     "원천" — 그 분야의 기반·원천 기술을 만들거나 원리·성능을 다루는 중분류
+     "적용" — 그 분야 체계가 이미 '산업적용·실증·시스템 통합'으로 규정한 중분류
+   이 구분이 판정의 ①원천 / ②적용을 가른다.                          */
+var TAXONOMY = {
+  "바이오": {
+    concept: "질병극복 및 건강증진(레드), 농생명(그린), 화학제품 생산(화이트) 및 AI·로봇 등 바이오 융합기술(플랫폼) 등 생명공학적 연구개발·생산 단계 전반",
+    basis: "의약품·백신, 융합기술(합성생물학, AI-바이오), 바이오 농수산·식품, 바이오화학, 의료·진단기기로 구분",
+    groups: [
+      { id: "7-1", name: "의약품", kind: "원천", w: ["유전자치료", "세포치료", "유전자편집", "RNA 치료", "CAR-T", "세포 유래물질", "오가노이드", "신약 후보물질", "바이오시밀러", "비임상", "임상약리", "치료적 탐색", "개량신약", "항체", "백혈병", "신약", "치료제", "질환", "의약품", "항암"] },
+      { id: "7-2", name: "백신", kind: "원천", w: ["백신", "감염병", "방어 항원", "면역원성", "백신 원부자재"] },
+      { id: "7-3", name: "합성생물학", kind: "원천", w: ["합성생물학", "유전체 제작", "유전자합성", "초고속 스크리닝", "바이오 파운드리", "바이오소재 생산", "바이오 공정 디지털트윈"] },
+      { id: "7-4", name: "AI-바이오", kind: "적용", w: ["디지털 헬스", "헬스데이터", "바이오 빅데이터", "정밀의료", "맞춤형 건강관리", "질병 예방", "임상 의사결정", "진단 보조", "영상 판독", "의료 AI", "진단", "의료", "환자", "건강", "임상", "헬스케어", "간호", "보건", "예방"] },
+      { id: "7-5", name: "바이오 농수산·식품", kind: "원천", w: ["종자", "가공처리", "유용미생물", "식품 냉해동", "스마트팜", "기능성 물질"] },
+      { id: "7-6", name: "바이오 화학", kind: "원천", w: ["바이오매스", "바이오플라스틱", "바이오화장품"] },
+      { id: "7-7", name: "의료·진단기기", kind: "원천", w: ["초음파 영상", "생분해성 소재", "검사용 진단기기", "시약", "바이오마커", "신체기능 복원", "보조 의료기기", "재활 기기", "의료기기", "영상 진단"] }
+    ]
+  },
+  "반도체": {
+    concept: "메모리(상용·연구개발 단계), 비메모리(AI반도체, 전력반도체, 센서 등) 설계·제조 관련 기술 전반에 더해, 소재·부품·장비, 후공정(패키징) 등 반도체 공정 전주기에 적용되는 첨단 및 상용기술",
+    basis: "(1) 메모리 (2) 비메모리(시스템·AI) (3) 공정·소재·부품·장비로 분류",
+    groups: [
+      { id: "1-1", name: "메모리 반도체", kind: "원천", w: ["DRAM", "D램", "낸드플래시", "낸드", "적층형 메모리", "HBM", "비휘발성 메모리", "MRAM", "PRAM", "RRAM", "FeRAM", "ECRAM", "고집적 저항기반", "메모리", "메모리 병목"] },
+      { id: "1-2", name: "시스템·AI 반도체", kind: "원천", w: ["AI 반도체", "AI반도체", "고속컴퓨팅 SoC", "화합물 반도체", "전력반도체", "BCDMOS", "이미지센서", "마이크로센서", "MEMS", "차량용 반도체", "DDI", "PMIC", "뉴로모픽", "반도체", "소자", "센서", "가속기", "아키텍처"] },
+      { id: "1-3", name: "공정·소재·부품·장비", kind: "원천", w: ["파운드리", "초미세 공정", "노광", "포토레지스트", "식각", "증착", "ALD", "CVD", "블랭크마스크", "웨이퍼", "패키징", "후공정", "이종집적", "코트막형성재", "수율", "공정", "패키징", "미세 공정"] }
+    ]
+  },
+  "디스플레이": {
+    concept: "유기발광(OLED) 제품 관련 패널·소재·부품·장비에 더해, 무기발광(Micro LED, 퀀텀닷) 및 프리폼·공간 디스플레이 기술",
+    basis: "발광체 유형에 따라 (1) 유기발광 (2) 무기발광으로 구별하고, (3) 프리폼·공간으로 분류",
+    groups: [
+      { id: "2-1", name: "유기발광 디스플레이", kind: "원천", w: ["OLED", "AMOLED", "유기발광", "TFT", "커버윈도우", "봉지 공정", "디스플레이", "패널"] },
+      { id: "2-2", name: "무기발광 디스플레이", kind: "원천", w: ["퀀텀닷", "마이크로 LED", "무기발광", "나노 LED", "전사 공정"] },
+      { id: "2-3", name: "프리폼·공간 디스플레이", kind: "원천", w: ["플렉서블 디스플레이", "롤러블", "스트레처블", "차량용 디스플레이", "VR 기기용", "AR 기기용", "신축성 디스플레이"] }
+    ]
+  },
+  "AI/SW": {
+    concept: "AI 구현에 필요한 데이터, 인프라, 모델, 산업 어플리케이션 및 규범(거버넌스) 등 Full-Stack을 폭넓게 포함",
+    basis: "AI 스택을 기준으로 (1) 인프라(컴퓨팅·클라우드) (2) 모델링(학습·추론 경량화, FM 구현 핵심 원천기술) (3) 산업 적용으로 우선 구분하고, 그 외 (4) 신뢰가능한 AI(AI Safety)를 위한 거버넌스 기술, (5) 기반SW·빅데이터 기술로 분류",
+    groups: [
+      { id: "3-1", name: "AI 인프라 고도화", kind: "원천", w: ["AI 인프라", "분산 병렬학습", "인지컴퓨팅", "멀티코어", "클라우드 운영", "SaaS", "PaaS", "IaaS", "전력공급", "냉각"] },
+      { id: "3-2", name: "AI 모델링·AGI 원천", kind: "원천", w: ["모델 경량화", "최적화 알고리즘", "저전력 고효율 컴퓨팅", "멀티에이전트", "자율성장", "상식 추론", "멀티모달", "뇌신경망", "생성형 인공지능", "언어모델", "파운데이션", "학습 알고리즘", "지식추론", "지식베이스", "언어 이해", "시각 이해", "추론 고도화", "소형 모델", "범용 모델"] },
+      { id: "3-3", name: "AI 산업적용", kind: "적용", w: ["산업 활용", "혁신 AI", "전문영역별 특화", "AI 전환", "실증", "도시시설물 관리", "콜드체인"] },
+      { id: "3-4", name: "AI 안전(Safety)", kind: "원천", w: ["AI 안전", "신뢰 AI", "데이터 공정성", "모델 투명성", "시스템 강건성", "인간 중심 인공지능", "비식별화", "설명가능"] },
+      { id: "3-5", name: "SW·빅데이터", kind: "원천", w: ["SW 내재화", "분산 병렬 SW", "시스템 SW", "CAD", "CAE", "빅데이터 수집", "정제", "빅데이터 분석", "예측 기술", "데이터", "소프트웨어", "플랫폼"] }
+    ]
+  },
+  "양자": {
+    concept: "양자기술의 주요 응용 분야인 컴퓨팅·통신·센싱 관련 기술에 더해, 양자컴퓨팅 관련 기반 알고리즘·SW 기술",
+    basis: "OECD 양자기술 분류를 기초로 컴퓨팅·통신·센싱 + 알고리즘·SW로 구분",
+    groups: [
+      { id: "4-1", name: "양자 컴퓨팅", kind: "원천", w: ["양자컴퓨팅", "양자 하드웨어", "큐비트", "초전도", "이온포획", "중성원자", "연산처리장치", "양자"] },
+      { id: "4-2", name: "양자 통신", kind: "원천", w: ["양자통신", "양자암호", "양자네트워크", "양자중계기", "퀀텀 리피터"] },
+      { id: "4-3", name: "양자 센싱", kind: "원천", w: ["양자센싱", "관성 센싱", "주파수 센싱", "자기장 센싱", "광 기반 센싱"] },
+      { id: "4-4", name: "양자 알고리즘·SW", kind: "원천", w: ["양자 알고리즘", "오류정정", "시스템SW", "응용SW", "양자내성"] }
+    ]
+  },
+  "통신": {
+    concept: "상용 이동통신 기술인 LTE, 5G에 더해, 국제표준 설계 단계에 있는 6G 및 그 필수기반 기술인 위성통신, 이동통신용 부품·장비 등",
+    basis: "(1) LTE·5G (2) 6G·위성통신으로 구분하고, (3) 통신부품·장비는 별도 분류",
+    groups: [
+      { id: "5-1", name: "LTE·5G", kind: "원천", w: ["LTE", "5G", "빔포밍", "MIMO", "기지국", "코어네트워크", "백홀"] },
+      { id: "5-2", name: "6G·위성통신", kind: "원천", w: ["6G", "초저지연", "오픈랜", "Open-RAN", "저궤도 위성", "위성통신", "네트워크 아키텍처", "통신", "네트워크", "무선", "주파수"] },
+      { id: "5-3", name: "통신 부품·장비", kind: "원천", w: ["RF 안테나", "광통신", "통신모듈", "RF 칩셋", "전력증폭기"] },
+      { id: "5-4", name: "사물인터넷·방송", kind: "적용", w: ["IoT 네트워크", "IoT 플랫폼", "UHD 방송", "다중화기", "시그널링"] }
+    ]
+  },
+  "사이버보안": {
+    concept: "사이버보안 관련 예방·탐지, 대응·복구, 산업특화 적용 등 전주기 및 블록체인 기술",
+    basis: "(1) 데이터·AI 보안 (2) 취약점·침해대응 (3) 산업보안·블록체인",
+    groups: [
+      { id: "6-1", name: "데이터·AI 보안", kind: "원천", w: ["프라이버시 강화", "PET", "AI 특화 보안", "AI 대상 공격", "적대적 공격", "양자내성암호", "미래컴퓨팅 보안"] },
+      { id: "6-2", name: "디지털 취약점 분석·침해대응", kind: "원천", w: ["취약점 분석", "공급망 무결성", "랜섬웨어", "침해사고", "포렌식", "제로트러스트", "위협 인텔리전스", "보안관제 자동화", "보안", "해킹", "공격", "취약점", "침해"] },
+      { id: "6-3", name: "산업보안·블록체인", kind: "적용", w: ["영상보안", "융합보안", "물리 가상융합", "국가중요시설", "블록체인", "스마트계약", "분산저장", "웹3.0"] }
+    ]
+  },
+  "로봇": {
+    concept: "로봇에 필요한 부품(HW), 자율이동·조작·상호작용 등 SW 기술에 더해, 제품형태 및 산업적용 분야별 개별기술 및 활용을 위한 기반기술",
+    basis: "(1) 제품·부품 (2) 지능기술 (3) 시스템 통합·관리",
+    groups: [
+      { id: "8-1", name: "로봇 제품·부품", kind: "원천", w: ["로봇 구동", "정밀제어", "감속기", "드라이버", "엔코더", "휴머노이드", "제조용 로봇", "협동로봇", "용접 로봇", "수술 로봇", "재활 로봇", "간병 로봇", "웨어러블 로봇"] },
+      { id: "8-2", name: "로봇 지능기술", kind: "원천", w: ["로봇 자율이동", "비정형 환경", "주행플랫폼", "공간 인지", "상황인지", "자율조작", "물체인식", "조작동작", "인간-로봇 상호작용", "교시", "소셜행동", "로봇"] },
+      { id: "8-3", name: "로봇 시스템 통합", kind: "적용", w: ["가상 제조", "스마트 팩토리", "자율 협업", "원격 제어", "다중로봇", "통합통제"] }
+    ]
+  },
+  "육상 모빌리티": {
+    concept: "자동차·철도 등 육상 모빌리티 관련 차세대 기술(자율주행, 전기차, 수소차)과 내연기관차, 철도 관련 기술",
+    basis: "(1) 자율주행 AI플랫폼·컴퓨팅·센서 (2) 친환경차(전기차, 수소차) (3) 내연기관차로 구분",
+    groups: [
+      { id: "9-1", name: "자율주행", kind: "원천", w: ["자율주행", "SDV", "주행상황 인지", "탑승자 인지", "MaaS", "라이다", "레이더", "정밀측위", "사고원인 규명", "모빌리티", "교통", "차량", "물류 자동화"] },
+      { id: "9-2", name: "친환경차", kind: "원천", w: ["전기차", "전기동력", "구동시스템", "전력변환", "충전시스템", "무선충전", "수소차 연료전지"] },
+      { id: "9-3", name: "내연기관차", kind: "원천", w: ["직접분사", "디젤엔진", "자동변속기", "탄소중립연료 차량"] },
+      { id: "9-4", name: "고속철도 차량", kind: "원천", w: ["철도차량", "고속철도", "동력시스템", "제어진단"] }
+    ]
+  },
+  "우주·항공": {
+    concept: "우주 발사체, 인공위성 등 산업 및 우주탐사기술, 항공 분야는 첨단 항공가스터빈 엔진, 드론(무인비행체) 및 미래항공교통(AAM)",
+    basis: "(우주) 위성·발사체·우주탐사 (항공) 항공기 엔진, 무인비행체, AAM",
+    groups: [
+      { id: "10-1", name: "우주", kind: "원천", w: ["발사체", "터보펌프", "극저온 추진제", "인공위성", "위성본체", "위성 탑재체", "SAR", "광역관측", "우주탐사", "달착륙", "심우주", "위성", "우주"] },
+      { id: "10-2", name: "항공", kind: "원천", w: ["항공가스터빈", "항공엔진", "터보팬", "무인비행체", "드론", "자율비행", "데이터링크", "도심항공교통", "UAM", "버티포트", "항공", "드론"] }
+    ]
+  },
+  "조선·해양": {
+    concept: "선박 건조·운항 관련, IMO 계획에 따른 친환경 기술, 선박 운영 전반에 AI 기능을 접목한 자율운항 기술 및 선박발전시스템, 핵심기자재",
+    basis: "(1) 선박 및 발전시스템(친환경 포함) (2) 인공지능 자율운항 (3) 해양자원기술",
+    groups: [
+      { id: "11-1", name: "조선·기자재", kind: "원천", w: ["친환경 선박", "암모니아 연료", "선박발전", "선박용 모터", "디젤엔진", "크랭크샤프트", "프로펠러", "블록탑재", "액화가스 화물창", "연료탱크", "선박", "조선", "해양", "해운"] },
+      { id: "11-2", name: "선박 자율운항", kind: "적용", w: ["자율운항", "e-Navigation", "통합제어관리", "선박 모니터링", "항해 지원"] },
+      { id: "11-3", name: "해양자원", kind: "원천", w: ["해양자원탐사", "심해물리탐사", "심해채광", "심해환경"] }
+    ]
+  },
+  "이차전지": {
+    concept: "상용 리튬이온전지(셀 및 양극재·음극재·분리막·전해질 등 핵심소재, 모듈-팩), 차세대 이차전지 기술, 재사용·재활용 등 밸류체인 전반",
+    basis: "(1) 상용 리튬이온전지 핵심소재 (2) 차세대 이차전지 (3) 모듈-팩·관리시스템 (4) 재사용·재활용",
+    groups: [
+      { id: "12-1", name: "리튬이온전지 및 핵심소재", kind: "원천", w: ["리튬이온전지", "에너지밀도", "양극재", "음극재", "하이니켈", "실리콘 음극", "분리막", "전해액", "전극", "배터리", "이차전지", "전지", "충전", "수명 예측"] },
+      { id: "12-2", name: "차세대 이차전지", kind: "원천", w: ["전고체", "반고체", "리튬금속전지", "리튬황전지", "나트륨이온", "비리튬계", "흐름전지"] },
+      { id: "12-3", name: "모듈-팩·관리시스템", kind: "원천", w: ["모듈-팩", "배터리 관리", "BMS", "열폭주", "에너지저장 시스템"] },
+      { id: "12-4", name: "재사용·재활용", kind: "적용", w: ["사용후 배터리", "재사용", "재활용", "습식 제련", "자원순환 전지"] }
+    ]
+  },
+  "원자력": {
+    concept: "상용 대형원전의 설계·제조·운영 관련 기술 전반과 SMR특별법에 따른 소형모듈원자로, 방사성폐기물 관련 후행핵주기 기술, 방사선 활용 기술",
+    basis: "(1) 대형원전 (2) 소형 원자로 (3) 후행 핵주기 (4) 방사선 활용",
+    groups: [
+      { id: "13-1", name: "대형 원전", kind: "원천", w: ["원자로 냉각재펌프", "내열 내식성 원자력소재", "원전 설계", "가압경수형", "원전 제조", "계측제어설비"] },
+      { id: "13-2", name: "소형 원자로", kind: "원천", w: ["소형모듈원자로", "SMR", "경수형", "비경수형", "고온가스로", "소듐냉각고속로", "용융염원자로", "연구용 원자로", "TRISO", "원자력", "원전", "방사성", "핵연료"] },
+      { id: "13-3", name: "후행 핵주기", kind: "원천", w: ["방폐물", "방사성폐기물", "사용후핵연료", "부지평가", "원전 해체", "처분"] },
+      { id: "13-4", name: "방사선 활용", kind: "적용", w: ["방사선 이용", "비파괴검사", "공정 시스템"] }
+    ]
+  },
+  "수소": {
+    concept: "수소생산 기술 전반(수전해, 블루, 청록 등), 기체·액화수소의 저장·운송, 전력생산 및 친환경 제철기술 활용 등 밸류체인 전반",
+    basis: "(1) 수소생산 (2) 수소 저장·운송(유통) (3) 수소 활용(모빌리티·연료전지·발전)",
+    groups: [
+      { id: "14-1", name: "수소 생산", kind: "원천", w: ["수전해", "청정수소", "그린수소", "블루수소", "청록수소", "부생수소", "탄소포집 수소", "수소"] },
+      { id: "14-2", name: "수소 저장·운송", kind: "원천", w: ["수소 저장", "수소 운송", "액화수소", "수소충전소", "배관망", "LOHC", "고체수소저장"] },
+      { id: "14-3", name: "수소 활용", kind: "적용", w: ["수소연료전지", "연료전지 발전", "SOFC", "암모니아 발전", "수소 혼소", "수소 가스터빈", "수소환원제철"] }
+    ]
+  },
+  "클린에너지·환경": {
+    concept: "탄소중립을 위한 재생에너지 생산(태양광, 풍력, 지열, 바이오매스 등) 및 고효율 에너지 생산·활용, 온실가스 감축을 위한 산업공정 탄소저감 기술 전반",
+    basis: "(1) 재생에너지 생산 (2) 전력망·에너지효율화 (3) CCUS·연원료 대체 (4) 오염저감·자원순환",
+    groups: [
+      { id: "15-1", name: "재생에너지", kind: "원천", w: ["태양광", "페로브스카이트", "탠덤 태양전지", "풍력", "블레이드", "해상풍력", "지열", "바이오매스 에너지", "폐기물 가스화", "재생에너지", "신재생"] },
+      { id: "15-2", name: "발전·전력망·에너지효율화", kind: "원천", w: ["가스터빈", "초임계 이산화탄소", "전력계통", "배전계통", "전력관리시스템", "EMS", "히트펌프", "산업용 전동기", "냉매"] },
+      { id: "15-3", name: "온실가스 감축", kind: "원천", w: ["이산화탄소 포집", "CCUS", "지중 저장", "부생가스 전환", "시멘트 원료화", "연원료 대체", "나프타 분해", "탄소중립", "탄소", "온실가스", "기후"] },
+      { id: "15-4", name: "오염저감·자원순환", kind: "적용", w: ["미세먼지", "배기가스", "미립자 필터", "폐플라스틱", "재활용", "생분해성 플라스틱", "폐수 재이용", "폐섬유"] }
+    ]
+  },
+  "소재·부품": {
+    concept: "산업 전반의 기반이 되는 소재·부품 및 철강(금속) 관련 기술",
+    basis: "(1) 폴리머(플라스틱, 섬유) (2) 금속·세라믹 (3) 철강 (4) 기반 부품(베어링 등)",
+    groups: [
+      { id: "16-1", name: "화학·고분자·섬유 소재", kind: "원천", w: ["극한성능 섬유", "의료용 섬유", "PTFE", "멤브레인", "하이퍼플라스틱", "불소계 실리콘", "정밀화학 소재", "접착소재", "탄소섬유", "그래핀", "소재", "신소재", "부품", "복합재", "고분자"] },
+      { id: "16-2", name: "금속·세라믹 소재", kind: "원천", w: ["알루미늄 도금", "니켈 회수", "희토류", "마그네슘", "구리합금", "타이타늄", "몰리브덴", "영구자석", "실리카", "세라믹 소재", "알루미늄 제조"] },
+      { id: "16-3", name: "철강", kind: "원천", w: ["스테인리스", "전기강판", "고강도 철근", "형강", "고로 조업", "철스크랩", "수냉각 기술"] },
+      { id: "16-4", name: "기반 부품", kind: "원천", w: ["롤러베어링", "볼베어링", "컨트롤 밸브", "볼스크류", "마그네틱 베어링", "터보식 펌프", "특수 렌즈"] },
+      { id: "16-5", name: "3D 프린팅·착용형", kind: "적용", w: ["3D 프린팅", "신체부착형", "유연기판", "유연전원"] }
+    ]
+  },
+  "기계·장비": {
+    concept: "산업현장에 기반이 되는 머시닝센터, 터닝센터, 굴착기 등 핵심 기계·장비",
+    basis: "(해당사항 없음)",
+    groups: [
+      { id: "17", name: "기계·장비", kind: "원천", w: ["머시닝센터", "정수압 프레스", "연삭가공", "터닝센터", "회전 성형기", "밸런싱머신", "레이저 가공장비", "방전가공", "굴착기", "승강기", "공작기계", "기계", "장비", "설비", "가공", "예지보전", "내구", "피로 수명"] }
+    ]
+  },
+  "방위산업": {
+    concept: "방산기업의 무기체계 관련 기술 중, 지원 필요성이 높은 가스터빈엔진 등 추진체계, 군사위성체계, 유무인복합체계, 방산물자 수출 지원 등",
+    basis: "(해당사항 없음). 국방R&D 분류기준은 10대 국방전략기술",
+    groups: [
+      { id: "18", name: "방위산업", kind: "원천", w: ["추진체계", "유도무기", "군사위성", "감시정찰", "지상장비", "유무인복합", "전투용 디지털 의류", "방산물자", "국방 무기체계", "국방", "방산", "무기"] }
+    ]
+  },
+  "콘텐츠 기술": {
+    concept: "VR·AR 등 공간컴퓨팅(Spatial computing) 실감형 콘텐츠 및 관련 디바이스, 게임·애니메이션·방송 등 문화 콘텐츠",
+    basis: "(해당사항 없음)",
+    groups: [
+      { id: "19-1", name: "공간컴퓨팅(실감형 콘텐츠)", kind: "원천", w: ["가상현실", "VR 콘텐츠", "증강현실", "AR 콘텐츠", "오감체험", "4D 콘텐츠", "홀로그램", "공간컴퓨팅"] },
+      { id: "19-2", name: "문화 콘텐츠", kind: "적용", w: ["게임 콘텐츠", "영화 콘텐츠", "방송 콘텐츠", "애니메이션", "웹툰", "만화 콘텐츠", "콘텐츠", "창작", "게임", "영상 콘텐츠", "실감"] }
+    ]
+  }
 };
 
-var TECH_THEME = {
-  "AI/SW": "AI·데이터", "양자": "AI·데이터",
-  "반도체": "반도체·전자", "디스플레이": "반도체·전자",
-  "바이오": "바이오·헬스",
-  "이차전지": "에너지·환경", "클린에너지·환경": "에너지·환경", "수소": "에너지·환경", "원자력": "에너지·환경",
-  "소재·부품": "소재·제조", "기계·장비": "소재·제조",
-  "로봇": "모빌리티·로봇", "육상 모빌리티": "모빌리티·로봇",
-  "통신": "정보보안·네트워크", "사이버보안": "정보보안·네트워크",
-  "우주·항공": "우주·항공·해양", "조선·해양": "우주·항공·해양", "방위산업": "우주·항공·해양",
-  "콘텐츠 기술": "인문·문화"
+/* 판정 순서 — 도메인이 뚜렷한 분야를 먼저 견주고 AI/SW 를 마지막에 둔다.
+   'AI' 같은 낱말이 모든 문장에 섞여 나와 다른 분야를 덮는 것을 막기 위함이다. */
+var TAX_ORDER = ["바이오", "반도체", "디스플레이", "이차전지", "원자력", "수소", "클린에너지·환경",
+  "소재·부품", "기계·장비", "로봇", "육상 모빌리티", "우주·항공", "조선·해양", "방위산업",
+  "양자", "통신", "사이버보안", "콘텐츠 기술", "AI/SW"];
+
+/* 19대 체계 밖 — 어느 세부기술에도 없는 연구. 사유를 나눠 둔다. */
+var OUTSIDE_WORDS = {
+  "법·제도·거버넌스": ["법적", "법제", "책임", "규제", "제도", "정책", "거버넌스", "윤리", "표준화", "인증", "공공성", "권리"],
+  "교육·인재양성": ["교육과정", "교육", "학습자", "대학원", "인재 양성", "교수법", "커리큘럼", "진로", "역량 강화"],
+  "사회·경제·문화": ["격차", "불평등", "수용성", "고령화", "인구", "지역 소멸", "노동", "일자리", "복지", "돌봄 체계", "문화", "창작", "시장", "경영", "조직"]
 };
+var OUTSIDE_ORDER = ["법·제도·거버넌스", "교육·인재양성", "사회·경제·문화"];
 
-/* 'AI'는 거의 모든 주제에 섞여 나오므로 마지막에 견준다.
-   점수가 같으면 더 좁은 영역이 이기도록 순서를 둔다. */
-var THEME_ORDER = ["바이오·헬스", "반도체·전자", "에너지·환경", "소재·제조", "모빌리티·로봇",
-  "정보보안·네트워크", "우주·항공·해양", "인문·문화", "교육·인재양성", "사회·정책",
-  "경영·산업", "AI·데이터"];
-var THEME_TECHS = {};
-Object.keys(TECH_THEME).forEach(function (tk) {
-  var th = TECH_THEME[tk];
-  if (!THEME_TECHS[th]) THEME_TECHS[th] = [];
-  THEME_TECHS[th].push(tk);
-});
-
-function classifyTheme(text) {
-  var t = String(text || "");
-  if (!t.trim()) return "";
-  var best = "", bestScore = 0;
-  THEME_ORDER.forEach(function (th) {
-    var n = 0;
-    THEME_WORDS[th].forEach(function (w) { if (t.indexOf(w) >= 0) n += (w.length >= 3 ? 1.4 : 1); });
-    if (n > bestScore) { bestScore = n; best = th; }
+function noSpace(t) { return String(t || "").replace(/\s+/g, ""); }
+function scoreWords(text, words) {
+  var t = noSpace(text), n = 0;
+  words.forEach(function (w) {
+    var k = noSpace(w);
+    if (k && t.indexOf(k) >= 0) n += (k.length >= 4 ? 1.6 : k.length >= 3 ? 1.3 : 1);
   });
-  return bestScore > 0 ? best : "미분류";
+  return n;
 }
 
+/* 문장을 19대 체계의 '분야 + 중분류'로 찍는다. 해당 없으면 null */
+function classifyTech(text) {
+  var t = String(text || "");
+  if (!t.trim()) return null;
+  var best = null, bestScore = 0;
+  TAX_ORDER.forEach(function (f) {
+    TAXONOMY[f].groups.forEach(function (g) {
+      var n = scoreWords(t, g.w);
+      if (n > bestScore) { bestScore = n; best = { field: f, id: g.id, group: g.name, kind: g.kind }; }
+    });
+  });
+  return bestScore >= 1 ? best : null;
+}
+
+/* 체계 밖일 때 어떤 성격인지 */
+function classifyOutside(text) {
+  var t = String(text || "");
+  var best = "", bestScore = 0;
+  OUTSIDE_ORDER.forEach(function (k) {
+    var n = scoreWords(t, OUTSIDE_WORDS[k]);
+    if (n > bestScore) { bestScore = n; best = k; }
+  });
+  return bestScore >= 1 ? best : "분류 불가";
+}
+
+/* 기존 화면이 쓰는 '영역' 이름은 이제 분야명 그 자체다 */
+var THEMES = TECH19.slice();
+var TECH_THEME = {};
+TECH19.forEach(function (t) { TECH_THEME[t] = t; });
+var THEME_TECHS = {};
+TECH19.forEach(function (t) { THEME_TECHS[t] = [t]; });
+
+function classifyTheme(text) {
+  var c = classifyTech(text);
+  if (c) return c.field;
+  return String(text || "").trim() ? "체계 밖" : "";
+}
+
+/* 판정 네 갈래의 정의 — 화면에도 그대로 노출한다 */
+var VERDICTS = [
+  { k: "원천", color: "var(--go)",
+    def: "연구주제의 대상이 선택한 분야의 <b>기반·원천 중분류</b>에 해당합니다.",
+    rule: "그 분야의 기술 자체를 만들거나 원리·성능·한계를 다루는 경우. 예) AI/SW 3-2 «AI 모델링·AGI 원천» — “언어모델의 추론 신뢰도를 어떻게 검증할 것인가”" },
+  { k: "적용", color: "var(--cobalt)",
+    def: "연구주제의 대상이 선택한 분야가 <b>스스로 ‘산업적용·실증·시스템 통합’으로 규정한 중분류</b>에 해당합니다.",
+    rule: "그 분야 체계 안에 이미 응용 항목이 있는 경우. 예) AI/SW 3-3 «AI 산업적용» — “제조 현장 특화 AI 실증”" },
+  { k: "타 분야", color: "var(--hold)",
+    def: "연구주제의 대상이 <b>다른 분야의 세부기술</b>에 해당합니다.",
+    rule: "총괄표상 각 분야는 자기 안에 AI 응용 항목을 이미 갖고 있으므로, 선택 분야를 도구로 쓰고 대상이 다른 분야면 그 분야로 셉니다. 예) “AI로 진단 오류를 줄인다” → 바이오 7-4 «AI-바이오»" },
+  { k: "체계 밖", color: "var(--off)",
+    def: "19대 전략기술 <b>어느 분야의 세부기술에도 해당하지 않습니다</b>.",
+    rule: "총괄표는 기술 개발 중심이라 법제도·교육과정·사회 수용성 연구는 세부기술로 올라 있지 않습니다. 잘못된 응답이라는 뜻이 아니라, 이 체계로는 셀 수 없다는 뜻입니다." }
+];
+var JUDGE_COLOR = { "원천": "var(--go)", "적용": "var(--cobalt)", "타 분야": "var(--hold)", "체계 밖": "var(--off)" };
+
 /* ── 연구주제의 '대상'과 '수단' 가르기 ─────────────────────────────
-   "AI로 진단 오류를 줄인다"와 "AI 자체의 한계를 넘는다"는 전혀 다른 연구다.
-   앞의 AI는 도구(수단), 뒤의 AI는 연구 대상이다.
-   한국어에서 수단은 대개 '~기반 / ~활용 / ~통해' 앞에 온다. 그 앞 어절을
-   수단으로 떼어내고, 남은 문장을 연구 대상으로 본다.                */
+   "AI로 진단 오류를 줄인다"와 "AI 자체의 한계를 넘는다"는 다른 연구다.
+   한국어에서 수단은 대개 '~기반 / ~활용 / ~통해' 앞에 온다.          */
 var MEANS_MARKERS = ["기반", "활용", "이용", "통해", "적용", "도입", "접목", "결합", "써서", "사용"];
-var AI_TERMS = ["AI", "인공지능", "머신러닝", "딥러닝", "LLM", "언어모델", "생성형", "신경망", "기계학습", "빅데이터"];
+var AI_TERMS = ["AI-CDSS", "CDSS", "AI", "인공지능", "머신러닝", "딥러닝", "LLM", "언어모델",
+  "생성형", "신경망", "기계학습", "빅데이터", "챗봇", "에이전트"];
 
 function splitMeans(text) {
   var obj = " " + String(text || "") + " ";
@@ -768,14 +977,30 @@ function hasAI(t) {
 }
 function parseTopic(text) {
   var sp = splitMeans(text);
-  var meansThemes = uniq(sp.means.map(classifyTheme).filter(function (x) { return x && x !== "미분류"; }));
+  var meansThemes = uniq(sp.means.map(classifyTheme)
+    .filter(function (x) { return x && x !== "체계 밖"; }));
+
+  /* 수단으로 선언된 말은 대상 판정에서 뺀다.
+     그러지 않으면 "생성형 AI와 AI-CDSS를 활용하는 간호실무…" 에서
+     꼬리로 남은 '생성형' 때문에 도구가 연구 대상으로 둔갑한다. */
+  var objText = sp.object;
+  var words = [];
+  sp.means.forEach(function (m) { words = words.concat(m.split(/\s+/)); });
+  words.forEach(function (w) { if (w.length >= 2) objText = objText.split(w).join(" "); });
+  if (sp.means.some(hasAI)) {
+    AI_TERMS.forEach(function (w) { objText = objText.split(w).join(" "); });
+  }
+
+  var oc = classifyTech(objText);
   return {
     text: text,
-    object: classifyTheme(sp.object),
+    object: oc ? oc.field : "체계 밖",
+    objId: oc ? oc.id : "",
+    objGroup: oc ? oc.group : classifyOutside(objText),
+    objKind: oc ? oc.kind : "",
     means: meansThemes,
     meansText: uniq(sp.means),
-    aiRole: sp.means.some(hasAI) ? "수단"
-      : (hasAI(sp.object) || classifyTheme(sp.object) === "AI·데이터") ? "대상" : ""
+    aiRole: sp.means.some(hasAI) ? "수단" : (hasAI(objText) ? "대상" : "")
   };
 }
 
@@ -903,7 +1128,7 @@ function analyze(rows) {
     if (r.track) a.track[r.track] = (a.track[r.track] || 0) + 1;
     if (r.track === "미래인재") {
       if (r.futureTopic) {
-        var fth = classifyTheme(r.futureTopic);
+        var fth = parseTopic(r.futureTopic).object;
         a.futureTopics.push({ text: r.futureTopic, dept: r.dept, college: col, name: r.name, techs: [], theme: fth });
         a.themes[fth] = (a.themes[fth] || 0) + 1;
       }
@@ -923,8 +1148,8 @@ function analyze(rows) {
     var myThemes = [];
     (r.topics || []).forEach(function (t) {
       if (!t) return;
-      var th = classifyTheme(t);
-      if (th && th !== "미분류" && myThemes.indexOf(th) < 0) myThemes.push(th);
+      var th = parseTopic(t).object;
+      if (th && th !== "체계 밖" && myThemes.indexOf(th) < 0) myThemes.push(th);
       a.themes[th] = (a.themes[th] || 0) + 1;
       a.topics.push({ text: t, dept: r.dept, college: col, name: r.name, techs: r.techs || [], theme: th });
       tokenize(t).forEach(function (w) { a.keywords[w] = (a.keywords[w] || 0) + 1; });
@@ -932,7 +1157,7 @@ function analyze(rows) {
     /* 고른 분야와 실제 연구주제의 대상·수단을 견준다 */
     var parsed = (r.topics || []).map(parseTopic);
     var objThemes = uniq(parsed.map(function (x) { return x.object; })
-      .filter(function (x) { return x && x !== "미분류"; }));
+      .filter(function (x) { return x && x !== "체계 밖"; }));
     var meanThemes = uniq([].concat.apply([], parsed.map(function (x) { return x.means; })));
     objThemes.forEach(function (th) { a.demandObject[th] = (a.demandObject[th] || 0) + 1; });
 
@@ -948,24 +1173,35 @@ function analyze(rows) {
     var judged = [];
     (r.techs || []).forEach(function (tk) {
       var th = TECH_THEME[tk];
-      if (!a.techAlign[tk]) a.techAlign[tk] = { sel: 0, tech: 0, fusion: 0, move: 0, check: 0, x: {}, to: {} };
+      if (!a.techAlign[tk]) a.techAlign[tk] = { sel: 0, tech: 0, fusion: 0, move: 0, check: 0, x: {}, to: {}, g: {} };
       var g = a.techAlign[tk];
       g.sel++;
-      var v, xs = [];
-      if (th && objThemes.indexOf(th) >= 0) { v = "기술"; }
-      else if (th && meanThemes.indexOf(th) >= 0) {
-        v = "융합";
-        xs = objThemes.filter(function (o) { return o !== th; });
-      } else if (objThemes.length) {
-        v = "재배치";
-        xs = objThemes.filter(function (o) { return o !== th; });
-      } else { v = "확인"; }
-      g[v === "기술" ? "tech" : v === "융합" ? "fusion" : v === "재배치" ? "move" : "check"]++;
-      xs.forEach(function (o) {
-        if (v === "융합") g.x[o] = (g.x[o] || 0) + 1;
-        if (v === "재배치") g.to[o] = (g.to[o] || 0) + 1;
+      /* 같은 문장에서 도구로 쓴 분야는 그 문장의 연구 대상으로 치지 않는다 */
+      var own = parsed.filter(function (pt) {
+        return pt.object === tk && pt.means.indexOf(tk) < 0;
       });
-      judged.push({ tech: tk, v: v, xs: xs });
+      var src = own.filter(function (pt) { return pt.objKind === "원천"; });
+      var app = own.filter(function (pt) { return pt.objKind === "적용"; });
+      var other = parsed.filter(function (pt) {
+        return pt.object && pt.object !== "체계 밖" && pt.object !== tk;
+      });
+      var v, xs = [], gid = "";
+      if (src.length) { v = "원천"; gid = src[0].objId + " " + src[0].objGroup; }
+      else if (app.length) { v = "적용"; gid = app[0].objId + " " + app[0].objGroup; }
+      else if (other.length) {
+        v = "타 분야";
+        xs = uniq(other.map(function (pt) { return pt.object + (pt.objId ? " · " + pt.objId + " " + pt.objGroup : ""); }));
+      } else {
+        v = "체계 밖";
+        xs = uniq(parsed.map(function (pt) { return pt.objGroup; }).filter(Boolean));
+      }
+      g[v === "원천" ? "tech" : v === "적용" ? "fusion" : v === "타 분야" ? "move" : "check"]++;
+      if (gid.trim()) g.g[gid] = (g.g[gid] || 0) + 1;
+      xs.forEach(function (o) {
+        if (v === "타 분야") g.to[o] = (g.to[o] || 0) + 1;
+        if (v === "체계 밖") g.x[o] = (g.x[o] || 0) + 1;
+      });
+      judged.push({ tech: tk, v: v, xs: xs, gid: gid });
     });
     /* 선택 기준 영역 인원 (주제 기준 실질 수요와 견주기 위함) */
     uniq((r.techs || []).map(function (x) { return TECH_THEME[x]; }).filter(Boolean))
@@ -1982,16 +2218,16 @@ function bindMatching() {
         if (j) judgeOf[ar.id] = j.v;
       });
       var ordered = c.members.slice().sort(function (x, y) {
-        var o = { "기술": 0, "융합": 1, "재배치": 2, "확인": 3 };
+        var o = { "원천": 0, "적용": 1, "타 분야": 2, "체계 밖": 3 };
         return (o[judgeOf[x.id]] === undefined ? 3 : o[judgeOf[x.id]]) -
                (o[judgeOf[y.id]] === undefined ? 3 : o[judgeOf[y.id]]);
       });
-      var core = c.members.filter(function (m) { return judgeOf[m.id] === "기술"; }).length;
-      var fus = c.members.filter(function (m) { return judgeOf[m.id] === "융합"; }).length;
+      var core = c.members.filter(function (m) { return judgeOf[m.id] === "원천"; }).length;
+      var fus = c.members.filter(function (m) { return judgeOf[m.id] === "적용"; }).length;
       openModal(t + " 교육연구단 구성안",
         '<div class="cl-stats" style="border-top:none;padding-top:0">' +
         "<div><b class=\"num\" style=\"color:var(--go)\">" + core + "</b><span>주축</span></div>" +
-        "<div><b class=\"num\" style=\"color:var(--cobalt)\">" + fus + "</b><span>융합 참여</span></div>" +
+        "<div><b class=\"num\" style=\"color:var(--cobalt)\">" + fus + "</b><span>적용 참여</span></div>" +
         "<div><b class=\"num\">" + c.depts.length + "</b><span>참여 학과</span></div></div>" +
         '<h5 style="font-size:0.7812rem;color:var(--ink-3);margin:6px 0 8px">참여 학과 ' + c.depts.length + "개 · " +
         c.colleges.length + "개 기관</h5>" +
@@ -2005,10 +2241,10 @@ function bindMatching() {
           var v = judgeOf[m.id] || "-";
           return '<tr><td><span class="chip chip-sm" style="cursor:default;border-color:' +
             (JUDGE_COLOR[v] || "var(--line)") + ";color:" + (JUDGE_COLOR[v] || "var(--ink-3)") + '">' +
-            esc(v === "기술" ? "주축" : v === "융합" ? "융합 참여" : v) + "</span></td><td>" + esc(m.name) +
+            esc(v === "원천" ? "주축" : v === "적용" ? "적용 참여" : v) + "</span></td><td>" + esc(m.name) +
             "</td><td>" + esc(m.dept) + "</td><td>" + esc(m.rank || "-") + "</td></tr>";
         }).join("") + "</tbody></table></div>" +
-        '<p class="mini-note">주축은 이 분야를 연구 대상으로 삼은 교원, 융합 참여는 이 분야를 도구로 다른 영역을 연구하겠다는 교원입니다. ' +
+        '<p class="mini-note">주축은 이 분야의 기반·원천 중분류를 연구 대상으로 삼은 교원, 적용 참여는 이 분야의 산업적용 중분류에 해당하는 교원입니다. ' +
         "최종 구성은 별도 검토가 필요합니다.</p>");
       var uc = $("#unitcsv");
       if (uc) uc.onclick = function () { exportUnit(t); };
@@ -2042,7 +2278,7 @@ function tabTopics() {
       return '<button class="brow" data-theme="' + esc(x.k) + '" style="width:100%;text-align:left">' +
         '<span class="nm"' + (filters.theme === x.k ? ' style="color:var(--navy);font-weight:700"' : "") + ">" + esc(x.k) + "</span>" +
         '<span class="bar-t"><i style="width:' + (x.n / maxTheme * 100) + "%;background:" +
-        (x.k === "미분류" ? "var(--ink-3)" : "var(--navy-2)") + '"></i></span>' +
+        (x.k === "체계 밖" ? "var(--ink-3)" : "var(--navy-2)") + '"></i></span>' +
         '<span class="vl num">' + x.n + "</span></button>";
     }).join("") : '<p class="hint">아직 주제가 없습니다.</p>') +
     '<p class="mini-note">영역 이름을 누르면 아래 목록이 걸러집니다. 문장에 쓰인 낱말로 자동 분류하므로 ‘미분류’는 직접 확인이 필요합니다.</p>' +
@@ -2063,7 +2299,7 @@ function tabTopics() {
     '<select class="input" id="ttrack"><option value="">트랙 전체</option>' +
     TRACKS.map(function (t) { return '<option' + (filters.track === t ? " selected" : "") + ">" + esc(t) + "</option>"; }).join("") + "</select>" +
     '<select class="input" id="ttheme"><option value="">영역 전체</option>' +
-    THEMES.concat(["미분류"]).map(function (t) { return '<option' + (filters.theme === t ? " selected" : "") + ">" + esc(t) + "</option>"; }).join("") + "</select>" +
+    THEMES.concat(["체계 밖"]).map(function (t) { return '<option' + (filters.theme === t ? " selected" : "") + ">" + esc(t) + "</option>"; }).join("") + "</select>" +
     '<select class="input" id="ttech"><option value="">전략기술 전체</option>' +
     TECH19.map(function (t) { return '<option' + (filters.tech === t ? " selected" : "") + ">" + esc(t) + "</option>"; }).join("") + "</select>" +
     (q || filters.tech || filters.track || filters.theme ? '<button class="btn btn-quiet" id="tclear">필터 지우기</button>' : "") + "</div>" +
@@ -2071,8 +2307,8 @@ function tabTopics() {
       slicePage("topics", list).map(function (x) {
         var t = x.t;
         return "<tr><td>" + esc(t.text) + "</td><td>" +
-          (t.theme && t.theme !== "미분류" ? '<span class="chip chip-sm" style="cursor:default">' + esc(t.theme) + "</span>"
-            : '<span style="color:var(--ink-3)">미분류</span>') +
+          (t.theme && t.theme !== "체계 밖" ? '<span class="chip chip-sm" style="cursor:default">' + esc(t.theme) + "</span>"
+            : '<span style="color:var(--ink-3)">체계 밖</span>') +
           '</td><td><span class="st"><i style="background:' + TRACK_COLOR[x.track] + '"></i>' +
           esc(x.track) + "</span></td><td>" + esc(t.name) + "</td><td>" + esc(t.dept) + "</td></tr>";
       }).join("") + "</tbody></table></div>" + pager("topics", list.length)
@@ -2198,23 +2434,21 @@ function axisTech() {
   var name = filters.atech;
   var members = A.alignRows.filter(function (r) { return r.techs.indexOf(filters.atech) >= 0; })
     .map(function (r) {
-      var j = r.judged.filter(function (x) { return x.tech === filters.atech; })[0] || { v: "확인", xs: [] };
-      return { r: r, v: j.v, xs: j.xs || [] };
+      var j = r.judged.filter(function (x) { return x.tech === filters.atech; })[0] || { v: "체계 밖", xs: [] };
+      return { r: r, v: j.v, xs: j.xs || [], gid: j.gid || "" };
     })
     .sort(function (x, y) {
-      var o = { "기술": 0, "융합": 1, "재배치": 2, "확인": 3 };
+      var o = { "원천": 0, "적용": 1, "타 분야": 2, "체계 밖": 3 };
       return o[x.v] - o[y.v] || x.r.dept.localeCompare(y.r.dept);
     });
   var shown = members.filter(function (m) { return !filters.judge || m.v === filters.judge; });
 
+  var tax = TAXONOMY[filters.atech];
   function bars(obj, color) {
     var list = Object.keys(obj).map(function (k) { return { k: k, n: obj[k] }; })
-      .sort(function (x, y) { return y.n - x.n; }).slice(0, 6);
+      .sort(function (x, y) { return y.n - x.n; }).slice(0, 7);
     var mx = list.length ? list[0].n : 1;
-    return list.length ? list.map(function (x) {
-      var tks = (THEME_TECHS[x.k] || []).filter(function (t) { return t !== filters.atech; });
-      return barRow(x.k + (tks.length ? " (" + tks.slice(0, 2).join(", ") + ")" : ""), x.n, mx, color);
-    }).join("") : "";
+    return list.length ? list.map(function (x) { return barRow(x.k, x.n, mx, color); }).join("") : "";
   }
 
   return '<div class="cols-2" style="margin-bottom:16px">' +
@@ -2232,30 +2466,32 @@ function axisTech() {
         '<i style="width:' + pct(x.check, x.sel) + '%;background:var(--off)"></i></span></span>' +
         '<span class="vl num">' + x.sel + "</span></button>";
     }).join("") +
-    '<div class="legend" style="margin-top:14px">' + ["기술", "융합", "재배치", "확인"].map(function (v) {
-      return '<span><i style="background:' + JUDGE_COLOR[v] + '"></i>' + v + "</span>";
-    }).join("") + "</div>" +
-    '<p class="mini-note"><b>기술</b> 그 분야 자체를 연구 · <b>융합</b> 도구로 삼아 다른 영역을 연구 · ' +
-    "<b>재배치</b> 주제가 다른 분야에 가까움 · <b>확인</b> 판정 불가</p></div>" +
+    '<div class="legend" style="margin-top:14px">' + VERDICTS.map(function (v) {
+      return '<span><i style="background:' + v.color + '"></i>' + v.k + "</span>";
+    }).join("") + "</div></div>" +
 
     /* 오른쪽: 선택한 분야의 속사정 */
     '<div class="panel"><div class="panel-head"><h3>' + esc(name) + " · " + cur.sel + "명</h3>" +
-    '<span class="note">연구주제로 본 성격</span></div>' +
-    '<dl class="kpis" style="grid-template-columns:repeat(3,1fr);margin-bottom:18px">' +
-      '<div class="kpi"><dt>① 기술 자체</dt><dd class="num" style="color:var(--go)">' + cur.tech +
+    '<span class="note">연구주제로 본 판정</span></div>' +
+    (tax ? '<div class="notice" style="margin-bottom:16px;font-size:0.8125rem"><span><b>분야별 개념</b> ' +
+      esc(tax.concept) + "<br><b>범주화 기준</b> " + esc(tax.basis) + "</span></div>" : "") +
+    '<dl class="kpis" style="grid-template-columns:repeat(4,1fr);margin-bottom:18px">' +
+      '<div class="kpi"><dt>① 원천</dt><dd class="num" style="color:var(--go)">' + cur.tech +
       '<small>명</small></dd><p class="foot">' + pct(cur.tech, cur.sel) + "%</p></div>" +
-      '<div class="kpi"><dt>② 기반 융합</dt><dd class="num" style="color:var(--cobalt)">' + cur.fusion +
+      '<div class="kpi"><dt>② 적용</dt><dd class="num" style="color:var(--cobalt)">' + cur.fusion +
       '<small>명</small></dd><p class="foot">' + pct(cur.fusion, cur.sel) + "%</p></div>" +
-      '<div class="kpi"><dt>③ 재배치</dt><dd class="num" style="color:var(--hold)">' + cur.move +
-      '<small>명</small></dd><p class="foot">' + pct(cur.move, cur.sel) + "%" +
-      (cur.check ? " · 확인 " + cur.check + "명" : "") + "</p></div></dl>" +
-    '<h5 style="font-size:0.7812rem;color:var(--ink-3);margin:0 0 8px;font-weight:700">② ' +
-      esc(name) + " + X 에서 X는 무엇인가</h5>" +
-    (bars(cur.x, "var(--cobalt)") || '<p class="hint">융합형 응답이 없습니다.</p>') +
-    '<h5 style="font-size:0.7812rem;color:var(--ink-3);margin:18px 0 8px;font-weight:700">③ 재배치한다면 어느 분야로</h5>' +
-    (bars(cur.to, "var(--hold)") || '<p class="hint">재배치 대상이 없습니다.</p>') +
-    '<p class="mini-note">괄호 안은 그 영역에 해당하는 19대 전략기술입니다.</p></div>' +
+      '<div class="kpi"><dt>③ 타 분야</dt><dd class="num" style="color:var(--hold)">' + cur.move +
+      '<small>명</small></dd><p class="foot">' + pct(cur.move, cur.sel) + "%</p></div>" +
+      '<div class="kpi"><dt>④ 체계 밖</dt><dd class="num" style="color:var(--off)">' + cur.check +
+      '<small>명</small></dd><p class="foot">' + pct(cur.check, cur.sel) + "%</p></div></dl>" +
+    '<h5 style="font-size:0.7812rem;color:var(--ink-3);margin:0 0 8px;font-weight:700">①② 어느 중분류에 해당하는가</h5>' +
+    (bars(cur.g, "var(--go)") || '<p class="hint">이 분야 세부기술에 해당하는 주제가 없습니다.</p>') +
+    '<h5 style="font-size:0.7812rem;color:var(--ink-3);margin:18px 0 8px;font-weight:700">③ 타 분야라면 어디로</h5>' +
+    (bars(cur.to, "var(--hold)") || '<p class="hint">타 분야 판정이 없습니다.</p>') +
+    '<h5 style="font-size:0.7812rem;color:var(--ink-3);margin:18px 0 8px;font-weight:700">④ 체계 밖이라면 어떤 성격인가</h5>' +
+    (bars(cur.x, "var(--off)") || '<p class="hint">체계 밖 판정이 없습니다.</p>') + "</div>" +
   "</div>" +
+  verdictPanel() +
 
   adjustedPanel() +
 
@@ -2263,29 +2499,57 @@ function axisTech() {
     '<span class="note">' + shown.length + "명</span></div>" +
     '<div class="tbl-tools">' +
     '<select class="input" id="ajudge"><option value="">성격 전체</option>' +
-    ["기술", "융합", "재배치", "확인"].map(function (v) { return '<option' + (filters.judge === v ? " selected" : "") + ">" + v + "</option>"; }).join("") + "</select>" +
+    ["원천", "적용", "타 분야", "체계 밖"].map(function (v) { return '<option' + (filters.judge === v ? " selected" : "") + ">" + v + "</option>"; }).join("") + "</select>" +
     (filters.judge ? '<button class="btn btn-quiet" id="aclear">필터 지우기</button>' : "") +
     '<button class="btn btn-ghost" id="acsv" style="margin-left:auto">이 명단 CSV</button></div>' +
     (shown.length ? '<div class="tbl-wrap"><table class="data" style="min-width:820px"><thead><tr>' +
-      "<th>성격</th><th>성명</th><th>소속 학과</th><th>직급</th><th>융합·재배치 대상</th><th style=\"width:38%\">연구주제와 판단 근거</th>" +
+      "<th>판정</th><th>성명</th><th>소속 학과</th><th>직급</th><th>해당 중분류 · 타 분야</th><th style=\"width:38%\">연구주제와 판단 근거</th>" +
       "</tr></thead><tbody>" +
       slicePage("analysis", shown).map(function (m) {
         var r = m.r;
         return '<tr><td><span class="chip chip-sm" style="cursor:default;border-color:' + JUDGE_COLOR[m.v] +
           ';color:' + JUDGE_COLOR[m.v] + '">' + m.v + "</span></td>" +
           "<td>" + esc(r.name) + "</td><td>" + esc(r.dept) + "</td><td>" + esc(rankOf(r.id)) + "</td>" +
-          "<td>" + (m.xs.length ? m.xs.map(function (o) {
-            var tks = (THEME_TECHS[o] || []).filter(function (t) { return t !== filters.atech; });
-            return '<div style="margin-bottom:3px">' + esc(o) +
-              (tks.length ? '<div style="font-size:0.72rem;color:var(--ink-3)">' + esc(tks.slice(0, 2).join(", ")) + "</div>" : "") + "</div>";
-          }).join("") : '<span style="color:var(--ink-3)">-</span>') + "</td>" +
+          "<td>" + (m.gid && m.gid.trim() ? '<span class="chip chip-sm" style="cursor:default">' + esc(m.gid) + "</span>"
+            : m.xs.length ? m.xs.map(function (o) {
+              return '<div style="margin-bottom:3px;font-size:0.8rem">' + esc(o) + "</div>";
+            }).join("") : '<span style="color:var(--ink-3)">-</span>') + "</td>" +
           "<td>" + (r.topics.length ? r.topics.map(function (t) {
             return '<div style="margin-bottom:7px">' + esc(t.text) +
               '<div style="font-size:0.75rem;color:var(--ink-3);margin-top:2px">대상 ' + esc(t.object) +
+              (t.objId ? " " + esc(t.objId + " " + t.objGroup) : t.objGroup ? " (" + esc(t.objGroup) + ")" : "") +
               (t.meansText.length ? " · 수단 " + esc(t.meansText.join(", ")) : "") + "</div></div>";
           }).join("") : '<span style="color:var(--ink-3)">주제 없음</span>') + "</td></tr>";
       }).join("") + "</tbody></table></div>" + pager("analysis", shown.length)
       : '<div class="empty-state"><b>해당하는 교원이 없습니다.</b></div>') + "</div>";
+}
+
+/* 판정 네 갈래의 정의와 기준을 화면에 그대로 둔다.
+   담당자가 어떤 잣대로 나뉘었는지 확인할 수 있어야 한다. */
+function verdictPanel() {
+  return '<details class="fold" style="margin-bottom:16px"><summary>판정 기준 — 원천 · 적용 · 타 분야 · 체계 밖의 정의' +
+    '<span class="note">무엇을 근거로 나누는가</span></summary><div class="fold-body">' +
+    '<div class="notice" style="margin-bottom:14px"><span>모든 판정은 <b>범부처 기술관리체계 「공통 기술분야 총괄표」</b>의 ' +
+    "19개 분야와 그 아래 중분류·세부기술을 기준으로 합니다. 연구주제 문장에서 <b>연구 대상</b>을 가려낸 뒤, " +
+    "그 대상이 어느 분야의 어느 중분류에 해당하는지를 찾습니다. " +
+    "‘~기반 / ~활용 / ~통해’ 앞에 오는 말은 <b>수단</b>으로 보고 대상 판정에서 제외합니다.</span></div>" +
+    '<div class="tbl-wrap"><table class="data" style="min-width:640px"><thead><tr>' +
+    "<th>판정</th><th style=\"width:32%\">정의</th><th>적용 기준과 예시</th></tr></thead><tbody>" +
+    VERDICTS.map(function (v) {
+      return '<tr><td><span class="chip chip-sm" style="cursor:default;border-color:' + v.color +
+        ";color:" + v.color + '">' + v.k + "</span></td><td>" + v.def + "</td><td>" + v.rule + "</td></tr>";
+    }).join("") + "</tbody></table></div>" +
+    '<p class="mini-note"><b>원천과 적용을 가르는 것은 중분류의 성격입니다.</b> ' +
+    "총괄표가 스스로 ‘산업적용·실증·시스템 통합·재활용’ 계열로 규정한 중분류(예: AI/SW 3-3 산업적용, 바이오 7-4 AI-바이오, " +
+    "조선·해양 11-2 자율운항)에 해당하면 «적용», 그 밖의 기반·원천 중분류에 해당하면 «원천»입니다.</p>" +
+    '<p class="mini-note"><b>타 분야 판정의 근거</b> — 총괄표에서는 각 분야가 이미 자기 안에 AI 응용 항목을 갖고 있습니다. ' +
+    "바이오 7-4 «AI-바이오», 로봇 8-2 «로봇 지능기술», 육상 모빌리티 9-1 «자율주행 AI·SW 플랫폼», 조선·해양 11-2 «자율운항», " +
+    "사이버보안 6-1 «데이터·AI 보안», 반도체 1-2 «AI 반도체»가 그것입니다. " +
+    "따라서 AI를 도구로 쓰는 연구를 AI/SW로 세면 이중 계산이 되고, 대상 분야로 보내는 것이 체계에 맞습니다.</p>" +
+    '<p class="mini-note"><b>체계 밖은 결격이 아닙니다.</b> 총괄표는 기술 개발 중심이라 법제도·교육과정·사회 수용성 연구는 ' +
+    "세부기술로 올라 있지 않습니다. 이 체계로 셀 수 없다는 뜻이며, 별도 트랙으로 검토할 대상입니다.</p>" +
+    '<p class="mini-note">문장의 낱말을 사전과 대조하는 자동 판정입니다. 아래 명단에서 원문과 판단 근거를 함께 보여드리니 ' +
+    "최종 판단은 담당자가 하시기 바랍니다.</p></div></details>";
 }
 
 /* 선택 기준 인원과 주제 기준 인원을 나란히 놓아 과대·과소를 드러낸다 */
@@ -2492,12 +2756,13 @@ function downloadCSV(name, head, lines) {
 function exportTechList(tech) {
   var lines = A.alignRows.filter(function (r) { return r.techs.indexOf(tech) >= 0; }).map(function (r) {
     var j = r.judged.filter(function (x) { return x.tech === tech; })[0];
-    return [tech, j ? j.v : "확인", r.name, r.college, r.dept, rankOf(r.id),
+    var jj = r.judged.filter(function (x) { return x.tech === tech; })[0];
+    return [tech, j ? j.v : "체계 밖", (jj && jj.gid) || "", r.name, r.college, r.dept, rankOf(r.id),
       r.techs.join(" / "), r.objThemes.join(" / "), r.meanThemes.join(" / "),
       r.topics.map(function (t) { return t.text; }).join(" ||| ")];
   });
   downloadCSV("BK21_" + tech.replace(/[\/·]/g, "_") + "_명단",
-    ["전략기술", "주제 성격", "성명", "단과대학·대학원", "학과", "직급", "선택 분야 전체", "주제 대상", "주제 수단", "연구주제"], lines);
+    ["전략기술", "판정", "해당 중분류", "성명", "단과대학·대학원", "학과", "직급", "선택 분야 전체", "주제 대상", "주제 수단", "연구주제"], lines);
 }
 
 function exportIssueList(issue) {
