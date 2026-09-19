@@ -323,6 +323,19 @@ table.data .clip{max-width:min(320px,28vw);overflow:hidden;text-overflow:ellipsi
 .modal-head button{margin-left:auto;color:var(--ink-3);font-size:1.375rem;line-height:1;padding:2px 6px}
 .modal-body{padding:clamp(16px,2vw,26px) clamp(18px,2.2vw,28px) clamp(20px,2.4vw,30px)}
 
+/* 접었다 펴는 패널 */
+details.fold{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:clamp(14px,1.4vw,20px) clamp(16px,1.6vw,26px)}
+details.fold>summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:10px;
+  font-size:1rem;font-weight:700;letter-spacing:-.025em}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::after{content:"펼치기";margin-left:auto;font-size:0.7812rem;font-weight:600;
+  color:var(--ink-3);border:1px solid var(--line);border-radius:999px;padding:3px 11px}
+details.fold[open]>summary::after{content:"접기"}
+details.fold>summary:hover::after{border-color:var(--ink-3);color:var(--ink)}
+details.fold>summary .note{font-size:0.7812rem;color:var(--ink-3);font-weight:500;letter-spacing:0}
+details.fold .fold-body{margin-top:16px}
+
 /* 페이지 나누기 */
 .pager{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;align-items:center;margin-top:18px}
 .pager button{min-width:33px;height:33px;padding:0 9px;border:1px solid var(--line);border-radius:8px;
@@ -383,7 +396,7 @@ function shiftDays(n) {
 }
 
 /* ── 조사 설정 (실배포 시 Code.gs의 CONFIG와 함께 수정) ───────────── */
-var BUILD = "2026.09.19-r30";
+var BUILD = "2026.09.19-r34";
 var CONFIG = {
   title: "5단계 BK21사업 개별 교원 참여의향 조사",
   owner: "대학원전략팀",
@@ -509,7 +522,10 @@ var PROBLEM_BANK = [
   "인공지능 융합형(AI+X) — 임상 현장의 진단 오류를 줄이는 의사결정 지원",
   "과학기술분야융복합 — 탄소중립 전환 과정의 에너지 비용 형평성",
   "돌봄 인력 부족을 기술과 제도 양쪽에서 푸는 문제",
-  "인문사회과학기술융복합 — 생성형 AI 확산에 따른 창작 생태계 재편"
+  "인문사회과학기술융복합 — 생성형 AI 확산에 따른 창작 생태계 재편",
+  "인공지능 융합형(AI+X)",
+  "과학기술분야융복합",
+  "인문사회과학기술융복합"
 ];
 var VISION_BANK = [
   "학과 경계를 넘는 데이터 기반 융합연구 클러스터를 만들고, 대학원생이 산업 현장 문제를 직접 정의하는 과정을 두고 싶습니다.",
@@ -704,6 +720,13 @@ var TECH_THEME = {
 var THEME_ORDER = ["바이오·헬스", "반도체·전자", "에너지·환경", "소재·제조", "모빌리티·로봇",
   "정보보안·네트워크", "우주·항공·해양", "인문·문화", "교육·인재양성", "사회·정책",
   "경영·산업", "AI·데이터"];
+var THEME_TECHS = {};
+Object.keys(TECH_THEME).forEach(function (tk) {
+  var th = TECH_THEME[tk];
+  if (!THEME_TECHS[th]) THEME_TECHS[th] = [];
+  THEME_TECHS[th].push(tk);
+});
+
 function classifyTheme(text) {
   var t = String(text || "");
   if (!t.trim()) return "";
@@ -781,10 +804,13 @@ var ISSUE_ORDER = ["고령화·돌봄", "지역소멸·균형발전", "안전·�
   "규제·거버넌스", "디지털 전환·AI 수용"];
 function classifyIssue(text) {
   /* '인공지능 융합형(AI+X) — …' 처럼 유형 이름을 앞에 붙여 쓰는 경우가 많다.
-     그 부분은 문제의식이 아니므로 떼어내고 본다. */
-  var t = String(text || "");
+     그 부분은 문제의식이 아니므로 떼어내고 본다.
+     떼고 나서 남는 말이 없으면 예시 범주만 고른 응답이다. */
+  var orig = String(text || "").trim();
+  if (!orig) return "";
+  var t = orig;
   FUSION_TYPES.forEach(function (f) { t = t.split(f).join(" "); });
-  if (!t.trim()) return "";
+  if (!t.replace(/[\s\-–—·,.()]/g, "")) return "유형만 기재";
   var best = "", bestScore = 0;
   ISSUE_ORDER.forEach(function (k) {
     var n = 0;
@@ -851,7 +877,7 @@ function analyze(rows) {
     declines: [], futureTopics: [],
     themes: {}, declineTypes: {}, mismatch: [],
     techAlign: {}, aiRole: { "대상": 0, "수단": 0, "미언급": 0 }, aiAims: {},
-    demandObject: {}, alignRows: [], issues: {}, issueRows: [],
+    demandObject: {}, selTheme: {}, alignRows: [], issues: {}, issueRows: [],
     byCollege: {}, byDept: {},
     tech: {}, techDept: {}, heat: {},
     fusionType: {},
@@ -922,15 +948,30 @@ function analyze(rows) {
     var judged = [];
     (r.techs || []).forEach(function (tk) {
       var th = TECH_THEME[tk];
-      if (!a.techAlign[tk]) a.techAlign[tk] = { sel: 0, core: 0, applied: 0, none: 0 };
-      a.techAlign[tk].sel++;
-      var v = (th && objThemes.indexOf(th) >= 0) ? "핵심"
-        : (th && meanThemes.indexOf(th) >= 0) ? "응용" : "무관";
-      a.techAlign[tk][v === "핵심" ? "core" : v === "응용" ? "applied" : "none"]++;
-      judged.push({ tech: tk, v: v });
+      if (!a.techAlign[tk]) a.techAlign[tk] = { sel: 0, tech: 0, fusion: 0, move: 0, check: 0, x: {}, to: {} };
+      var g = a.techAlign[tk];
+      g.sel++;
+      var v, xs = [];
+      if (th && objThemes.indexOf(th) >= 0) { v = "기술"; }
+      else if (th && meanThemes.indexOf(th) >= 0) {
+        v = "융합";
+        xs = objThemes.filter(function (o) { return o !== th; });
+      } else if (objThemes.length) {
+        v = "재배치";
+        xs = objThemes.filter(function (o) { return o !== th; });
+      } else { v = "확인"; }
+      g[v === "기술" ? "tech" : v === "융합" ? "fusion" : v === "재배치" ? "move" : "check"]++;
+      xs.forEach(function (o) {
+        if (v === "융합") g.x[o] = (g.x[o] || 0) + 1;
+        if (v === "재배치") g.to[o] = (g.to[o] || 0) + 1;
+      });
+      judged.push({ tech: tk, v: v, xs: xs });
     });
+    /* 선택 기준 영역 인원 (주제 기준 실질 수요와 견주기 위함) */
+    uniq((r.techs || []).map(function (x) { return TECH_THEME[x]; }).filter(Boolean))
+      .forEach(function (th) { a.selTheme[th] = (a.selTheme[th] || 0) + 1; });
     if (r.problem) {
-      var iss = classifyIssue(r.problem);
+      var iss = classifyIssue(r.problem) || "미분류";
       a.issues[iss] = (a.issues[iss] || 0) + 1;
       a.issueRows.push({ issue: iss, name: r.name, dept: r.dept, college: col,
         text: r.problem, type: classifyProblem(r.problem), techs: (r.techs || []).join(", ") });
@@ -1839,18 +1880,7 @@ function tabMatching() {
   var cols = Object.keys(A.heat);
   var heatMax = 1;
   cols.forEach(function (c) { TECH19.forEach(function (t) { heatMax = Math.max(heatMax, A.heat[c][t] || 0); }); });
-  return (A.mismatch.length ? '<div class="panel" style="margin-bottom:16px"><div class="panel-head">' +
-    '<h3>고른 분야와 쓴 주제가 다른 응답</h3><span class="note">' + A.mismatch.length + "건</span></div>" +
-    '<div class="tbl-wrap"><table class="data" style="min-width:0"><thead><tr>' +
-    "<th>성명</th><th>소속 학과</th><th>고른 전략기술</th><th>주제의 영역</th></tr></thead><tbody>" +
-    A.mismatch.slice(0, 12).map(function (m) {
-      return "<tr><td>" + esc(m.name) + "</td><td>" + esc(m.dept) + "</td><td>" + esc(m.techs) +
-        '</td><td><span class="chip chip-sm" style="cursor:default">' + esc(m.wrote) + "</span></td></tr>";
-    }).join("") + "</tbody></table></div>" +
-    (A.mismatch.length > 12 ? '<p class="mini-note">상위 12건만 표시합니다.</p>' : "") +
-    '<p class="mini-note">고른 전략기술 분야와 실제 작성한 연구주제의 영역이 겹치지 않는 경우입니다. ' +
-    "교육연구단을 배치할 때 어느 쪽을 기준으로 삼을지 확인이 필요합니다.</p></div>" : "") +
-  '<div class="notice" style="margin-bottom:16px"><span><b>교육연구단 후보</b>는 전략기술 분야를 축으로 응답자를 묶은 것입니다. ' +
+  return '<div class="notice" style="margin-bottom:16px"><span><b>교육연구단 후보</b>는 전략기술 분야를 축으로 응답자를 묶은 것입니다. ' +
     "AI 융합인재 트랙 " + A.active.length + "명이 대상이며, 판정 기준(교원 " + CONFIG.minFacultyPerUnit + "명 · " + CONFIG.minDeptsPerUnit + "개 학과 이상)은 설정 탭에서 바꿀 수 있습니다.</span></div>" +
 
   '<div style="margin-bottom:16px">' +
@@ -1952,15 +1982,16 @@ function bindMatching() {
         if (j) judgeOf[ar.id] = j.v;
       });
       var ordered = c.members.slice().sort(function (x, y) {
-        var o = { "핵심": 0, "응용": 1, "무관": 2 };
+        var o = { "기술": 0, "융합": 1, "재배치": 2, "확인": 3 };
         return (o[judgeOf[x.id]] === undefined ? 3 : o[judgeOf[x.id]]) -
                (o[judgeOf[y.id]] === undefined ? 3 : o[judgeOf[y.id]]);
       });
-      var core = c.members.filter(function (m) { return judgeOf[m.id] === "핵심"; }).length;
+      var core = c.members.filter(function (m) { return judgeOf[m.id] === "기술"; }).length;
+      var fus = c.members.filter(function (m) { return judgeOf[m.id] === "융합"; }).length;
       openModal(t + " 교육연구단 구성안",
         '<div class="cl-stats" style="border-top:none;padding-top:0">' +
-        "<div><b class=\"num\" style=\"color:var(--go)\">" + core + "</b><span>주축 (핵심)</span></div>" +
-        "<div><b class=\"num\">" + c.n + "</b><span>희망 교원</span></div>" +
+        "<div><b class=\"num\" style=\"color:var(--go)\">" + core + "</b><span>주축</span></div>" +
+        "<div><b class=\"num\" style=\"color:var(--cobalt)\">" + fus + "</b><span>융합 참여</span></div>" +
         "<div><b class=\"num\">" + c.depts.length + "</b><span>참여 학과</span></div></div>" +
         '<h5 style="font-size:0.7812rem;color:var(--ink-3);margin:6px 0 8px">참여 학과 ' + c.depts.length + "개 · " +
         c.colleges.length + "개 기관</h5>" +
@@ -1974,10 +2005,10 @@ function bindMatching() {
           var v = judgeOf[m.id] || "-";
           return '<tr><td><span class="chip chip-sm" style="cursor:default;border-color:' +
             (JUDGE_COLOR[v] || "var(--line)") + ";color:" + (JUDGE_COLOR[v] || "var(--ink-3)") + '">' +
-            esc(v === "핵심" ? "주축" : v === "응용" ? "협력" : v) + "</span></td><td>" + esc(m.name) +
+            esc(v === "기술" ? "주축" : v === "융합" ? "융합 참여" : v) + "</span></td><td>" + esc(m.name) +
             "</td><td>" + esc(m.dept) + "</td><td>" + esc(m.rank || "-") + "</td></tr>";
         }).join("") + "</tbody></table></div>" +
-        '<p class="mini-note">주축은 이 분야를 연구 대상으로 삼은 교원, 협력은 도구로 활용하겠다고 답한 교원입니다. ' +
+        '<p class="mini-note">주축은 이 분야를 연구 대상으로 삼은 교원, 융합 참여는 이 분야를 도구로 다른 영역을 연구하겠다는 교원입니다. ' +
         "최종 구성은 별도 검토가 필요합니다.</p>");
       var uc = $("#unitcsv");
       if (uc) uc.onclick = function () { exportUnit(t); };
@@ -2135,7 +2166,13 @@ function bindResponses() {
   });
 }
 
-var JUDGE_COLOR = { "핵심": "var(--go)", "응용": "var(--hold)", "무관": "var(--off)" };
+var JUDGE_COLOR = { "기술": "var(--go)", "융합": "var(--cobalt)", "재배치": "var(--hold)", "확인": "var(--off)" };
+var JUDGE_DESC = {
+  "기술": "그 분야 자체를 연구 대상으로 삼음",
+  "융합": "그 분야를 도구로 다른 영역을 연구",
+  "재배치": "주제가 다른 분야에 가까움",
+  "확인": "주제가 없거나 판정이 어려움"
+};
 
 function tabAnalysis() {
   if (!A.alignRows.length) return '<div class="card empty-state"><b>분석할 응답이 없습니다.</b>' +
@@ -2152,91 +2189,96 @@ function tabAnalysis() {
 function axisTech() {
   var rank = Object.keys(A.techAlign).map(function (k) {
     var v = A.techAlign[k];
-    return { k: k, sel: v.sel, core: v.core, applied: v.applied, none: v.none,
-      rate: v.sel ? Math.round(v.core / v.sel * 100) : 0 };
+    return { k: k, sel: v.sel, tech: v.tech, fusion: v.fusion, move: v.move, check: v.check };
   }).sort(function (x, y) { return y.sel - x.sel; });
   var maxSel = rank.length ? rank[0].sel : 1;
   if (!filters.atech && rank.length) filters.atech = rank[0].k;
 
-  var cur = A.techAlign[filters.atech] || { sel: 0, core: 0, applied: 0, none: 0 };
-  var curTheme = TECH_THEME[filters.atech];
+  var cur = A.techAlign[filters.atech] || { sel: 0, tech: 0, fusion: 0, move: 0, check: 0, x: {}, to: {} };
+  var name = filters.atech;
   var members = A.alignRows.filter(function (r) { return r.techs.indexOf(filters.atech) >= 0; })
     .map(function (r) {
-      var j = r.judged.filter(function (x) { return x.tech === filters.atech; })[0];
-      return { r: r, v: j ? j.v : "무관" };
+      var j = r.judged.filter(function (x) { return x.tech === filters.atech; })[0] || { v: "확인", xs: [] };
+      return { r: r, v: j.v, xs: j.xs || [] };
     })
     .sort(function (x, y) {
-      var o = { "핵심": 0, "응용": 1, "무관": 2 };
+      var o = { "기술": 0, "융합": 1, "재배치": 2, "확인": 3 };
       return o[x.v] - o[y.v] || x.r.dept.localeCompare(y.r.dept);
     });
   var shown = members.filter(function (m) { return !filters.judge || m.v === filters.judge; });
 
-  /* 이 분야를 도구로 쓰는 응답이 실제로 겨냥하는 영역 */
-  var aims = {};
-  members.forEach(function (m) {
-    if (m.v !== "응용") return;
-    m.r.objThemes.forEach(function (th) { if (th !== curTheme) aims[th] = (aims[th] || 0) + 1; });
-  });
-  var aimList = Object.keys(aims).map(function (k) { return { k: k, n: aims[k] }; })
-    .sort(function (x, y) { return y.n - x.n; });
-  var maxAim = aimList.length ? aimList[0].n : 1;
+  function bars(obj, color) {
+    var list = Object.keys(obj).map(function (k) { return { k: k, n: obj[k] }; })
+      .sort(function (x, y) { return y.n - x.n; }).slice(0, 6);
+    var mx = list.length ? list[0].n : 1;
+    return list.length ? list.map(function (x) {
+      var tks = (THEME_TECHS[x.k] || []).filter(function (t) { return t !== filters.atech; });
+      return barRow(x.k + (tks.length ? " (" + tks.slice(0, 2).join(", ") + ")" : ""), x.n, mx, color);
+    }).join("") : "";
+  }
 
-  return '<div class="notice" style="margin-bottom:16px"><span>분야를 고르면 그 분야를 선택한 교원이 실제로 무엇을 연구하려는지 갈라 봅니다. ' +
-    "주제에서 그 분야가 연구 <b>대상</b>이면 «핵심», 다른 것을 연구하기 위한 <b>수단</b>으로만 쓰였으면 «응용», " +
-    "문장에 흔적이 없으면 «무관»입니다. 문장의 낱말로 판정하므로 명단의 원문을 함께 확인해 주세요.</span></div>" +
-
-  '<div class="panel" style="margin-bottom:16px"><div class="panel-head"><h3>분야 선택</h3>' +
-    '<span class="note">괄호 안은 선택 인원</span></div><div class="chips">' +
+  return '<div class="cols-2" style="margin-bottom:16px">' +
+    /* 왼쪽: 분야 목록이자 선택기 */
+    '<div class="panel"><div class="panel-head"><h3>분야별 구성</h3>' +
+    '<span class="note">눌러서 오른쪽을 바꿉니다</span></div>' +
     rank.map(function (x) {
-      return '<button class="chip" data-atech="' + esc(x.k) + '" aria-pressed="' + (filters.atech === x.k) + '">' +
-        esc(x.k) + '<span class="chip-count num">' + x.sel + "</span></button>";
-    }).join("") + "</div></div>" +
-
-  '<div class="cols-2" style="margin-bottom:16px">' +
-    '<div class="panel"><div class="panel-head"><h3>' + esc(filters.atech) + "를 고른 " + cur.sel + "명은 무엇을 연구하려는가</h3></div>" +
-    '<dl class="kpis" style="grid-template-columns:repeat(3,1fr);margin-bottom:14px">' +
-      '<div class="kpi"><dt>이 분야가 연구 대상</dt><dd class="num" style="color:var(--go)">' + cur.core +
-      '<small>명</small></dd><p class="foot">' + pct(cur.core, cur.sel) + "%</p></div>" +
-      '<div class="kpi"><dt>도구로만 등장</dt><dd class="num" style="color:var(--hold)">' + cur.applied +
-      '<small>명</small></dd><p class="foot">' + pct(cur.applied, cur.sel) + "%</p></div>" +
-      '<div class="kpi"><dt>주제에 흔적 없음</dt><dd class="num" style="color:var(--off)">' + cur.none +
-      '<small>명</small></dd><p class="foot">' + pct(cur.none, cur.sel) + "%</p></div></dl>" +
-    (aimList.length
-      ? '<h5 style="font-size:0.7812rem;color:var(--ink-3);margin:0 0 7px;font-weight:700">도구로 쓰겠다는 응답이 실제로 겨냥하는 영역</h5>' +
-        aimList.map(function (x) { return barRow(x.k, x.n, maxAim, "var(--hold)"); }).join("")
-      : '<p class="hint">도구로만 쓰겠다는 응답은 없습니다.</p>') + "</div>" +
-
-    '<div class="panel"><div class="panel-head"><h3>전체 분야 비교</h3>' +
-    '<span class="note">색은 핵심·응용·무관</span></div>' +
-    rank.map(function (x) {
-      return '<button class="brow" data-atech="' + esc(x.k) + '" style="width:100%;text-align:left">' +
+      return '<button class="brow" data-atech="' + esc(x.k) + '" style="width:100%;text-align:left' +
+        (filters.atech === x.k ? ";background:#F5F8FD;border-radius:6px" : "") + '">' +
         '<span class="nm"' + (filters.atech === x.k ? ' style="color:var(--navy);font-weight:700"' : "") + ">" + esc(x.k) + "</span>" +
         '<span style="display:block;width:' + Math.max(10, x.sel / maxSel * 100) + '%"><span class="stack" style="height:11px">' +
-        '<i style="width:' + pct(x.core, x.sel) + '%;background:var(--go)"></i>' +
-        '<i style="width:' + pct(x.applied, x.sel) + '%;background:var(--hold)"></i>' +
-        '<i style="width:' + pct(x.none, x.sel) + '%;background:var(--off)"></i></span></span>' +
+        '<i style="width:' + pct(x.tech, x.sel) + '%;background:var(--go)"></i>' +
+        '<i style="width:' + pct(x.fusion, x.sel) + '%;background:var(--cobalt)"></i>' +
+        '<i style="width:' + pct(x.move, x.sel) + '%;background:var(--hold)"></i>' +
+        '<i style="width:' + pct(x.check, x.sel) + '%;background:var(--off)"></i></span></span>' +
         '<span class="vl num">' + x.sel + "</span></button>";
     }).join("") +
-    '<div class="legend"><span><i style="background:var(--go)"></i>핵심</span>' +
-    '<span><i style="background:var(--hold)"></i>응용</span>' +
-    '<span><i style="background:var(--off)"></i>무관</span></div></div>' +
+    '<div class="legend" style="margin-top:14px">' + ["기술", "융합", "재배치", "확인"].map(function (v) {
+      return '<span><i style="background:' + JUDGE_COLOR[v] + '"></i>' + v + "</span>";
+    }).join("") + "</div>" +
+    '<p class="mini-note"><b>기술</b> 그 분야 자체를 연구 · <b>융합</b> 도구로 삼아 다른 영역을 연구 · ' +
+    "<b>재배치</b> 주제가 다른 분야에 가까움 · <b>확인</b> 판정 불가</p></div>" +
+
+    /* 오른쪽: 선택한 분야의 속사정 */
+    '<div class="panel"><div class="panel-head"><h3>' + esc(name) + " · " + cur.sel + "명</h3>" +
+    '<span class="note">연구주제로 본 성격</span></div>' +
+    '<dl class="kpis" style="grid-template-columns:repeat(3,1fr);margin-bottom:18px">' +
+      '<div class="kpi"><dt>① 기술 자체</dt><dd class="num" style="color:var(--go)">' + cur.tech +
+      '<small>명</small></dd><p class="foot">' + pct(cur.tech, cur.sel) + "%</p></div>" +
+      '<div class="kpi"><dt>② 기반 융합</dt><dd class="num" style="color:var(--cobalt)">' + cur.fusion +
+      '<small>명</small></dd><p class="foot">' + pct(cur.fusion, cur.sel) + "%</p></div>" +
+      '<div class="kpi"><dt>③ 재배치</dt><dd class="num" style="color:var(--hold)">' + cur.move +
+      '<small>명</small></dd><p class="foot">' + pct(cur.move, cur.sel) + "%" +
+      (cur.check ? " · 확인 " + cur.check + "명" : "") + "</p></div></dl>" +
+    '<h5 style="font-size:0.7812rem;color:var(--ink-3);margin:0 0 8px;font-weight:700">② ' +
+      esc(name) + " + X 에서 X는 무엇인가</h5>" +
+    (bars(cur.x, "var(--cobalt)") || '<p class="hint">융합형 응답이 없습니다.</p>') +
+    '<h5 style="font-size:0.7812rem;color:var(--ink-3);margin:18px 0 8px;font-weight:700">③ 재배치한다면 어느 분야로</h5>' +
+    (bars(cur.to, "var(--hold)") || '<p class="hint">재배치 대상이 없습니다.</p>') +
+    '<p class="mini-note">괄호 안은 그 영역에 해당하는 19대 전략기술입니다.</p></div>' +
   "</div>" +
 
-  '<div class="panel"><div class="panel-head"><h3>' + esc(filters.atech) + " 선택 교원 명단</h3>" +
+  adjustedPanel() +
+
+  '<div class="panel"><div class="panel-head"><h3>' + esc(name) + " 선택 교원 명단</h3>" +
     '<span class="note">' + shown.length + "명</span></div>" +
     '<div class="tbl-tools">' +
-    '<select class="input" id="ajudge"><option value="">판정 전체</option>' +
-    ["핵심", "응용", "무관"].map(function (v) { return '<option' + (filters.judge === v ? " selected" : "") + ">" + v + "</option>"; }).join("") + "</select>" +
+    '<select class="input" id="ajudge"><option value="">성격 전체</option>' +
+    ["기술", "융합", "재배치", "확인"].map(function (v) { return '<option' + (filters.judge === v ? " selected" : "") + ">" + v + "</option>"; }).join("") + "</select>" +
     (filters.judge ? '<button class="btn btn-quiet" id="aclear">필터 지우기</button>' : "") +
     '<button class="btn btn-ghost" id="acsv" style="margin-left:auto">이 명단 CSV</button></div>' +
-    (shown.length ? '<div class="tbl-wrap"><table class="data" style="min-width:760px"><thead><tr>' +
-      "<th>판정</th><th>성명</th><th>소속 학과</th><th>직급</th><th style=\"width:44%\">연구주제와 판단 근거</th>" +
+    (shown.length ? '<div class="tbl-wrap"><table class="data" style="min-width:820px"><thead><tr>' +
+      "<th>성격</th><th>성명</th><th>소속 학과</th><th>직급</th><th>융합·재배치 대상</th><th style=\"width:38%\">연구주제와 판단 근거</th>" +
       "</tr></thead><tbody>" +
       slicePage("analysis", shown).map(function (m) {
         var r = m.r;
         return '<tr><td><span class="chip chip-sm" style="cursor:default;border-color:' + JUDGE_COLOR[m.v] +
           ';color:' + JUDGE_COLOR[m.v] + '">' + m.v + "</span></td>" +
           "<td>" + esc(r.name) + "</td><td>" + esc(r.dept) + "</td><td>" + esc(rankOf(r.id)) + "</td>" +
+          "<td>" + (m.xs.length ? m.xs.map(function (o) {
+            var tks = (THEME_TECHS[o] || []).filter(function (t) { return t !== filters.atech; });
+            return '<div style="margin-bottom:3px">' + esc(o) +
+              (tks.length ? '<div style="font-size:0.72rem;color:var(--ink-3)">' + esc(tks.slice(0, 2).join(", ")) + "</div>" : "") + "</div>";
+          }).join("") : '<span style="color:var(--ink-3)">-</span>') + "</td>" +
           "<td>" + (r.topics.length ? r.topics.map(function (t) {
             return '<div style="margin-bottom:7px">' + esc(t.text) +
               '<div style="font-size:0.75rem;color:var(--ink-3);margin-top:2px">대상 ' + esc(t.object) +
@@ -2246,6 +2288,35 @@ function axisTech() {
       : '<div class="empty-state"><b>해당하는 교원이 없습니다.</b></div>') + "</div>";
 }
 
+/* 선택 기준 인원과 주제 기준 인원을 나란히 놓아 과대·과소를 드러낸다 */
+function adjustedPanel() {
+  var keys = uniq(Object.keys(A.selTheme).concat(Object.keys(A.demandObject)));
+  var list = keys.map(function (k) {
+    var sel = A.selTheme[k] || 0, obj = A.demandObject[k] || 0;
+    return { k: k, sel: sel, obj: obj, d: obj - sel };
+  }).sort(function (x, y) { return y.obj - x.obj; });
+  var mx = Math.max.apply(null, list.map(function (x) { return Math.max(x.sel, x.obj); }).concat([1]));
+  var big = list.filter(function (x) { return Math.abs(x.d) >= 5; }).length;
+  return '<details class="fold" style="margin-bottom:16px"><summary>선택 기준과 주제 기준의 차이' +
+    '<span class="note">영역 단위' + (big ? " · 5명 이상 벌어진 영역 " + big + "곳" : "") + "</span></summary>" +
+    '<div class="fold-body"><div class="tbl-wrap"><table class="data" style="min-width:520px"><thead><tr>' +
+    "<th>연구 영역</th><th>분야 선택 기준</th><th>주제 기준</th><th>차이</th><th style=\"width:34%\">비교</th>" +
+    "</tr></thead><tbody>" +
+    list.map(function (x) {
+      var sign = x.d > 0 ? "+" : "";
+      var col = x.d > 0 ? "var(--go)" : x.d < 0 ? "var(--danger)" : "var(--ink-3)";
+      return "<tr><td>" + esc(x.k) + '</td><td class="num">' + x.sel + '</td><td class="num">' + x.obj +
+        '</td><td class="num" style="color:' + col + ';font-weight:700">' + sign + x.d + "</td>" +
+        '<td><div style="display:flex;flex-direction:column;gap:3px">' +
+        '<span class="bar-t" style="height:7px"><i style="width:' + (x.sel / mx * 100) + '%;background:var(--ink-3)"></i></span>' +
+        '<span class="bar-t" style="height:7px"><i style="width:' + (x.obj / mx * 100) + '%;background:var(--navy-2)"></i></span>' +
+        "</div></td></tr>";
+    }).join("") + "</tbody></table></div>" +
+    '<div class="legend"><span><i style="background:var(--ink-3)"></i>분야 선택 기준 — 응답자가 고른 전략기술</span>' +
+    '<span><i style="background:var(--navy-2)"></i>주제 기준 — 연구주제가 실제로 다루는 영역</span></div>' +
+    '<p class="mini-note">차이가 음수면 고른 사람은 많은데 실제 주제는 적은 분야, 양수면 선택은 적었지만 주제가 몰린 분야입니다.</p></div></details>';
+}
+
 function rankOf(id) {
   var r = A.rows.filter(function (x) { return x.id === id; })[0];
   return r ? r.rank : "-";
@@ -2253,9 +2324,14 @@ function rankOf(id) {
 
 /* ── 축 2. 산업·사회 문제 ────────────────────────────────────────── */
 function axisIssue() {
+  var SOFT = ["미분류", "유형만 기재"];
   var rank = Object.keys(A.issues).map(function (k) { return { k: k, n: A.issues[k] }; })
-    .sort(function (x, y) { return y.n - x.n; });
-  var max = rank.length ? rank[0].n : 1;
+    .sort(function (x, y) {
+      var a1 = SOFT.indexOf(x.k) >= 0 ? 1 : 0, b1 = SOFT.indexOf(y.k) >= 0 ? 1 : 0;
+      return a1 - b1 || y.n - x.n;
+    });
+  var max = Math.max.apply(null, rank.filter(function (x) { return SOFT.indexOf(x.k) < 0; })
+    .map(function (x) { return x.n; }).concat([1]));
   if (!filters.issue && rank.length) filters.issue = rank[0].k;
   var rows = A.issueRows.filter(function (x) { return x.issue === filters.issue; });
 
@@ -2282,11 +2358,12 @@ function axisIssue() {
     (rank.length ? rank.map(function (x) {
       return '<button class="brow" data-issue="' + esc(x.k) + '" style="width:100%;text-align:left">' +
         '<span class="nm"' + (filters.issue === x.k ? ' style="color:var(--navy);font-weight:700"' : "") + ">" + esc(x.k) + "</span>" +
-        '<span class="bar-t"><i style="width:' + (x.n / max * 100) + "%;background:" +
-        (x.k === "미분류" ? "var(--ink-3)" : "var(--navy-2)") + '"></i></span>' +
+        '<span class="bar-t"><i style="width:' + Math.min(100, x.n / max * 100) + "%;background:" +
+        (SOFT.indexOf(x.k) >= 0 ? "var(--ink-3)" : "var(--navy-2)") + '"></i></span>' +
         '<span class="vl num">' + x.n + "</span></button>";
     }).join("") : '<p class="hint">아직 응답이 없습니다.</p>') +
-    '<p class="mini-note">문장에 쓰인 낱말로 묶습니다. ‘미분류’는 원문을 보고 직접 판단해 주세요.</p></div>' +
+    '<p class="mini-note">문장에 쓰인 낱말로 묶습니다. <b>유형만 기재</b>는 예시로 준 네 범주만 적고 ' +
+    "구체적인 문제를 쓰지 않은 응답이고, <b>미분류</b>는 사전에 없는 표현입니다. 둘 다 원문을 보고 판단해 주세요.</p></div>" +
 
     '<div class="panel"><div class="panel-head"><h3>' + esc(filters.issue) + " 응답자가 고른 전략기술</h3>" +
     '<span class="note">' + rows.length + "명</span></div>" +
@@ -2415,12 +2492,12 @@ function downloadCSV(name, head, lines) {
 function exportTechList(tech) {
   var lines = A.alignRows.filter(function (r) { return r.techs.indexOf(tech) >= 0; }).map(function (r) {
     var j = r.judged.filter(function (x) { return x.tech === tech; })[0];
-    return [tech, j ? j.v : "무관", r.name, r.college, r.dept, rankOf(r.id),
+    return [tech, j ? j.v : "확인", r.name, r.college, r.dept, rankOf(r.id),
       r.techs.join(" / "), r.objThemes.join(" / "), r.meanThemes.join(" / "),
       r.topics.map(function (t) { return t.text; }).join(" ||| ")];
   });
   downloadCSV("BK21_" + tech.replace(/[\/·]/g, "_") + "_명단",
-    ["전략기술", "판정", "성명", "단과대학·대학원", "학과", "직급", "선택 분야 전체", "주제 대상", "주제 수단", "연구주제"], lines);
+    ["전략기술", "주제 성격", "성명", "단과대학·대학원", "학과", "직급", "선택 분야 전체", "주제 대상", "주제 수단", "연구주제"], lines);
 }
 
 function exportIssueList(issue) {
@@ -2441,7 +2518,7 @@ function exportUnit(tech) {
       (m.techs || []).join(" / "), m.problem || "", (m.topics || []).join(" ||| ")];
   });
   downloadCSV("BK21_" + tech.replace(/[\/·]/g, "_") + "_교육연구단_구성안",
-    ["교육연구단(가칭)", "판정", "성명", "단과대학·대학원", "학과", "직급", "선택 전략기술", "산업·사회 문제", "연구주제"], lines);
+    ["교육연구단(가칭)", "역할", "성명", "단과대학·대학원", "학과", "직급", "선택 전략기술", "산업·사회 문제", "연구주제"], lines);
 }
 
 /* CSV */
