@@ -9,7 +9,7 @@
   --navy:#0A2A4E; --navy-2:#14477E; --cobalt:#2F6FD0; --cobalt-soft:#E9F0FB;
   --ink:#101720; --ink-2:#57626F; --ink-3:#8C97A4;
   --line:#DCE2EA; --line-2:#EDF1F5;
-  --paper:#F3F5F8; --card:#FFFFFF;
+  --paper:#F3F5F8; --card:#FFFFFF;F
   --go:#1B6F55; --go-soft:#E4F2ED;
   --hold:#A9711A; --hold-soft:#FBF0DC;
   --off:#7C8794; --off-soft:#EEF0F3;
@@ -1499,7 +1499,7 @@ function shiftDays(n) {
 }
 
 /* ── 조사 설정 (실배포 시 Code.gs의 CONFIG와 함께 수정) ───────────── */
-var BUILD = "2026.09.20-r37 (pages)";   /* 결과 분석 3경로 · Code.gs 는 r36 그대로 */
+var BUILD = "2026.09.20-r37";   /* 결과 분석 3경로 · Code.gs 는 r36 그대로 */
 var CONFIG = {
   title: "5단계 BK21사업 개별 교원 참여의향 조사",
   owner: "대학원전략팀",
@@ -4072,7 +4072,7 @@ if (hasGAS && google.script.url && google.script.url.getLocation) {
     var v = (loc && loc.parameter && loc.parameter.view) || "";
     if (v === "admin") { adminEntry = true; route = "admin"; }
     render();
-  });fvar 
+  });
 } else {
   if (REMOTE && /[?&]view=admin/.test(location.search)) { adminEntry = true; route = "admin"; }
   render();
