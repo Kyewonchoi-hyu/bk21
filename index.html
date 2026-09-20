@@ -367,6 +367,122 @@ details.fold .fold-body{margin-top:16px}
   .panel,.kpi,.cl{break-inside:avoid;box-shadow:none}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ── 결과 분석(세 경로) 전용 스타일 ─────────────────────────────
+   .r3* 는 결과 분석 안에서만 쓰입니다. 기존 화면 선택자와 겹치지 않습니다. */
+.r3{color:#16202B;font-size:15px;line-height:1.65}
+.r3-dept{white-space:nowrap;font-weight:600}
+.r3-dup{color:#9AA5B1;font-weight:400}
+.r3-group-label small{display:block;font-weight:400;color:#5A6672;font-size:12px;margin-top:3px}
+.r3 *{box-sizing:border-box}
+.r3 button,.r3 input,.r3 select{font:inherit}
+.r3-header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.r3-eyebrow{font-size:12px;color:#5A6672;letter-spacing:.025em}
+.r3 h2{font-size:28px;line-height:1.4;margin:4px 0 0}
+.r3 h3{font-size:17px}
+.r3-actions{display:flex;gap:9px;flex-wrap:wrap}
+.r3-button{background:#fff;border:1px solid #C4CCD4;border-radius:5px;padding:9px 14px;font-size:13px!important;cursor:pointer;white-space:nowrap}
+.r3-button:hover{border-color:#1B4E8C}
+.r3-quiet{background:transparent;color:#5A6672}
+.r3-context{font-size:12px;color:#5A6672;margin:8px 0 22px}
+.r3-paths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px solid #C4CCD4;gap:0;margin-bottom:23px;background:#fff}
+.r3-paths button{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:4px;padding:17px 20px;border-bottom:3px solid transparent;color:#5A6672}
+.r3-paths button+button{border-left:1px solid #EDF1F4}
+.r3-paths button[aria-selected=true]{color:#1B4E8C;border-bottom-color:#1B4E8C;background:#F0F5FB}
+.r3-paths strong{font-size:16px}
+.r3-paths span{font-size:14px}
+.r3-selector{display:grid;grid-template-columns:minmax(230px,330px) minmax(0,1fr);gap:25px;align-items:center;margin-bottom:20px}
+.r3-selector label>span{display:block;font-size:12px;color:#5A6672;margin-bottom:5px}
+.r3 select,.r3 input{min-width:0;max-width:100%;background:#fff;border:1px solid #C4CCD4;border-radius:5px;padding:11px 12px;color:#16202B}
+.r3-selector select{width:100%;font-weight:650;font-size:16px}
+.r3-flow strong{font-size:15px}
+.r3-flow p{font-size:12px;color:#5A6672;margin-top:5px}
+.r3-types{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:21px}
+.r3-types button{border:1px solid #DCE2EA;background:white;padding:16px 18px;border-radius:5px;text-align:left}
+.r3-types button[aria-pressed=true]{border-color:#1B4E8C;box-shadow:inset 0 0 0 1px #1B4E8C}
+.r3-types button>span{display:block;font-weight:650;font-size:15px}
+.r3-types button>strong{font-size:29px;line-height:1.5;display:block;font-variant-numeric:tabular-nums;color:#1B4E8C}
+.r3-types strong small{font-size:13px;margin-left:4px;font-weight:500;color:#5A6672}
+.r3-types p{font-size:12px;color:#5A6672}
+.r3-list-tools{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.r3-list-tools>p{font-size:13px}
+.r3-search{margin-left:auto;min-width:0;max-width:260px}
+.r3-search input{font-size:13px;width:100%;padding:8px 10px}
+.r3-overlap{font-size:12px;color:#5A6672;margin:6px 0 17px}
+.r3-section{margin-top:21px}
+.r3-section-title,.r3-list-head{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+.r3-section-title>span,.r3-list-head>span{font-size:12px;color:#5A6672}
+.r3-group{background:#fff;border:1px solid #DCE2EA;border-radius:5px;margin-bottom:8px}
+.r3-group>summary{display:flex;align-items:center;gap:18px;padding:15px 18px;cursor:pointer;list-style:none}
+.r3-group>summary::-webkit-details-marker{display:none}
+.r3-group[open]>summary{border-bottom:1px solid #EDF1F4;background:#FAFBFC}
+.r3-group-label{font-weight:600;flex:1;min-width:0;overflow-wrap:anywhere}
+.r3-group-label small{display:block;font-size:11px;color:#5A6672;font-weight:400;margin-top:3px}
+.r3-group-count{display:flex;align-items:baseline;gap:10px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.r3-group-count b{font-size:16px}
+.r3-group-count small{font-size:12px;color:#5A6672}
+.r3-open-text{font-size:12px;color:#1B4E8C;white-space:nowrap}
+.r3-group-body{padding:4px 15px 15px}
+.r3-table-wrap{overflow:auto;background:#fff;border-radius:5px}
+.r3-table{width:100%;border-collapse:collapse;table-layout:fixed;min-width:640px;font-size:13px}
+.r3-table th{text-align:left;font-weight:650;color:#5A6672;background:#FAFBFC;font-size:12px;padding:11px 13px;border-bottom:1px solid #DCE2EA}
+.r3-table td{vertical-align:top;padding:15px 13px;border-bottom:1px solid #EDF1F4;overflow-wrap:anywhere}
+.r3-table tr:last-child td{border-bottom:0}
+.r3-table th:first-child{width:22%}
+.r3-table th:nth-child(2):not(:last-child){width:24%}
+.r3-table small{display:block;font-size:12px;color:#5A6672;margin-top:3px}
+.r3-original{white-space:pre-wrap;line-height:1.75}
+.r3-evidence{font-size:12px;color:#5A6672;margin-top:8px}
+.r3-evidence>summary{cursor:pointer;color:#1B4E8C}
+.r3-evidence p{margin-top:7px}
+.r3-tools{border-top:1px solid #DCE2EA;margin-top:30px;padding-top:15px;color:#5A6672;font-size:12px}
+.r3-tools>summary{cursor:pointer;width:max-content}
+.r3-tools-body{background:#fff;border:1px solid #DCE2EA;margin-top:10px;padding:17px}
+.r3-tools-body label{display:inline-flex;align-items:center;gap:10px;margin:0 10px 10px 0}
+.r3-tools-body p{margin-top:12px}
+.r3-tools-body ul{list-style:disc;padding-left:20px}
+.r3-small{font-size:11px;overflow-wrap:anywhere}
+.r3-alert{font-size:13px;background:#FFF9EE;border:1px solid #E9DCC2;padding:12px 14px;margin:12px 0;color:#705219;border-radius:5px}
+.r3-empty{background:#fff;border:1px solid #DCE2EA;padding:32px 20px;margin-top:20px;text-align:center}
+.r3-empty p{font-size:13px;color:#5A6672;margin-top:9px}
+.ra-callout{padding:12px;background:#F0F5FB;font-size:13px;border:1px solid #DCE2EA;margin-bottom:15px}
+#r3-print-root{display:none}
+@media(max-width:760px){
+ .r3-selector{grid-template-columns:1fr;gap:12px}
+ .r3-paths button{padding:12px 10px}
+ .r3-paths strong{font-size:14px}
+ .r3-paths span{font-size:12px;word-break:keep-all}
+ .r3-types{gap:6px}
+ .r3-types button{padding:12px 10px}
+ .r3-types button>span{font-size:13px}
+ .r3-types button>strong{font-size:25px}
+ .r3-types p{font-size:11px}
+ .r3-list-tools{flex-wrap:wrap}
+ .r3-search{max-width:none;flex:1;min-width:180px}
+ .r3-group>summary{padding:13px 12px;gap:10px;flex-wrap:wrap}
+ .r3-group-label{font-size:14px;flex-basis:55%}
+ .r3-group-count{gap:5px;flex-direction:column;line-height:1.5}
+ .r3-open-text{width:100%;font-size:11px}
+ .r3-header{align-items:flex-start}
+ .r3-actions{gap:5px;justify-content:flex-end}
+ .r3-actions button{font-size:12px!important;padding:8px 9px}
+ .r3 h2{font-size:23px}
+ .r3-context{font-size:11px}
+ .r3-table{min-width:0;table-layout:auto}
+ .r3-table thead{display:none}
+ .r3-table tr{display:block;padding:10px 0;border-bottom:1px solid #DCE2EA}
+ .r3-table td{display:block;border:0;padding:4px 3px}
+ .r3-table td:not(:first-child){margin-top:8px}
+ .r3-table td:nth-child(2):not(:last-child){font-size:12px;color:#5A6672}
+}
+@media print{
+ body.r3-printing>*:not(#r3-print-root){display:none!important}
+ body.r3-printing #r3-print-root{display:block!important;font-size:11px}
+ #r3-print-root h1{font-size:19px}
+ #r3-print-root p{margin:10px 0}
+ #r3-print-root table{width:100%;border-collapse:collapse}
+ #r3-print-root th,#r3-print-root td{border:1px solid #bbb;padding:8px;text-align:left;vertical-align:top;white-space:pre-wrap}
+}
 </style>
 </head>
 <body>
@@ -382,6 +498,975 @@ details.fold .fold-body{margin-top:16px}
 <main id="app" aria-live="polite"></main>
 <div id="layer"></div>
 <script>
+/* BK21 Analysis V2 — offline pilot. No network, no automatic approval.
+ * Pure content classifier + validated snapshot + common view model.
+ * This is a conservative rule-based suggestion engine, not a semantic AI model.
+ */
+(function(root, factory) {
+  const api = factory();
+  if (typeof module === "object" && module.exports) module.exports = api;
+  else root.BK21AnalysisV2 = api;
+})(typeof globalThis !== "undefined" ? globalThis : this, function() {
+"use strict";
+const VERSION = "2.0-test.1";
+const ENGINE = "rules-pilot-20260920.1";
+const RUBRIC = "rubric-v2";
+const TAXONOMY = "legacy-r36-unverified";
+const FIELD_NAMES = ["바이오","반도체","클린에너지·환경","육상 모빌리티","콘텐츠 기술","이차전지","AI/SW","로봇","기계·장비","소재·부품","수소","양자","우주·항공","방위산업","디스플레이","사이버보안","통신","원자력","조선·해양"];
+const FIELDS = FIELD_NAMES.map((name,i)=>({id:"T"+String(i+1).padStart(2,"0"),name}));
+const RELATIONS = {core_candidate:"원천기술 개발 후보",application:"적용",linkage:"연계"};
+const ROLES = {development:"기술개발 목적",method:"방법·도구",study_object:"연구대상",context:"배경·맥락",undetermined:"역할 확인 필요"};
+const ASSESSMENTS = {supported:"긍정 근거 있음",no_evidence:"검토 후 근거 미확인",undetermined:"판단 보류",not_assessed:"미평가"};
+const REVIEW = {unreviewed:"미검토",approved:"승인",needs_info:"추가정보 필요",disputed:"의견 불일치",stale:"재검토 필요"};
+const NOVELTY = {development_stated:"개발 목표 명시",improvement_stated:"개선 목표 명시",nondevelopment_stated:"기술개발 아님을 명시",insufficient:"기술개발·신규성 근거 부족"};
+const PATTERNS = [
+ /바이오|신약|후보\s*물질|오가노이드|유전자|항체|질환|임상|의료|간호|진단|생명공학/iu,
+ /반도체|웨이퍼|식각|노광|패키징|파운드리|낸드|(?:^|[^a-z0-9])(?:DRAM|HBM)(?![a-z0-9])/iu,
+ /탄소\s*중립|재생\s*에너지|환경|기후|자원\s*순환|온실\s*가스/iu,
+ /자율\s*주행|전기차|철도|모빌리티|수소차/iu,
+ /실감\s*콘텐츠|콘텐츠|가상\s*현실|증강\s*현실/iu,
+ /이차\s*전지|배터리|전고체|양극재|음극재/iu,
+ /인공\s*지능|머신\s*러닝|딥\s*러닝|언어\s*모델|소프트웨어|(?:^|[^a-z0-9])(?:AI|LLM|ML|SW)(?![a-z0-9])/iu,
+ /로봇|휴머노이드|자율\s*조작/iu,
+ /기계|설비|예지\s*보전|공작\s*기계/iu,
+ /신소재|소재|복합재|나노\s*소재/iu,
+ /수소|암모니아/iu,
+ /양자|큐비트/iu,
+ /위성|우주|항공|드론/iu,
+ /국방|방위산업|민군/iu,
+ /디스플레이|마이크로\s*LED|(?:^|[^a-z0-9])OLED(?![a-z0-9])/iu,
+ /사이버\s*보안|암호|취약점|랜섬웨어|프라이버시|정보\s*보안/iu,
+ /이동\s*통신|위성\s*통신|통신|(?:^|[^a-z0-9])(?:5G|6G)(?![a-z0-9])/iu,
+ /원자력|원자로|방사성/iu,
+ /선박|조선|해양|자율\s*운항/iu
+];
+const AI_SOURCE = "(?:인공\\s*지능|머신\\s*러닝|딥\\s*러닝|언어\\s*모델|소프트웨어|\\b(?:AI|LLM|ML|SW)\\b)";
+const SOCIAL = /사회|조직|노동|격차|불평등|시장|수용성|정치|유권자|국제분쟁|문화|저작권|거버넌스|규제|제도|정책|책임|윤리/iu;
+const POLICY = /공공\s*정책|정책|행정|규제|제도|거버넌스|법적|책임|윤리|저작권/iu;
+const EDUCATION = /교육|학습자|수업|학생|교수법|인재|교육과정|피드백/iu;
+const NEGATIVE = /개발\s*(?:하지\s*않|하지\s*못|할\s*계획.{0,4}없)|개발.{0,4}아니|설계\s*하지\s*않|개발\s*없이/iu;
+const NEW_TARGET = /(?:새로운|신규|새)\s+[^.!?;\n]{0,65}?(?:알고리즘|모델(?:\s*(?:구조|아키텍처))?|학습\s*방법|추론\s*방법|검증\s*방법|소프트웨어|핵심\s*기술|반도체|소자|전지|소재|암호\s*프로토콜)[^.!?;\n]{0,18}?(?:개발|설계|제안)/iu;
+const IMPROVEMENT = /(?:학습|추론|모델|알고리즘|소프트웨어).{0,28}(?:경량화|본질적.{0,3}개선|핵심.{0,3}개선|성능.{0,8}개선).{0,12}(?:기술|방법|알고리즘).{0,10}(?:개발|제안)/iu;
+const AI_TARGET = /알고리즘|모델|학습\s*방법|추론\s*방법|검증\s*방법|소프트웨어|컴퓨팅|핵심\s*기술/iu;
+let calls = 0;
+const candidateCache = new Map();
+function text(v){ return typeof v==="string" ? v : ""; }
+function norm(s){ return text(s).normalize("NFKC").replace(/\s+/gu," ").trim(); }
+function unique(a){ return Array.from(new Set(a)); }
+function clone(x){ return JSON.parse(JSON.stringify(x)); }
+function fieldName(id){ return (FIELDS.find(f=>f.id===id)||{}).name||id; }
+function fieldPattern(name){ const i=FIELD_NAMES.indexOf(name); return i<0?null:PATTERNS[i]; }
+function esc(x){ return String(x==null?"":x).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function sha256Fallback(input){
+  // SHA-256 fallback for offline preview contexts without WebCrypto.
+  const K=[0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+    0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+    0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+    0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+    0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+    0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+    0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+    0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+  const h=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+  const bytes=new TextEncoder().encode(input), len=Math.ceil((bytes.length+9)/64)*64;
+  const padded=new Uint8Array(len);padded.set(bytes);padded[bytes.length]=0x80;
+  const dv=new DataView(padded.buffer), bits=bytes.length*8;
+  dv.setUint32(len-8,Math.floor(bits/0x100000000));dv.setUint32(len-4,bits>>>0);
+  const rotate=(x,n)=>(x>>>n)|(x<<(32-n)),w=new Uint32Array(64);
+  for(let off=0;off<len;off+=64){
+    for(let i=0;i<16;i++)w[i]=dv.getUint32(off+i*4);
+    for(let i=16;i<64;i++){
+      const s0=rotate(w[i-15],7)^rotate(w[i-15],18)^(w[i-15]>>>3);
+      const s1=rotate(w[i-2],17)^rotate(w[i-2],19)^(w[i-2]>>>10);
+      w[i]=(w[i-16]+s0+w[i-7]+s1)>>>0;
+    }
+    let [a,b,c,d,e,f,g,k]=h;
+    for(let i=0;i<64;i++){
+      const s1=rotate(e,6)^rotate(e,11)^rotate(e,25),ch=(e&f)^((~e)&g);
+      const t1=(k+s1+ch+K[i]+w[i])>>>0;
+      const s0=rotate(a,2)^rotate(a,13)^rotate(a,22),maj=(a&b)^(a&c)^(b&c),t2=(s0+maj)>>>0;
+      k=g;g=f;f=e;e=(d+t1)>>>0;d=c;c=b;b=a;a=(t1+t2)>>>0;
+    }
+    [a,b,c,d,e,f,g,k].forEach((v,i)=>h[i]=(h[i]+v)>>>0);
+  }
+  return h.map(v=>v.toString(16).padStart(8,"0")).join("");
+}
+
+function hashString(input){ // WebCrypto or the same SHA-256 algorithm offline.
+  const c = typeof globalThis !== "undefined" ? globalThis.crypto : null;
+  if(!c || !c.subtle) return Promise.resolve(sha256Fallback(input));
+  return c.subtle.digest("SHA-256",new TextEncoder().encode(input))
+    .then(b=>Array.from(new Uint8Array(b),v=>v.toString(16).padStart(2,"0")).join(""));
+}
+function extractClauses(input){
+  const re=/[^.!?;\n。？]+[.!?。？]?/gu, out=[];
+  for (const m of input.matchAll(re)) if(m[0].trim()) out.push(m[0].trim());
+  return out.length?out:[input];
+}
+function classifyTopic(input, meta={}) {
+  calls++;
+  const original=text(input);
+  const candidate={
+    schemaVersion:"2.0",candidateId:meta.candidateId||"trial",topicUid:meta.topicUid||"trial",
+    inputRevision:meta.inputRevision||"trial",engineVersion:ENGINE,rubricVersion:RUBRIC,
+    processingStatus:"succeeded",source:{kind:meta.sourceKind||"local_trial",field:meta.sourceField||"text",text:original,contextRefs:[]},
+    structure:{what:{value:null,evidenceIds:[],confidence:"Low"},method:{value:null,evidenceIds:[],confidence:"Low"},
+      output:{value:null,evidenceIds:[],confidence:"Low"},noveltyEvidence:{status:"insufficient",evidenceIds:[],confidence:"Low"},
+      primaryDomain:{value:null,alternatives:[],evidenceIds:[],confidence:"Low"},secondaryDomains:[],aiRoles:[]},
+    fieldAssessments:[], taxonomy:{taxonomyVersion:TAXONOMY,provenanceStatus:"unverified",scope:"undetermined",
+      candidateMappings:[],reasonCodes:["REFERENCE_NOT_VERIFIED"]},
+    evidence:[],needsInformation:[],reviewStatus:"unreviewed"
+  };
+  const s=candidate.structure;
+  function evidence(quote){
+    if(!quote || !original.includes(quote)) return null;
+    let e=candidate.evidence.find(e=>e.quote===quote);
+    if(!e){
+      e={id:"E"+(candidate.evidence.length+1),sourceField:candidate.source.field,inputRevision:candidate.inputRevision,
+        quote,start:original.indexOf(quote),end:original.indexOf(quote)+quote.length,offsetUnit:"UTF-16"};
+      candidate.evidence.push(e);
+    }
+    return e.id;
+  }
+  if(!norm(original)){
+    candidate.needsInformation.push("빈 연구주제입니다. 분석할 원문이 필요합니다.");
+    return candidate;
+  }
+  if(original.length>12000){
+    candidate.processingStatus="failed"; candidate.errorCode="INPUT_TOO_LONG";
+    candidate.needsInformation.push("문장 시험은 12,000자 이내로 입력해 주세요.");
+    return candidate;
+  }
+  const clauses=extractClauses(original);
+  const hits=FIELDS.map((f,i)=>({field:f,match:original.match(PATTERNS[i]),pattern:PATTERNS[i]})).filter(h=>h.match);
+  let anyDevelopment=false, methodQuotes=[], developmentQuotes=[];
+  for(const hit of hits){
+    const field=hit.field, isAI=field.id==="T07", rel=new Set(), refs=[], reasons=[], extra=[];
+    let uncertain=false;
+    for(const clause of clauses){
+      if(!hit.pattern.test(clause)) continue;
+      const neg=NEGATIVE.test(clause);
+      const dev=clause.match(NEW_TARGET)||clause.match(IMPROVEMENT);
+      const devTied=!!dev && !neg && (isAI ? AI_TARGET.test(dev[0]) : hit.pattern.test(dev[0]));
+      if(devTied){
+        rel.add("core_candidate"); reasons.push("EXPLICIT_DEVELOPMENT");
+        refs.push(evidence(dev[0])); developmentQuotes.push(dev[0]); anyDevelopment=true;
+      }
+      if(neg){extra.push("기술개발을 하지 않는다는 구절이 있습니다.");}
+      let method=null;
+      if(isAI){
+        method=clause.match(new RegExp(AI_SOURCE+"(?:\\s*[가-힣A-Za-z0-9·-]+){0,3}?\\s*(?:를|을)?\\s*(?:활용(?:한|하여|해)?|이용(?:한|하여|해)?|기반(?:으로)?|통해|로\\s*분석)","iu"));
+      }else{
+        const m=clause.match(/.{1,45}?(?:활용한|이용한|기반으로|도구로|를\s*활용|을\s*활용)/u);
+        if(m && hit.pattern.test(m[0])) method=m;
+      }
+      const otherDomain=hits.some(h=>h.field.id!==field.id && h.pattern.test(clause));
+      const socialOrEdu=SOCIAL.test(clause)||EDUCATION.test(clause);
+      // "딥러닝 기반 언어모델..." alone is NOT proof of an external application.
+      if(method && (otherDomain || socialOrEdu || /기존|도구|현장|자료|데이터를|실증/iu.test(clause))){
+        rel.add("application"); refs.push(evidence(method[0])); methodQuotes.push(method[0]); reasons.push("EXPLICIT_METHOD_USE");
+      }else if(method){
+        methodQuotes.push(method[0]); uncertain=true; reasons.push("METHOD_WITH_UNCLEAR_TARGET");
+      }
+      // Explicit development + external application may occur in one sentence.
+      if(devTied && /(?:에|에\s*직접)\s*적용|현장.{0,8}실증/u.test(clause) && (otherDomain||socialOrEdu)){
+        rel.add("application"); refs.push(evidence(clause)); methodQuotes.push(clause); reasons.push("DEVELOPMENT_AND_APPLICATION");
+      }
+      const socialConnection=SOCIAL.test(clause)||EDUCATION.test(clause);
+      const linkWords=/영향|책임|규제|제도|윤리|수용성|저작권|거버넌스|사회적|교육과정|효과|공정성/iu.test(clause);
+      if(socialConnection && linkWords && !rel.has("application") && (!/시대/.test(clause)||/영향|책임|규제|저작권/.test(clause))){
+        rel.add("linkage"); refs.push(evidence(clause)); reasons.push("EXPLICIT_STUDY_OBJECT_OR_LINKAGE");
+      }
+      if(!devTied && !method && !linkWords) uncertain=true;
+    }
+    const found=Array.from(rel);
+    const specific=hit.match[0].trim();
+    refs.push(evidence(specific));
+    candidate.fieldAssessments.push({
+      fieldId:field.id, assessment:found.length?"supported":"undetermined",relations:found,
+      evidenceIds:unique(refs.filter(Boolean)),confidence:found.includes("core_candidate")||found.includes("application")?"High":found.length?"Medium":"Low",
+      reasonCodes:unique(reasons.length?reasons:["FIELD_MENTION_ONLY"]),notes:unique(extra),
+      incompleteRole:uncertain
+    });
+    candidate.taxonomy.candidateMappings.push({fieldId:field.id,fieldName:field.name,source:"internal-label-only",officialGroupId:null});
+  }
+  const ai=candidate.fieldAssessments.find(f=>f.fieldId==="T07");
+  if(ai){
+    if(ai.relations.includes("core_candidate")) s.aiRoles.push("development");
+    if(ai.relations.includes("application")||methodQuotes.some(q=>PATTERNS[6].test(q))) s.aiRoles.push("method");
+    if(ai.relations.includes("linkage")) s.aiRoles.push("study_object");
+    if(!s.aiRoles.length) s.aiRoles.push(/시대|확산|전환/.test(original)?"context":"undetermined");
+  }
+  if(anyDevelopment){
+    const q=developmentQuotes[0], ref=evidence(q);
+    s.output={value:q,evidenceIds:[ref],confidence:"High"};
+    s.noveltyEvidence={status:IMPROVEMENT.test(q)?"improvement_stated":"development_stated",evidenceIds:[ref],confidence:"High"};
+  }else if(NEGATIVE.test(original)){
+    const q=clauses.find(c=>NEGATIVE.test(c));
+    s.noveltyEvidence={status:"nondevelopment_stated",evidenceIds:[evidence(q)],confidence:"High"};
+  }
+  if(methodQuotes.length){
+    s.method={value:unique(methodQuotes).join(" / "),evidenceIds:unique(methodQuotes.map(evidence)),confidence:"Medium"};
+  }
+  const domains=[];
+  const nonAI=hits.filter(h=>h.field.id!=="T07").map(h=>h.field.name);
+  if(POLICY.test(original)) domains.push("법·제도·거버넌스");
+  else if(SOCIAL.test(original)) domains.push("사회·경제·문화");
+  if(EDUCATION.test(original)) domains.push("교육·인재양성");
+  // Roles, not faculty/selected fields, control domain suggestions.
+  const aiDev=ai && ai.relations.includes("core_candidate");
+  if(aiDev) domains.push("AI/SW");
+  domains.push(...nonAI);
+  if(!domains.length && ai && !ai.relations.includes("application") && !ai.relations.includes("linkage")) domains.push("AI/SW");
+  const ds=unique(domains);
+  if(ds.length===1){
+    s.primaryDomain={value:ds[0],alternatives:[],evidenceIds:candidate.evidence.map(e=>e.id),confidence:"Medium"};
+  }else if(ds.length>1){
+    s.primaryDomain={value:null,alternatives:ds,evidenceIds:candidate.evidence.map(e=>e.id),confidence:"Low"};
+    candidate.needsInformation.push("여러 분야가 언급됩니다. 핵심 연구목표와 산출물의 우선순위를 확인해 주세요.");
+  }
+  s.secondaryDomains=hits.map(h=>h.field.name).filter(n=>n!==s.primaryDomain.value && !ds.includes(n));
+  const whatMatch=original.match(/신약\s*후보(?:물질)?\s*탐색|임상\s*진단\s*오류|공공\s*정책\s*평가|공정한\s*시장|언어\s*모델의\s*추론\s*신뢰도|교육\s*효과|수업\s*피드백|정치적\s*태도|국제분쟁\s*뉴스|제도적\s*책임|창작\s*노동/iu);
+  if(whatMatch) s.what={value:whatMatch[0],evidenceIds:[evidence(whatMatch[0])],confidence:"Medium"};
+  if(!s.output.value) candidate.needsInformation.push("계획한 산출물과 기술개발 여부를 추가 확인해 주세요.");
+  if(!hits.length) candidate.needsInformation.push("구체적인 기술 관계를 자동으로 찾지 못했습니다. 체계 밖으로 판단하지 않습니다.");
+  if(candidate.fieldAssessments.some(f=>f.assessment==="undetermined")) candidate.needsInformation.push("기술 언급만으로 원천·적용·연계를 결정할 수 없는 항목이 있습니다.");
+  if(/이전\s*지시|무시하고|모든\s*교원/.test(original)) candidate.needsInformation.push("지시문처럼 보이는 표현도 원문 데이터로만 처리했습니다.");
+  return candidate;
+}
+function validateCandidate(c){
+  const errors=[];
+  if(!c||c.schemaVersion!=="2.0") return ["INVALID_SCHEMA"];
+  if(c.taxonomy.scope!=="undetermined" && c.taxonomy.provenanceStatus!=="verified") errors.push("UNVERIFIED_TAXONOMY");
+  const ids=new Set();
+  for(const f of c.fieldAssessments){
+    if(ids.has(f.fieldId)||!FIELDS.some(x=>x.id===f.fieldId)) errors.push("INVALID_FIELD");
+    ids.add(f.fieldId);
+    if(f.assessment==="supported" && !f.relations.length) errors.push("MISSING_RELATION");
+    if(f.assessment!=="supported" && f.relations.length) errors.push("UNSUPPORTED_RELATION");
+    if(f.relations.some(r=>!RELATIONS[r])) errors.push("INVALID_RELATION");
+    if(f.relations.includes("core_candidate") && !["development_stated","improvement_stated"].includes(c.structure.noveltyEvidence.status)) errors.push("CORE_WITHOUT_EVIDENCE");
+    if(f.evidenceIds.some(id=>!c.evidence.some(e=>e.id===id))) errors.push("INVALID_EVIDENCE_ID");
+  }
+  for(const e of c.evidence) if(!c.source.text.includes(e.quote)||e.inputRevision!==c.inputRevision) errors.push("INVALID_EVIDENCE");
+  return unique(errors);
+}
+function parseCSV(content){
+  const s=content.replace(/^\ufeff/,""), rows=[]; let row=[], cell="", quoted=false;
+  for(let i=0;i<s.length;i++){
+    const c=s[i];
+    if(quoted){if(c==='"'){if(s[i+1]==='"'){cell+='"';i++;}else quoted=false;}else cell+=c;}
+    else if(c==='"'){if(cell.length) throw new Error("CSV 따옴표 위치를 확인해 주세요."); quoted=true;}
+    else if(c===','){row.push(cell);cell="";}
+    else if(c==='\n'||c==='\r'){
+      if(c==='\r'&&s[i+1]==='\n')i++;
+      row.push(cell); if(row.some(v=>v!==""))rows.push(row); row=[];cell="";
+    }else cell+=c;
+  }
+  if(quoted)throw new Error("CSV 따옴표가 닫히지 않았습니다.");
+  row.push(cell); if(row.some(v=>v!==""))rows.push(row);
+  if(!rows.length) return [];
+  const head=rows.shift().map(v=>v.trim());
+  if(new Set(head).size!==head.length) throw new Error("중복된 CSV 열 이름이 있습니다.");
+  if(!head.includes("참여의향")&&!head.includes("intent"))throw new Error("기존 ‘전체 응답 CSV’ 또는 intent 열을 가진 파일을 사용해 주세요.");
+  return rows.map((r,i)=>{
+    if(r.length!==head.length)throw new Error((i+2)+"행의 열 개수가 머리글과 다릅니다.");
+    const x=Object.fromEntries(head.map((h,j)=>[h,r[j]]));
+    const get=(a,b)=>x[a]??x[b]??"";
+    const topics=x.topics!==undefined ? String(x.topics).split(" ||| ") : [x["주제1"],x["주제2"],x["주제3"]].filter(v=>v!==undefined);
+    return {id:get("id","접수번호"),name:get("name","성명"),dept:get("dept","학과"),college:get("college","단과대학·대학원"),
+      rank:get("rank","직급"),intent:get("intent","참여의향"),track:get("track","트랙"),
+      topics,techs:get("techs","전략기술").split(" / ").filter(Boolean),futureTopic:get("futureTopic","미래인재연구주제"),
+      problem:get("problem","산업사회문제해결분야"),coreField:get("coreField","핵심분야"),vision:get("vision","교육연구단구상"),
+      submittedAt:get("submittedAt","접수일시"),updatedAt:get("updatedAt","수정일시")};
+  });
+}
+function parseFile(content,name){
+  if(content.length>2000000)throw new Error("파일 크기는 2MB 이내로 제한합니다.");
+  let rows;
+  if(/\.csv$/i.test(name)) rows=parseCSV(content);
+  else{
+    let obj;try{obj=JSON.parse(content.replace(/^\ufeff/,""));}catch(e){throw new Error("올바른 JSON 배열 또는 rows 배열이 필요합니다.");}
+    rows=Array.isArray(obj)?obj:obj.rows;
+  }
+  if(!Array.isArray(rows))throw new Error("응답 배열을 찾을 수 없습니다.");
+  if(rows.length>2000)throw new Error("테스트본에서는 최대 2,000개 응답을 읽습니다.");
+  return rows;
+}
+async function buildSnapshot(rawRows,options={}){
+  if(!Array.isArray(rawRows))throw new Error("입력은 응답 배열이어야 합니다.");
+  if(rawRows.length>2000)throw new Error("최대 2,000개 응답만 처리합니다.");
+  const rows=clone(rawRows), issues=[], teachers=[], topics=[], synthetic=options.synthetic===true;
+  const idCounts=new Map();
+  rows.forEach(r=>{if(r&&typeof r==="object"&&text(r.id))idCounts.set(r.id,(idCounts.get(r.id)||0)+1);});
+  const rawHash=await hashString(JSON.stringify(rows));
+  const snapshot={schemaVersion:"2.0",snapshotId:"snap-"+rawHash.slice(0,16),analysisRunId:"run-"+rawHash.slice(0,12)+"-"+ENGINE,
+    sourceLabel:options.sourceLabel||"로컬 자료",sourceKind:synthetic?"synthetic":"local_file",fetchedAt:options.fetchedAt||new Date().toISOString(),
+    analyzedAt:null,engineVersion:ENGINE,rubricVersion:RUBRIC,taxonomyVersion:TAXONOMY,rawRows:rows,teachers,topics,issues,decisions:[],inputCount:rows.length};
+  for(let i=0;i<rows.length;i++){
+    const r=rows[i], rowRef="입력 "+(i+1)+"행";
+    if(!r||typeof r!=="object"||Array.isArray(r)){issues.push({code:"INVALID_ROW",rowRef,message:"응답 객체가 아닙니다. 분석에서 제외했습니다."});continue;}
+    if(!["참여","불참"].includes(r.intent)){issues.push({code:"INVALID_INTENT",rowRef,message:"참여 의향이 비어 있거나 허용값이 아닙니다."});continue;}
+    if(r.intent==="불참")continue;
+    if(!["AI 융합인재","미래인재"].includes(r.track)){issues.push({code:"INVALID_TRACK",rowRef,message:"참여 응답의 트랙을 확인해 주세요."});continue;}
+    const localId=(text(r.id)&&idCounts.get(r.id)===1) ? "legacy:"+r.id : "row-position:"+(i+1);
+    const identityStatus=synthetic && text(r.id) && idCounts.get(r.id)===1?"synthetic":"unresolved";
+    if(text(r.id)&&idCounts.get(r.id)>1)issues.push({code:"DUPLICATE_LEGACY_ID",rowRef,message:"원래 접수 ID가 중복되어 행을 병합하지 않았습니다."});
+    const responseUid="response-"+(await hashString(localId)).slice(0,20);
+    const groupId=identityStatus==="synthetic"?"demo-person-"+r.id:"unresolved-"+responseUid;
+    const rawSelected=r.track==="AI 융합인재"?(Array.isArray(r.techs)?r.techs:[]):[];
+    if(r.track==="AI 융합인재"&&!Array.isArray(r.techs))issues.push({code:"INVALID_TECH_ARRAY",rowRef,message:"기술 선택값은 배열이어야 합니다."});
+    const known=unique(rawSelected.filter(v=>FIELD_NAMES.includes(v)));
+    const unknown=rawSelected.filter(v=>!FIELD_NAMES.includes(v));
+    if(unknown.length)issues.push({code:"UNKNOWN_FIELD",rowRef,message:"알 수 없는 기술 선택값이 있습니다. 체계 밖으로 분류하지 않습니다."});
+    if(r.track==="AI 융합인재"&&!known.length)issues.push({code:"MISSING_SELECTION",rowRef,message:"유효한 기술 선택값이 없습니다."});
+    let strings=r.track==="미래인재"?[r.futureTopic||""]:(Array.isArray(r.topics)?r.topics:[]);
+    if(r.track==="AI 융합인재"&&!Array.isArray(r.topics))issues.push({code:"INVALID_TOPIC_ARRAY",rowRef,message:"연구주제 배열을 확인해 주세요."});
+    const teacher={groupId,respondentUid:identityStatus==="synthetic"?groupId:null,responseUid,legacyId:r.id||null,identityStatus,
+      name:text(r.name)||rowRef,dept:text(r.dept)||"미기재",college:text(r.college)||"미기재",track:r.track,
+      selectedFields:known.map(n=>FIELDS.find(f=>f.name===n).id),selectionApplicable:r.track==="AI 융합인재",
+      topicUids:[],context:{problem:text(r.problem),coreField:text(r.coreField),vision:text(r.vision)}};
+    const seen=new Set();
+    for(let j=0;j<strings.length;j++){
+      if(typeof strings[j]!=="string"){issues.push({code:"INVALID_TOPIC_TYPE",rowRef,message:"문자열이 아닌 주제 항목을 제외했습니다."});continue;}
+      const raw=strings[j], canonical=norm(raw);
+      if(!canonical)continue;
+      if(canonical.length>12000){issues.push({code:"TOPIC_TOO_LONG",rowRef,message:"12,000자를 넘는 주제는 제외했습니다."});continue;}
+      if(seen.has(canonical)){issues.push({code:"DUPLICATE_TOPIC",rowRef,message:"동일 응답 안의 중복 주제는 한 번만 셉니다. 원본은 보존했습니다."});continue;}
+      seen.add(canonical);
+      const topicUid="topic-"+(await hashString(responseUid+"|"+canonical)).slice(0,24);
+      const inputRevision=await hashString(JSON.stringify({raw,context:teacher.context}));
+      const sourceField=r.track==="미래인재"?"futureTopic":"topics["+j+"]";
+      const cacheKey=topicUid+"|"+inputRevision+"|"+ENGINE+"|"+sourceField+"|"+snapshot.sourceKind;
+      let candidate=candidateCache.get(cacheKey);
+      if(!candidate){
+        candidate=classifyTopic(raw,{topicUid,inputRevision,sourceField,sourceKind:snapshot.sourceKind,candidateId:"cand-"+(await hashString(cacheKey)).slice(0,24)});
+        const validation=validateCandidate(candidate);
+        if(validation.length){candidate.processingStatus="failed";candidate.errorCode=validation.join(",");}
+        candidateCache.set(cacheKey,candidate);
+      }
+      topics.push({topicUid,inputRevision,responseUid,groupId,sourceField,text:raw,teacher,candidate});
+      teacher.topicUids.push(topicUid);
+    }
+    if(!teacher.topicUids.length)issues.push({code:"MISSING_TOPIC",rowRef,message:"유효한 연구주제가 없는 참여 응답입니다."});
+    teachers.push(teacher);
+  }
+  if(topics.length>6000)throw new Error("테스트본의 최대 주제 수 6,000건을 초과했습니다.");
+  snapshot.analyzedAt=new Date().toISOString();
+  return snapshot;
+}
+function effective(topic,snapshot,mode){
+  const decisions=snapshot.decisions||[];
+  const d=decisions.filter(x=>x.topicUid===topic.topicUid).sort((a,b)=>(b.reviewRevision||0)-(a.reviewRevision||0))[0];
+  const valid=d && d.inputRevision===topic.inputRevision && d.rubricVersion===RUBRIC && d.taxonomyVersion===TAXONOMY;
+  if(mode==="approved")return valid && d.reviewStatus==="approved"?{candidate:d.decisionPayload,reviewStatus:"approved",source:"human"}:
+    {candidate:null,reviewStatus:d&&!valid?"stale":d?d.reviewStatus:"unreviewed",source:"none"};
+  return {candidate:topic.candidate,reviewStatus:valid?d.reviewStatus:d?"stale":"unreviewed",source:"rules"};
+}
+function assessment(c,fieldId){
+  return c&&c.processingStatus!=="failed" ? (c.fieldAssessments||[]).find(f=>f.fieldId===fieldId)||{fieldId,assessment:"not_assessed",relations:[],confidence:"Low",evidenceIds:[]}:
+    {fieldId,assessment:"not_assessed",relations:[],confidence:"Low",evidenceIds:[]};
+}
+function summarizeField(teachers,topics,snapshot,field,mode){
+  const selected=new Set(),positive=new Set(),complete=new Set(),pending=new Set(),notApplicable=new Set();
+  const rel=Object.fromEntries(Object.keys(RELATIONS).map(r=>[r,new Set()]));
+  const result=[];
+  for(const p of teachers){
+    const ts=topics.filter(t=>t.groupId===p.groupId);
+    if(p.selectionApplicable && p.selectedFields.includes(field))selected.add(p.groupId);
+    if(!p.selectionApplicable)notApplicable.add(p.groupId);
+    let has=false,done=ts.length>0;
+    const rr=new Set();
+    for(const t of ts){
+      const ef=effective(t,snapshot,mode), a=assessment(ef.candidate,field);
+      if(a.assessment==="supported"){
+        has=true; a.relations.forEach(r=>{rel[r].add(p.groupId);rr.add(r);});
+      }
+      if(!["supported","no_evidence"].includes(a.assessment))done=false;
+    }
+    if(has)positive.add(p.groupId);
+    if(done)complete.add(p.groupId);else pending.add(p.groupId);
+    result.push({teacher:p,topics:ts,relations:Array.from(rr),hasEvidence:has,complete:done,pending:!done,
+      selected:p.selectionApplicable?p.selectedFields.includes(field):null});
+  }
+  const chosen=Array.from(selected), inSet=(a,b)=>a.filter(x=>b.has(x));
+  return {selected,positive,complete,pending,rel,notApplicable,teacherRows:result,
+    counts:{selected:selected.size,positive:positive.size,core_candidate:rel.core_candidate.size,application:rel.application.size,linkage:rel.linkage.size,
+      selectedPositive:inSet(chosen,positive).length,
+      selectedNoEvidence:chosen.filter(x=>!positive.has(x)&&complete.has(x)).length,
+      selectedPending:chosen.filter(x=>!positive.has(x)&&!complete.has(x)).length,
+      unselectedPositive:Array.from(positive).filter(x=>!selected.has(x)&&!notApplicable.has(x)).length,
+      positivePending:Array.from(positive).filter(x=>pending.has(x)).length,notApplicable:notApplicable.size}
+  };
+}
+function defaultFilters(){return {track:"AI 융합인재",q:"",field:"T07",relation:"",selection:"",confidence:"",review:""};}
+function buildView(snapshot,filters,mode="preview",pane="demand",page=1){
+  const f={...defaultFilters(),...filters};
+  if(!FIELDS.some(x=>x.id===f.field))f.field="T07";
+  if(!["","AI 융합인재","미래인재"].includes(f.track))f.track="AI 융합인재";
+  const q=norm(f.q).toLocaleLowerCase();
+  const teachers=snapshot.teachers.filter(p=>(!f.track||p.track===f.track) &&
+    (!q||[p.name,p.dept,p.college,...snapshot.topics.filter(t=>t.groupId===p.groupId).map(t=>t.text)].join(" ").toLocaleLowerCase().includes(q)));
+  const groups=new Set(teachers.map(p=>p.groupId));
+  const topics=snapshot.topics.filter(t=>groups.has(t.groupId));
+  const summary=summarizeField(teachers,topics,snapshot,f.field,mode);
+  const topicRows=topics.map(t=>{const ef=effective(t,snapshot,mode);return {topic:t,candidate:ef.candidate,reviewStatus:ef.reviewStatus,
+    a:assessment(ef.candidate,f.field),source:ef.source,teacher:t.teacher};});
+  const choice=p=>f.selection===""||f.selection==="selected"&&p.selectionApplicable&&p.selectedFields.includes(f.field)||
+    f.selection==="unselected"&&p.selectionApplicable&&!p.selectedFields.includes(f.field)||
+    f.selection==="na"&&!p.selectionApplicable;
+  let rows;
+  if(pane==="demand"){
+    rows=summary.teacherRows.filter(r=>choice(r.teacher)&&(!f.relation||r.relations.includes(f.relation))&&
+      (!f.review||r.topics.some(t=>effective(t,snapshot,mode).reviewStatus===f.review))&&
+      (!f.confidence||r.topics.some(t=>assessment(effective(t,snapshot,mode).candidate,f.field).confidence===f.confidence)));
+  }else{
+    rows=topicRows.filter(r=>choice(r.teacher)&&(!f.relation||r.a.relations.includes(f.relation))&&
+      (!f.review||r.reviewStatus===f.review)&&(!f.confidence||r.a.confidence===f.confidence));
+  }
+  const pages=Math.max(1,Math.ceil(rows.length/10)), current=Math.max(1,Math.min(Number(page)||1,pages));
+  const known=teachers.filter(t=>t.identityStatus!=="unresolved").length;
+  const approved=topicRows.filter(t=>t.reviewStatus==="approved").length;
+  return {meta:{snapshotId:snapshot.snapshotId,analysisRunId:snapshot.analysisRunId,engineVersion:ENGINE,rubricVersion:RUBRIC,
+      taxonomyVersion:TAXONOMY,mode,pane,filters:f,denominator:teachers.length,unit:pane==="demand"?"response_or_demo_person":"topic",sourceKind:snapshot.sourceKind},
+    filters:f,teachers,topics,summary,filteredRows:rows,visibleRows:rows.slice((current-1)*10,current*10),page:current,pages,
+    metrics:{cohort:teachers.length,known,unresolved:teachers.length-known,topics:topics.length,approved,pending:topics.length-approved,
+      processingFailed:topics.filter(t=>t.candidate.processingStatus==="failed").length},
+    source:snapshot};
+}
+function csvCell(value){
+  let s=String(value==null?"":value);
+  if(/^[\s\u0000-\u001f]*[=+\-@]/u.test(s)||/^[\t\r\n]/u.test(s))s="'"+s;
+  return '"'+s.replace(/"/g,'""')+'"';
+}
+function exportModel(view){
+  const m=view.meta, meta=JSON.stringify({snapshotId:m.snapshotId,analysisRunId:m.analysisRunId,mode:m.mode,filters:m.filters,denominator:m.denominator,sourceKind:m.sourceKind});
+  let headers,rows;
+  if(m.pane==="demand"){
+    headers=["자료 구분","응답 ID","고유 교원 연결 ID","식별 상태","표시 이름","소속","트랙","비교 분야","선택 여부","관련 관계","검토 범위","유효 주제 수","근거 주제 ID","출력 기준"];
+    rows=view.filteredRows.map(r=>[m.sourceKind,r.teacher.responseUid,r.teacher.respondentUid||"",r.teacher.identityStatus,r.teacher.name,r.teacher.dept,
+      r.teacher.track,fieldName(m.filters.field),r.selected===null?"해당 없음":r.selected?"선택":"미선택",
+      r.relations.map(x=>RELATIONS[x]).join(" / "),r.complete?(m.mode==="preview"?"자동 평가 범위 충족·미승인":"검토 범위 충족"):"추가 확인 필요",
+      r.topics.length,r.topics.map(t=>t.topicUid).join(" / "),meta]);
+  }else{
+    headers=["자료 구분","주제 ID","응답 ID","고유 교원 연결 ID","식별 상태","표시 이름","소속","트랙","원문","주 연구분야 후보","분야 대안","비교 분야","분야 관계","평가","확신도","검토 상태","분류체계 포함","판정 출처","입력 리비전","근거 구절","출력 기준"];
+    rows=view.filteredRows.map(r=>[m.sourceKind,r.topic.topicUid,r.teacher.responseUid,r.teacher.respondentUid||"",r.teacher.identityStatus,
+      r.teacher.name,r.teacher.dept,r.teacher.track,r.topic.text,r.candidate?r.candidate.structure.primaryDomain.value||"": "",
+      r.candidate?r.candidate.structure.primaryDomain.alternatives.join(" / "):"",fieldName(m.filters.field),
+      r.a.relations.map(x=>RELATIONS[x]).join(" / "),ASSESSMENTS[r.a.assessment],r.a.confidence,REVIEW[r.reviewStatus],
+      r.candidate?r.candidate.taxonomy.scope:"undetermined",r.source,r.topic.inputRevision,
+      r.candidate?r.candidate.evidence.map(e=>e.quote).join(" ||| "):"",meta]);
+  }
+  return {headers,rows,ids:view.filteredRows.map(r=>r.topic?r.topic.topicUid:r.teacher.responseUid)};
+}
+function toCSV(model){return "\ufeff"+[model.headers,...model.rows].map(r=>r.map(csvCell).join(",")).join("\r\n");}
+return {VERSION,ENGINE,RUBRIC,TAXONOMY,FIELDS,FIELD_NAMES,RELATIONS,ROLES,REVIEW,NOVELTY,ASSESSMENTS,
+  norm,esc,fieldName,fieldPattern,hashString,sha256Fallback,classifyTopic,validateCandidate,parseCSV,parseFile,buildSnapshot,effective,assessment,
+  summarizeField,defaultFilters,buildView,csvCell,exportModel,toCSV,
+  diagnostics:()=>({classifierCalls:calls,cacheEntries:candidateCache.size})};
+});
+</script>
+<script>
+/* BK21 results v3: three views, question -> theme -> grouping.
+ * Offline rule-based prototype. No model calls; no human approval is implied.
+ * issueAnswers/futureFields are proposed input extensions, NOT r36 server fields.
+ */
+(function(root, factory){
+  const dep=typeof module==="object"&&module.exports?require("./analysis-core.js"):root.BK21AnalysisV2;
+  const api=factory(dep);
+  if(typeof module==="object"&&module.exports)module.exports=api;
+  else root.BK21TopicsV3=api;
+})(typeof globalThis!=="undefined"?globalThis:this,function(C){
+"use strict";
+const VERSION="3.0-test.1", ENGINE="topic-rules-20260920.3";
+const MODES=[
+  {id:"future",title:"미래인재",sub:"분야별 교원"},
+  {id:"tech",title:"AI 융합인재",sub:"19대 국가전략기술"},
+  {id:"issue",title:"AI 융합인재",sub:"산업·사회 문제 해결"}
+];
+const TYPES={
+  tech:[
+    {id:"core",label:"원천 기술",desc:"선택 기술 자체의 개발·핵심 변화가 명시된 주제"},
+    {id:"connected",label:"연계 기술",desc:"선택 기술을 활용해 다른 연구대상 X를 다루는 주제"},
+    {id:"pending",label:"미판정",desc:"기술개발·활용의 근거 또는 연결이 불명확"}
+  ],
+  issue:[
+    {id:"hs",label:"인문사회분야융복합",desc:"기재 내용이 인문사회 융복합으로 분류됨"},
+    {id:"st",label:"과학기술분야융복합",desc:"기재 내용이 과학기술 융복합으로 분류됨"},
+    {id:"hst",label:"인문사회과학기술융복합",desc:"기재 내용이 두 영역의 융복합으로 분류됨"},
+    {id:"aix",label:"인공지능 융합형(AI+X)",desc:"기재 내용에 인공지능 융합이 드러남"},
+    {id:"etc",label:"그 밖의 분야",desc:"네 유형에 들어가지 않는 직접 기재"},
+    {id:"none",label:"기재 없음",desc:"산업·사회 문제 해결 분야를 적지 않음"}
+  ]
+};
+/* 융복합 유형 — 설문 예시 4종과 같은 이름을 쓴다 */
+const FUSION_IDS=[["hs","인문사회분야융복합"],["st","과학기술분야융복합"],
+  ["hst","인문사회과학기술융복합"],["aix","인공지능 융합형(AI+X)"],["etc","그 밖의 분야 (직접 기재)"]];
+function fusionId(label,hasText){
+  if(!hasText)return "none";
+  const hit=FUSION_IDS.find(([,name])=>name===clean(label));
+  return hit?hit[0]:"etc";
+}
+/* 19대 국가전략기술 중분류표 — 운영 HTML 의 TAXONOMY 를 주입해 쓴다.
+   주입되지 않으면 중분류를 표시하지 않을 뿐, 판정 자체는 그대로 동작한다. */
+let TAX={};
+function setTaxonomy(table){TAX=table&&typeof table==="object"?table:{};}
+/* 19대 체계 기반 판정기를 밖에서 주입한다.
+   운영 HTML 의 parseTopic()·classifyTech() 가 이미 대상·수단을 갈라 중분류를 찍으므로
+   그 결과를 그대로 쓴다. 주입되지 않으면 이전 규칙 판정으로 되돌아간다. */
+let JUDGE=null;
+function setTechJudge(fn){JUDGE=typeof fn==="function"?fn:null;}
+function taxonomyMatch(text,field){
+  const def=TAX[field];
+  if(!def||!Array.isArray(def.groups)||!clean(text))return null;
+  let best=null;
+  for(const g of def.groups){
+    const hits=(g.w||[]).filter(w=>w&&text.indexOf(w)>=0);
+    if(!hits.length)continue;
+    const score=hits.reduce((n,w)=>n+Math.max(1,w.length),0);
+    if(!best||score>best.score)best={id:g.id,name:g.name,kind:g.kind,hits:unique(hits),score};
+  }
+  return best;
+}
+const clean=s=>typeof s==="string"?s.trim():"";
+const unique=a=>Array.from(new Set(a));
+const key=s=>C.sha256Fallback(String(s)).slice(0,20);
+const normalize=s=>C.norm(s).toLocaleLowerCase();
+function strings(v){
+  if(typeof v==="string")return v.trim()?[v.trim()]:[];
+  return Array.isArray(v)?unique(v.filter(x=>typeof x==="string").map(x=>x.trim()).filter(Boolean)):[];
+}
+const FUSION=["인문사회분야융복합","과학기술분야융복합","인문사회과학기술융복합","인공지능 융합형(AI+X)"];
+// Fixed recognisers are an explicit pilot dictionary, not an official or exhaustive taxonomy.
+// Matching only creates candidate noun phrases, never a new common research question.
+const THEMES=[
+  ["reasoning","언어모델 추론 구조·신뢰성",/언어\s*모델|대규모\s*언어|\bLLM\b/iu,/추론|신뢰|오류/iu],
+  ["efficiency","AI 학습·연산 효율",/인공지능|\bAI\b|모델|학습|컴퓨팅/iu,/연산|경량|효율|저전력|병렬/iu],
+  ["validation","AI 검증·안전성",/인공지능|\bAI\b|모델/iu,/검증|안전성|강건/iu],
+  ["medical_imaging","의료영상·진단",/의료\s*영상|영상\s*진단|영상\s*판독|진단\s*오류/iu,null],
+  ["drug","신약 후보 탐색",/신약|후보\s*물질/iu,/탐색|발굴|개발/iu],
+  ["writing","글쓰기 피드백",/글쓰기|작문/iu,/피드백|첨삭/iu],
+  ["learning_support","개인별 학습 지원",/학생|학습자|학습|수업/iu,/맞춤|개인별|개별|피드백|학습\s*격차/iu],
+  ["maintenance","설비 이상 탐지·예지보전",/설비|예지\s*보전|고장/iu,/이상|탐지|고장|보전|예측/iu],
+  ["care_gap","돌봄 접근성·격차",/돌봄|요양|고령|독거/iu,/격차|접근|불평등/iu],
+  ["care_supply","돌봄 인력·서비스 공급",/돌봄|요양/iu,/인력|부족|공급|서비스/iu],
+  ["elder_risk","독거노인 위험 감지",/독거|고령자|노인/iu,/위험|감지|탐지|고독사|낙상/iu],
+  ["industrial_safety","산업현장 사고 예방",/산업\s*현장|산업\s*재해|산업\s*안전|작업장|제조\s*현장/iu,/재해|사고|위험|안전/iu],
+  ["reskilling","재교육·숙련 전환",/노동|일자리|숙련|재교육|근로자/iu,/재교육|숙련|전환/iu],
+  ["renewable","재생에너지 출력 예측",/재생\s*에너지|태양광|풍력/iu,/출력|변동|예측/iu],
+  ["carbon_cost","탄소중립 전환 비용",/탄소\s*중립|에너지\s*전환/iu,/비용|분담|형평/iu],
+  ["chip","반도체 구조·제조",/반도체|웨이퍼|식각|노광|패키징/iu,null],
+  ["battery","전지 계면·수명",/전지|배터리/iu,/계면|수명|열화/iu],
+  ["robot","로봇 제어·조작",/로봇/iu,/제어|조작|협업/iu],
+  ["ai_social","AI의 사회·조직 영향",/인공지능|\bAI\b/iu,/사회|조직|의사결정|책임|윤리|규제/iu],
+  ["public_eval","공공정책 평가",/공공\s*정책/iu,/평가/iu],
+  ["fair_market","시장 공정성",/공정한\s*시장|시장의\s*공정성/iu,null],
+  ["care_general","돌봄체계 연구",/돌봄\s*체계/iu,null],
+  ["classics","고전 문헌 연구",/고전\s*문헌/iu,null]
+];
+function extractTheme(input){
+  const s=clean(input);
+  if(!s)return {key:"no_question",label:"질문 미기재",derived:"질문 미기재",method:"missing",evidence:[]};
+  for(const [id,label,p,q]of THEMES){
+    const m=s.match(p),n=q?s.match(q):null;
+    if(m&&(!q||n))return {
+      key:id,label,derived:label,method:"rule_candidate",
+      evidence:unique([m[0],...(n?[n[0]]:[])])
+    };
+  }
+  // Preserve unmatched content. No invented topic or silent broad-group assignment.
+  const exact=C.norm(s).replace(/[?？]\s*$/u,"");
+  return {key:"individual-"+key(normalize(s)),label:exact,derived:exact,method:"extractive_unmerged",evidence:[s]};
+}
+function techAnalysis(text,field,candidate){
+  const a=(candidate.fieldAssessments||[]).find(x=>C.fieldName(x.fieldId)===field);
+  const categories=[];
+  if(a&&a.relations.includes("core_candidate"))categories.push("core");
+  if(a&&a.relations.includes("application"))categories.push("connected");
+  let reason="";
+  if(!clean(text))reason="질문이 입력되지 않았습니다.";
+  else if(!a)reason="이 질문에서 선택 기술과 연결되는 표현을 규칙으로 확인하지 못했습니다.";
+  else if(!categories.length&&a.relations.includes("linkage"))
+    reason="기술을 연구대상으로 다루지만, 기술 자체 개발이나 X에 활용하는 방식은 확인되지 않았습니다.";
+  else if(!categories.length)reason="기술 언급은 있으나, 개발·변화 또는 활용 대상 X를 확인하기 어렵습니다.";
+  else reason=categories.length===2?"기술개발과 다른 연구대상에의 적용이 함께 명시되어 있습니다.":
+    categories[0]==="core"?"원문에 기술 자체의 개발·개선 목표가 기재되어 있습니다. 실제 성과·신규성 검증은 아닙니다.":
+    "원문에 선택 기술을 방법으로 활용하는 표현과 연구대상 X가 있습니다.";
+  return {categories:categories.length?categories:["pending"],reason,
+    evidence:a?(candidate.evidence||[]).filter(e=>(a.evidenceIds||[]).includes(e.id)).map(e=>e.quote):[],
+    aiUse:!!(candidate.fieldAssessments||[]).find(x=>x.fieldId==="T07"&&x.relations.includes("application"))
+  };
+}
+function buildDataset(rawRows,options={}){
+  if(!Array.isArray(rawRows)||rawRows.length>2000)throw new Error("응답은 최대 2,000건의 배열이어야 합니다.");
+  const raw=JSON.parse(JSON.stringify(rawRows)), synthetic=options.synthetic===true;
+  const teachers=[],tech=[],issue=[],future=[],warnings=[],counts=new Map();
+  raw.forEach(r=>{if(r&&clean(r.id))counts.set(r.id,(counts.get(r.id)||0)+1);});
+  raw.forEach((r,index)=>{
+    if(!r||typeof r!=="object"||Array.isArray(r)){warnings.push(`입력 ${index+1}행: 응답 객체가 아닙니다.`);return;}
+    if(r.intent==="불참")return;
+    if(r.intent!=="참여"||!["미래인재","AI 융합인재"].includes(r.track)){warnings.push(`입력 ${index+1}행: 참여 의향·트랙을 확인해 주세요.`);return;}
+    const validId=clean(r.id)&&counts.get(r.id)===1,uid=validId?"row-"+key(r.id):"row-"+index+"-"+key(JSON.stringify(r));
+    if(clean(r.id)&&!validId)warnings.push(`입력 ${index+1}행: 중복 접수 ID를 자동 병합하지 않았습니다.`);
+    const t={uid,sourceIndex:index,legacyId:clean(r.id),name:clean(r.name)||`입력 ${index+1}행`,
+      dept:clean(r.dept)||"소속 미기재",college:clean(r.college),track:r.track,synthetic:synthetic&&!!validId,
+      techs:strings(r.techs).filter(f=>C.FIELD_NAMES.includes(f)),futureFields:strings(r.futureFields),
+      issues:[],raw:r};
+    if(strings(r.techs).some(f=>!C.FIELD_NAMES.includes(f)))warnings.push(`${t.name}: 알 수 없는 기술 선택값이 있습니다.`);
+    teachers.push(t);
+    function entry(text,channel,field,source,meta={}){
+      const full=typeof text==="string"?text:"";
+      if(full.length>12000){warnings.push(`${t.name}: 12,000자를 넘는 질문을 분석하지 않았습니다.`);return null;}
+      return {id:channel+"-"+key(uid+"|"+field+"|"+C.norm(full)),topicUid:"q-"+key(uid+"|"+channel+"|"+C.norm(full)),
+        inputRevision:key(full),teacher:t,field,text:full,source,theme:extractTheme(full),placeholder:!full.trim(),...meta};
+    }
+    if(t.track==="미래인재"){
+      const fields=t.futureFields.length?t.futureFields:["분야 미기재"];
+      for(const f of fields){
+        const e=entry(clean(r.futureTopic),"future",f,"futureTopic",{provenance:t.futureFields.length?"explicit":"missing",categories:[]});
+        if(e)future.push(e);
+      }
+      return;
+    }
+    const qs=strings(r.topics);
+    if(r.topics!==undefined&&!Array.isArray(r.topics))warnings.push(`${t.name}: 19대 질문 배열 형식을 확인해 주세요.`);
+    for(const q of qs.length?qs:[""]){
+      const c=C.classifyTopic(q);
+      for(const f of t.techs){
+        const j=JUDGE?JUDGE(q,f):{...techAnalysis(q,f,c),tax:taxonomyMatch(q,f)};
+        const e=entry(q,"tech",f,"topics",{candidate:c,provenance:"explicit",aiUse:false,evidence:[],...j});
+        if(e)tech.push(e);
+      }
+    }
+    /* 산업·사회: 문항 5-Ⅱ 에 응답자가 직접 쓴 내용만 분석 대상으로 삼는다.
+       분야별 질문 연결 정보가 없으므로 공통 질문(topics)과 짝짓지 않는다.
+       묶음 이름(issueTheme)과 융복합 유형(fusionType)은 운영 HTML 의 기존 분류 함수가
+       계산해 어댑터로 넘겨준 값이다. 이 모듈이 새로 추정하지 않는다. */
+    const pText=clean(r.problem);
+    const theme=clean(r.issueTheme)||(pText?"미분류":"기재 없음");
+    const e2=entry(pText,"issue",theme,"problem",{
+      provenance:pText?"written":"missing",linked:true,
+      fusion:fusionId(r.fusionType,!!pText),
+      categories:[fusionId(r.fusionType,!!pText)],
+      reason:pText?"응답자가 문항 5-Ⅱ 에 직접 기재한 내용입니다. 연구 접근의 성격은 판정하지 않습니다."
+        :"산업·사회 문제 해결 분야를 기재하지 않았습니다.",
+      evidence:[],aiUse:false});
+    if(e2){issue.push(e2);t.issues=[theme];}
+  });
+  if(tech.length+issue.length+future.length>30000)throw new Error("분야·질문 연결이 너무 많습니다. 파일을 나누어 읽어 주세요.");
+  return {version:VERSION,engine:ENGINE,id:"snap-"+key(JSON.stringify(raw)),synthetic,
+    label:options.label||"로컬 응답",readAt:new Date().toISOString(),raw,teachers,tech,issue,future,warnings};
+}
+function fieldOptions(data,mode){
+  const pool=data[mode]||[], names=mode==="tech"?C.FIELD_NAMES:unique(pool.map(e=>e.field)).sort((a,b)=>a.localeCompare(b,"ko"));
+  return names.map(name=>{
+    const entries=pool.filter(e=>e.field===name);
+    return {name,count:new Set(entries.map(e=>e.teacher.uid)).size,
+      provenance:unique(entries.map(e=>e.provenance))};
+  });
+}
+function view(data,mode,field="",category="all",query="",dept=""){
+  if(!MODES.some(x=>x.id===mode))mode="future";
+  const choices=fieldOptions(data,mode);
+  let selected="";
+  let pool=data[mode]||[];
+  if(mode!=="issue"){
+    selected=choices.some(x=>x.name===field)?field:(mode==="tech"?"AI/SW":(choices.find(x=>x.count)||{}).name||"");
+    pool=pool.filter(e=>e.field===selected);
+  }
+  /* 미래인재·산업·사회는 학과 중심으로 읽는다. 목록·CSV·인쇄가 같은 순서를 쓰도록 여기서 정렬한다. */
+  if(mode!=="tech")pool=pool.slice().sort((a,b)=>
+    a.teacher.dept.localeCompare(b.teacher.dept,"ko")||a.teacher.name.localeCompare(b.teacher.name,"ko"));
+  const depts=unique(pool.map(e=>e.teacher.dept)).sort((a,b)=>a.localeCompare(b,"ko"));
+  const selectedDept=depts.includes(dept)?dept:"";
+  const base=selectedDept?pool.filter(e=>e.teacher.dept===selectedDept):pool;
+  const needle=normalize(query);
+  const matched=base.filter(e=>!needle||normalize(e.teacher.name+" "+e.teacher.dept+" "+e.text+" "+e.theme.label).includes(needle));
+  const typeDefs=TYPES[mode]||[];
+  if(category!=="all"&&!typeDefs.some(x=>x.id===category))category="all";
+  const entries=matched.filter(e=>category==="all"||e.categories.includes(category));
+  const types=typeDefs.map(t=>({ ...t,people:new Set(matched.filter(e=>e.categories.includes(t.id)).map(e=>e.teacher.uid)).size,
+    questions:new Set(matched.filter(e=>e.categories.includes(t.id)&&!e.placeholder).map(e=>e.topicUid)).size }));
+  const groups=[];
+  function close(map){
+    for(const g of map.values()){
+      g.people=new Set(g.entries.map(e=>e.teacher.uid)).size;
+      g.questions=new Set(g.entries.filter(e=>!e.placeholder).map(e=>e.topicUid)).size;
+    }
+    return Array.from(map.values()).sort((a,b)=>b.people-a.people||b.questions-a.questions||a.label.localeCompare(b.label,"ko"));
+  }
+  if(mode==="issue"){
+    /* 기재 내용의 주제 묶음이 먼저, 융복합 유형은 묶음 안에서 구분한다 */
+    const map=new Map();
+    for(const e of entries){
+      const groupId="theme-"+e.field;
+      if(!map.has(groupId))map.set(groupId,{id:groupId,category:"",categoryLabel:"",
+        label:e.field,method:"issue_theme",entries:[]});
+      map.get(groupId).entries.push(e);
+    }
+    groups.push(...close(map));
+  }else{
+    for(const type of typeDefs){
+      if(category!=="all"&&category!==type.id)continue;
+      const map=new Map();
+      for(const e of entries.filter(e=>e.categories.includes(type.id))){
+        /* 19대 경로는 공식 중분류가 맞으면 그 이름으로 묶는다 */
+        const groupId=type.id+"-"+(e.tax?"tax-"+e.tax.id:e.theme.key);
+        if(!map.has(groupId))map.set(groupId,{id:groupId,category:type.id,categoryLabel:type.label,
+          label:e.tax?e.tax.name:e.theme.label,method:e.tax?"taxonomy_group":e.theme.method,entries:[]});
+        map.get(groupId).entries.push(e);
+      }
+      groups.push(...close(map));
+    }
+  }
+  const people=Array.from(new Map(entries.map(e=>[e.teacher.uid,e.teacher])).values());
+  const unit=data.synthetic&&people.every(t=>t.synthetic)?"명":"건";
+  return {dataId:data.id,label:data.label,mode,field:selected,category,query,choices,types,groups,entries,people,
+    depts,dept:selectedDept,
+    participantCount:people.length,baseParticipants:new Set(base.map(e=>e.teacher.uid)).size,
+    questions:new Set(entries.filter(e=>!e.placeholder).map(e=>e.topicUid)).size,
+    unit,unlinked:entries.filter(e=>mode==="issue"&&!e.linked).length,
+    missingField:mode==="future"&&selected==="분야 미기재",
+    provenance:unique(base.map(e=>e.provenance)),
+    sourceKind:data.synthetic?"synthetic":"local_unverified",engine:ENGINE,readAt:data.readAt};
+}
+function exportModel(vm){
+  const path=MODES.find(m=>m.id===vm.mode).sub;
+  const tail=e=>[e.teacher.uid,e.topicUid,vm.dataId,vm.sourceKind];
+  const tailHeads=["교원·응답 연결 ID","주제 ID","기준본","자료 구분"];
+  if(vm.mode==="future"){
+    return {headers:["분석 경로","학과","교원","연구주제",...tailHeads],
+      printCols:[1,2,3],
+      rows:vm.entries.map(e=>[path,e.teacher.dept,e.teacher.name,e.text,...tail(e)])};
+  }
+  if(vm.mode==="issue"){
+    const label=id=>(TYPES.issue.find(t=>t.id===id)||{}).label||"";
+    const rows=[];
+    vm.groups.forEach(g=>g.entries.forEach(e=>rows.push(
+      [path,g.label,label(e.fusion),e.teacher.dept,e.teacher.name,e.text,...tail(e)])));
+    return {headers:["분석 경로","주제 묶음","융복합 유형","학과","교원","기재 내용",...tailHeads],
+      printCols:[1,2,3,4,5],rows};
+  }
+  const rows=[];
+  vm.groups.forEach(g=>g.entries.forEach(e=>rows.push(
+    [path,vm.field,g.categoryLabel,g.label,e.tax?e.tax.id+" "+e.tax.name:"중분류 미검출",
+     e.teacher.dept,e.teacher.name,e.theme.derived,e.text,
+     e.aiUse?"활용 표현 있음":"별도 확인",e.reason||"",...tail(e)])));
+  return {headers:["분석 경로","기술 분야","구분","주제 묶음","공식 중분류","학과","교원","도출 주제","원문 질문",
+    "AI 활용 명시","판정 근거",...tailHeads],printCols:[2,3,4,5,6,8],rows};
+}
+return {VERSION,ENGINE,MODES,TYPES,extractTheme,techAnalysis,buildDataset,view,
+  fieldOptions,exportModel,setTaxonomy,setTechJudge,taxonomyMatch,fusionId,csv:C.toCSV,esc:C.esc,fieldNames:C.FIELD_NAMES};
+});
+</script>
+<script>
+/* Three-path results UI. All inputs stay in this browser window. */
+(function(root){
+"use strict";
+const V=root.BK21TopicsV3,E=V.esc;
+function create(options={}){
+ const state={root:null,data:null,origin:"출처 미확인",loading:false,error:"",sequence:0,
+   mode:"future",filters:{tech:{field:"AI/SW",category:"all",q:""},future:{field:"",category:"all",q:"",dept:""},issue:{field:"",category:"all",q:""}},view:null};
+ const visible=()=>state.root&&state.root.isConnected;
+ function notify(s){if(options.notify)options.notify(s);}
+ function loadRows(rows,label="현재 응답",synthetic=false){
+   const n=++state.sequence;state.loading=true;state.error="";paint();
+   return Promise.resolve().then(()=>V.buildDataset(rows,{label,synthetic})).then(data=>{
+     if(n!==state.sequence)return false;
+     state.data=data;state.loading=false;
+     Object.values(state.filters).forEach(f=>{f.category="all";f.q="";});
+     paint();return true;
+   }).catch(e=>{
+     if(n!==state.sequence)return false;
+     state.loading=false;state.error=e.message||"자료 처리 오류";paint();return false;
+   });
+ }
+ /* 자료는 대시보드가 이미 읽어 둔 기준본에서만 가져온다.
+    시험용 가상 자료 선택과 파일 읽기는 운영 화면에서 제공하지 않는다. */
+ function refresh(){
+   const src=(options.getRows?options.getRows():null)||{};
+   state.origin=src.origin||"출처 미확인";
+   return loadRows(Array.isArray(src.rows)?src.rows:[],src.label||"현재 응답",false);
+ }
+ function mount(el){state.root=el;return refresh();}
+ const selectOptions=(items,value)=>items.map(([k,n])=>`<option value="${E(k)}"${value===k?" selected":""}>${E(n)}</option>`).join("");
+ function toolbar(){
+   return `<details class="r3-tools" id="r3-tools"><summary>자료·기준 확인</summary>
+   <div class="r3-tools-body">
+    <p><b>분류·묶음은 제한된 규칙이 만든 초안입니다.</b> 실제 응답에 대한 정확도는 아직 측정하지 않았습니다.
+    AI API·승인 저장·사람 검토 기능은 연결하지 않았습니다. 이 화면은 계산을 이 브라우저에서만 수행합니다.</p>
+    <p>식별이 검증된 자료가 아니므로 인원이 아닌 <b>응답 건수</b>로 셉니다. 같은 이름을 자동으로 병합하지 않습니다.</p>
+    <p><b>원천 기술</b>은 원문에 기술개발·핵심 변화 목표가 적혀 있다는 뜻이며 실제 혁신성·성과의 검증이 아닙니다.
+    <b>연계 기술</b>은 선택 기술을 방법으로 써서 다른 연구대상을 다룬다는 표현이 확인된 경우입니다.
+    <b>미판정</b>은 부적합·무관·체계 밖이 아니라 현재 규칙으로 관계를 확인하지 못했다는 뜻입니다.</p>
+    <p>산업·사회의 <b>문제 진단·원리 규명 / 해결 방안·현장 적용</b>은 확정된 공식 구분이 아니라 검토용 시안입니다.
+    제도·서비스 연구에 AI 활용을 요구하지 않습니다.</p>
+    <p>원문에 없는 새 공동 질문은 만들지 않습니다. 사전에 없는 표현은 개별 원문 주제로 남깁니다.
+    분야 명칭은 입력값을 그대로 보존하며 19대 목록은 기존 설문의 목록입니다.</p>
+    <p><b>현재 설문에서 확인되지 않는 입력</b>: 미래인재 분야 선택 문항, 산업·사회 분야 선택지, 분야별 개별 질문 연결.
+    이 세 가지는 임의로 추정하지 않고 ‘분야 미기재’ 또는 ‘미판정’으로 보존합니다.</p>
+    <p class="r3-small">기준본 ${E(state.data.id)} · ${E(state.data.engine)} · 자료 읽은 시각 ${E(new Date(state.data.readAt).toLocaleString("ko-KR",{timeZone:"Asia/Seoul"}))}</p>
+    ${state.data.warnings.length?`<details><summary>입력 확인사항 ${state.data.warnings.length}건</summary><ul>${state.data.warnings.map(w=>`<li>${E(w)}</li>`).join("")}</ul></details>`:""}
+   </div></details>`;
+ }
+ function questionTable(entries,showTheme=true){
+   return `<div class="r3-table-wrap"><table class="r3-table"><thead><tr><th>교원 · 소속</th>${showTheme?"<th>도출 주제</th>":""}<th>${state.mode==="future"?"기재한 연구주제":"제출한 질문"}</th></tr></thead><tbody>`+
+   entries.map(e=>`<tr data-entry="${E(e.id)}"><td><strong>${E(e.teacher.name)}</strong><small>${E(e.teacher.dept)}</small></td>
+   ${showTheme?`<td>${E(e.theme.derived)}</td>`:""}
+   <td><p class="r3-original">${E(e.text||"질문 미기재")}</p>
+   ${state.mode!=="future"?`<details class="r3-evidence"><summary>분류 근거</summary><p>${E(e.reason)}</p>${e.evidence.length?`<p>근거 표현: ${e.evidence.map(E).join(" / ")}</p>`:""}<p>주제 묶음: ${e.tax?"공식 19대 중분류 "+E(e.tax.id)+" "+E(e.tax.name)+" (kind: "+E(e.tax.kind)+")":e.theme.method==="rule_candidate"?"표현 사전 기반 후보":e.placeholder?"질문 없음":"개별 원문 · 자동 묶지 않음"}${e.tax?" · 대응 표현 "+e.tax.hits.map(E).join(", "):""}</p>
+   <p>중분류의 원천·적용 구분은 참고 표시이며, 위 성격 판정은 원문 근거로만 합니다.</p>${state.mode==="issue"?`<p>연결: ${e.linked?"분야별 질문 입력 기준":"분야·질문 개별 연결 미확인"} · ${e.aiUse?"AI 활용 표현 있음":"AI 활용 여부 별도 확인"}</p>`:""}</details>`:""}</td></tr>`).join("")+
+   `</tbody></table></div>`;
+ }
+ function futureContent(vm){
+   if(!vm.entries.length)return empty();
+   const title=vm.missingField?"미래인재 참여 교원 목록":`${vm.field} 교원 목록`;
+   return `<div class="r3-list-head"><h3>${E(title)}</h3><span>${vm.participantCount}${vm.unit}</span></div>
+     ${rosterTable(vm.entries,false)}`;
+ }
+ /* 학과 → 교원 → 연구주제 순의 명단표. 같은 학과는 첫 행에만 학과명을 쓴다. */
+ function rosterTable(entries,showFusion){
+   let last="";
+   return `<div class="r3-table-wrap"><table class="r3-table"><thead><tr><th>학과</th><th>교원</th>${showFusion?"<th>융복합 유형</th>":""}<th>${showFusion?"기재 내용":"연구주제"}</th></tr></thead><tbody>`+
+   entries.map(e=>{
+     const dept=e.teacher.dept,first=dept!==last;last=dept;
+     return `<tr data-entry="${E(e.id)}"><td class="r3-dept">${first?E(dept):`<span class="r3-dup">${E(dept)}</span>`}</td>
+     <td><strong>${E(e.teacher.name)}</strong></td>
+     ${showFusion?`<td>${E(fusionLabel(e.fusion))}</td>`:""}
+     <td><p class="r3-original">${E(e.text||"기재 없음")}</p></td></tr>`;
+   }).join("")+`</tbody></table></div>`;
+ }
+ const fusionLabel=id=>((V.TYPES.issue||[]).find(t=>t.id===id)||{}).label||"확인 필요";
+ /* 산업·사회: 주제 묶음 → 융복합 유형 → 학과·교원 명단 */
+ function issueContent(vm){
+   if(!vm.groups.length)return empty();
+   return vm.groups.map(g=>{
+     const mix=(V.TYPES.issue||[]).map(t=>{
+       const n=new Set(g.entries.filter(e=>e.fusion===t.id).map(e=>e.teacher.uid)).size;
+       return n?`${t.label} ${n}`:"";
+     }).filter(Boolean).join(" · ");
+     return `<details class="r3-group" data-group="${E(g.id)}"><summary>
+       <span class="r3-group-label">${E(g.label)}<small>${E(mix||"유형 확인 필요")}</small></span>
+       <span class="r3-group-count"><b>${g.people}${vm.unit}</b></span><span class="r3-open-text">학과·교원 보기</span>
+       </summary><div class="r3-group-body">${rosterTable(g.entries,true)}</div></details>`;
+   }).join("");
+ }
+ function empty(){
+   return `<div class="r3-empty"><h3>표시할 응답이 없습니다.</h3><p>다른 분야를 선택하거나 검색어를 지워 주세요. 없다는 사실을 부적합 판정으로 해석하지 않습니다.</p></div>`;
+ }
+ function groupsContent(vm){
+   if(!vm.groups.length)return empty();
+   return (V.TYPES[state.mode]||[]).map(type=>{
+     const groups=vm.groups.filter(g=>g.category===type.id);if(!groups.length)return "";
+     return `<section class="r3-section" data-category="${type.id}"><div class="r3-section-title"><h3>${type.label}</h3><span>${groups.length}개 주제 묶음</span></div>`+
+     groups.map(g=>`<details class="r3-group" data-group="${E(g.id)}"><summary>
+       <span class="r3-group-label">${E(g.label)}<small>${g.method==="taxonomy_group"?"공식 19대 중분류":g.method==="rule_candidate"?"표현 사전 후보":"개별 주제 · 자동 묶지 않음"}</small></span>
+       <span class="r3-group-count"><b>${g.people}${vm.unit}</b><small>질문 ${g.questions}건</small></span><span class="r3-open-text">교원·질문 보기</span>
+       </summary><div class="r3-group-body">${questionTable(g.entries,true)}</div></details>`).join("")+`</section>`;
+   }).join("");
+ }
+ function paint(focusId){
+   if(!visible())return;
+   if(!state.data){
+     state.root.innerHTML=`<section class="r3"><h2>결과 분석</h2><p>${E(state.error||"가상 자료를 준비하고 있습니다.")}</p>${state.error?'<button class="r3-button" id="r3-retry">다시 시도</button>':""}</section>`;
+     const retry=state.root.querySelector("#r3-retry");if(retry)retry.onclick=()=>refresh();return;
+   }
+   const f=state.filters[state.mode],vm=V.view(state.data,state.mode,f.field,f.category,f.q,f.dept||"");
+   state.view=vm;f.field=vm.field;f.category=vm.category;f.dept=vm.dept;
+   const isFuture=state.mode==="future";
+   const modeTitle=state.mode==="future"?"미래인재":state.mode==="tech"?"AI 융합인재 · 19대 국가전략기술":"AI 융합인재 · 산업·사회 문제 해결";
+   const fieldLabel=vm.mode==="issue"&&vm.provenance.some(x=>x==="legacy_written")?"기재 분야":"분야 선택";
+   /* 미래인재는 현재 설문에 분야 선택 문항이 없다.
+      실제 분야값이 하나도 없으면 선택기를 감추고 명단만 보여준다.
+      분야 문항이 생겨 값이 들어오면 자동으로 다시 나타난다. */
+   const noFieldChoice=(isFuture&&vm.choices.every(c=>c.name==="분야 미기재"))||state.mode==="issue";
+   const listTitle=state.mode==="issue"?"산업·사회 문제 해결":(noFieldChoice?"미래인재":(vm.field||modeTitle));
+   const showDept=isFuture&&vm.depts.length>1;
+   state.root.innerHTML=`<section class="r3">
+     <header class="r3-header"><div><span class="r3-eyebrow">BK21 · 참여의향 조사</span><h2>결과 분석</h2></div>
+       <div class="r3-actions"><button class="r3-button" id="r3-export">현재 목록 내려받기</button><button class="r3-button r3-quiet" id="r3-print">인쇄</button></div></header>
+     <p class="r3-context">${E(state.data.label)} · ${E(state.origin)} · 신원 연결 미검증 · ${isFuture?"명단 조회":"자동 분류 초안"}</p>
+     <div class="r3-paths" role="tablist" aria-label="결과 분석 경로">
+       ${V.MODES.map(m=>`<button id="r3-mode-${m.id}" data-mode="${m.id}" role="tab" aria-selected="${state.mode===m.id}" aria-controls="r3-content" tabindex="${state.mode===m.id?0:-1}"><strong>${m.title}</strong><span>${m.sub}</span></button>`).join("")}
+     </div>
+     <section id="r3-content" role="tabpanel" aria-labelledby="r3-mode-${state.mode}">
+       <div class="r3-selector">${noFieldChoice?"":`<label><span>${fieldLabel}</span><select id="r3-field" aria-label="${fieldLabel}">${vm.choices.length?
+         selectOptions(vm.choices.map(x=>[x.name,`${x.name} (${x.count}${vm.unit})`]),vm.field):'<option value="">분야 정보 없음</option>'}</select></label>`}
+         ${showDept?`<label><span>학과</span><select id="r3-dept" aria-label="학과 선택">${
+           selectOptions([["","학과 전체"],...vm.depts.map(d=>[d,d])],vm.dept)}</select></label>`:""}
+         ${state.mode==="issue"?`<label><span>융복합 유형</span><select id="r3-fusion" aria-label="융복합 유형 선택">${
+           selectOptions([["all","유형 전체"],...vm.types.map(t=>[t.id,`${t.label} (${t.people}${vm.unit})`])],vm.category)}</select></label>`:""}
+       </div>
+       ${state.error?`<p class="r3-alert" role="alert">${E(state.error)} 마지막 정상 자료를 유지합니다.</p>`:""}
+       ${state.loading?'<p role="status">자료를 읽는 중입니다.</p>':""}
+       ${state.mode==="tech"?`<div class="r3-types" aria-label="연구 성격별 보기">${vm.types.map(t=>`<button data-type="${t.id}" aria-pressed="${vm.category===t.id}">
+         <span>${t.label}</span><strong>${t.people}<small>${vm.unit}</small></strong><p>${t.desc}</p></button>`).join("")}</div>`:""}
+       <div class="r3-list-tools"><p><strong>${E(listTitle)}</strong> · 표시 ${vm.participantCount}${vm.unit} · 유효 질문 ${vm.questions}건</p>
+         <label class="r3-search"><span class="sr">주제·이름·소속 검색</span><input id="r3-search" type="search" placeholder="주제·이름·소속 검색" value="${E(f.q)}"></label>
+         ${(f.category!=="all"||f.q||f.dept)?'<button class="r3-button r3-quiet" id="r3-reset">전체 보기</button>':""}
+       </div>
+       ${state.mode==="tech"?'<p class="r3-overlap">같은 교원·질문이 원천과 연계 양쪽에 포함될 수 있습니다. 전체 응답은 중복 없이 셉니다.</p>':""}
+       ${isFuture?futureContent(vm):state.mode==="issue"?issueContent(vm):groupsContent(vm)}
+       ${vm.unit==="건"?'<p class="r3-overlap">파일의 동일인 연결은 검증되지 않았습니다. 동일 이름을 자동 병합하지 않고 응답 건수로 표시합니다.</p>':""}
+     </section>
+     ${toolbar()}
+   </section>`;
+   bind();
+   if(focusId){const el=state.root.querySelector("#"+focusId);if(el){el.focus();if(el.setSelectionRange)el.setSelectionRange(el.value.length,el.value.length);}}
+ }
+ function bind(){
+   const q=s=>state.root.querySelector(s),qa=s=>Array.from(state.root.querySelectorAll(s));
+   qa("[data-mode]").forEach(b=>{
+     b.onclick=()=>{state.mode=b.dataset.mode;paint("r3-mode-"+state.mode);};
+     b.onkeydown=e=>{
+       if(!["ArrowLeft","ArrowRight","Home","End"].includes(e.key))return;
+       e.preventDefault();const arr=V.MODES.map(x=>x.id),i=arr.indexOf(state.mode);
+       state.mode=arr[e.key==="Home"?0:e.key==="End"?2:(i+(e.key==="ArrowRight"?1:2))%3];paint("r3-mode-"+state.mode);
+     };
+   });
+   const fusionSel=q("#r3-fusion");
+   if(fusionSel)fusionSel.onchange=e=>{state.filters[state.mode].category=e.target.value;paint("r3-fusion");};
+   const deptSel=q("#r3-dept");
+   if(deptSel)deptSel.onchange=e=>{state.filters[state.mode].dept=e.target.value;paint("r3-dept");};
+   const fieldSel=q("#r3-field");
+   if(fieldSel)fieldSel.onchange=e=>{const f=state.filters[state.mode];f.field=e.target.value;f.category="all";f.q="";f.dept="";paint("r3-field");};
+   qa("[data-type]").forEach(b=>b.onclick=()=>{const f=state.filters[state.mode];f.category=f.category===b.dataset.type?"all":b.dataset.type;paint();});
+   q("#r3-search").oninput=e=>{state.filters[state.mode].q=e.target.value;paint("r3-search");};
+   if(q("#r3-reset"))q("#r3-reset").onclick=()=>{const f=state.filters[state.mode];f.category="all";f.q="";f.dept="";paint();};
+   q("#r3-export").onclick=exportCurrent;
+   q("#r3-print").onclick=printCurrent;
+ }
+ function exportCurrent(){
+   if(!state.view)return;
+   const model=V.exportModel(state.view),csv=V.csv(model),a=document.createElement("a");
+   const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+   const stamp=new Date().toISOString().slice(0,10);
+   const seg=(state.view.missingField?"전체명단":state.view.field).replace(/[\/\\:*?"<>|]/g,"_");
+   a.href=url;a.download="BK21_결과분석_"+state.mode+"_"+seg+"_"+stamp+".csv";
+   document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),500);
+   notify("현재 필터의 명단·주제를 내려받았습니다.");
+   return model;
+ }
+ function printCurrent(){
+   if(!state.view)return;
+   document.getElementById("r3-print-root")?.remove();
+   const vm=state.view,model=V.exportModel(vm),el=document.createElement("div");
+   el.id="r3-print-root";el.innerHTML=`<h1>BK21 결과 분석 · ${E(vm.missingField?"미래인재 참여 교원 목록":vm.field)}</h1><p>${E(state.data.label)} · ${E(state.origin)} · 기준본 ${E(vm.dataId)}</p>
+     <p>표시 ${vm.participantCount}${vm.unit} · 화면과 같은 조건 · 자동 분류 초안</p>
+     <table><thead><tr>${model.printCols.map(i=>`<th>${E(model.headers[i])}</th>`).join("")}</tr></thead><tbody>
+     ${model.rows.map(r=>`<tr data-topic-id="${E(r[model.headers.indexOf("주제 ID")])}">${model.printCols.map(i=>`<td>${E(r[i])}</td>`).join("")}</tr>`).join("")}
+     </tbody></table>`;
+   document.body.appendChild(el);document.body.classList.add("r3-printing");
+   const done=()=>{document.body.classList.remove("r3-printing");el.remove();window.removeEventListener("afterprint",done);};
+   window.addEventListener("afterprint",done);window.print();return model;
+ }
+ return {mount,refresh,loadRows,exportCurrent,printCurrent,inspect:()=>state,
+   currentExport:()=>state.view?V.exportModel(state.view):null};
+}
+root.BK21ResultsUI={create};
+})(globalThis);
+</script>
+<script>
 /* =====================================================================
    5단계 BK21 교원 참여의향 조사
    - 단독 실행: 데모 데이터(메모리)로 전 기능 동작
@@ -396,7 +1481,7 @@ function shiftDays(n) {
 }
 
 /* ── 조사 설정 (실배포 시 Code.gs의 CONFIG와 함께 수정) ───────────── */
-var BUILD = "2026.09.19-r36";
+var BUILD = "2026.09.20-r37 (pages)";   /* GitHub Pages 배포본 · Code.gs 는 r36 그대로 */
 var CONFIG = {
   title: "5단계 BK21사업 개별 교원 참여의향 조사",
   owner: "대학원전략팀",
@@ -601,7 +1686,7 @@ function makeDemo(n) {
 /* ── 백엔드 어댑터 ─────────────────────────────────────────────────
    GAS 환경이면 google.script.run, 아니면 메모리 저장소를 사용한다.  */
 var hasGAS = (typeof google !== "undefined" && google.script && google.script.run);
-var REMOTE = "https://script.google.com/macros/s/AKfycbxH4-5A_i8n6O3vUnhb2A_bPZJVPSjAoeCD6v9ckGO8X1h75pSxvDlXBGxzcpND_YrvGA/exec";            /* ★ GitHub Pages 등 외부에 올릴 때, Apps Script 웹 앱의 /exec 주소를 여기에 넣으세요 */
+var REMOTE = "https://script.google.com/macros/s/AKfycbxH4-5A_i8n6O3vUnhb2A_bPZJVPSjAoeCD6v9ckGO8X1h75pSxvDlXBGxzcpND_YrvGA/exec";            /* GitHub Pages 배포본 — Apps Script 웹 앱 /exec 주소 */
 var memory = null;
 var adminEntry = !hasGAS && !REMOTE;   // ?view=admin 으로 들어왔을 때 true
 var adminCodeEntered = "";  // 담당자가 입력한 관리자 코드 (서버 검증용, 화면에 표시하지 않음)
@@ -1938,7 +3023,7 @@ function renderGate(msg) {
 }
 
 function paintAdmin() {
-  var TABS = [["overview", "응답 현황"], ["matching", "분야·교육연구단 매칭"], ["topics", "연구주제"], ["responses", "응답 목록"], ["analysis", "정합성 분석"], ["settings", "설정"]];
+  var TABS = [["overview", "응답 현황"], ["matching", "분야·교육연구단 매칭"], ["topics", "연구주제"], ["responses", "응답 목록"], ["analysis", "결과 분석"], ["settings", "설정"]];
   app.innerHTML =
   '<div class="wrap">' +
     '<div class="dash-head">' +
@@ -1964,6 +3049,10 @@ function paintAdmin() {
 }
 function paintTab() {
   var box = $("#tabbody");
+  /* 결과 분석의 인쇄용 DOM·클래스가 다른 탭에 남지 않게 정리한다 */
+  var pr = document.getElementById("r3-print-root");
+  if (pr) pr.remove();
+  document.body.classList.remove("r3-printing");
   box.innerHTML = ({ overview: tabOverview, matching: tabMatching, topics: tabTopics,
     responses: tabResponses, analysis: tabAnalysis, settings: tabSettings })[tab]();
   if (tab === "analysis") bindAnalysis();
@@ -2053,19 +3142,12 @@ function tabOverview() {
     var dt = Object.keys(A.declineTypes).map(function (k) { return { k: k, n: A.declineTypes[k] }; })
       .sort(function (x, y) { return y.n - x.n; });
     var maxD = dt.length ? dt[0].n : 1;
+    /* 개별 사유·소속 학과 목록은 표시하지 않는다. 분포 그래프만 남긴다.
+       원문 사유는 응답 목록과 전체 CSV에서 확인한다. */
     return '<div class="panel" style="margin-bottom:16px"><div class="panel-head"><h3>불참 사유</h3>' +
       '<span class="note">' + A.declines.length + "건 · 유형은 자동 분류</span></div>" +
-      '<div class="cols-2">' +
-        "<div>" + dt.map(function (x) { return barRow(x.k, x.n, maxD, "var(--off)"); }).join("") + "</div>" +
-        '<div class="tbl-wrap"><table class="data" style="min-width:0"><thead><tr>' +
-        "<th>유형</th><th>소속 학과</th><th>사유</th></tr></thead><tbody>" +
-        A.declines.slice(0, 20).map(function (x) {
-          return '<tr><td><span class="chip chip-sm" style="cursor:default">' + esc(x.type) + "</span></td><td>" +
-            esc(x.dept) + "</td><td>" + esc(x.text) + "</td></tr>";
-        }).join("") + "</tbody></table>" +
-        (A.declines.length > 20 ? '<p class="mini-note" style="padding:0 14px 12px">상위 20건만 표시합니다. 전체는 CSV로 확인하세요.</p>' : "") +
-        "</div>" +
-      "</div></div>";
+      dt.map(function (x) { return barRow(x.k, x.n, maxD, "var(--off)"); }).join("") +
+      "</div>";
   })() : "") +
   '<div class="panel"><div class="panel-head"><h3>단과대학·대학원별 응답 현황</h3>' +
     '<span class="note">막대 안 색은 참여·불참 구성</span></div>' +
@@ -2410,7 +3492,19 @@ var JUDGE_DESC = {
   "확인": "주제가 없거나 판정이 어려움"
 };
 
+/* ── 결과 분석 탭 ────────────────────────────────────────────────
+   세 경로(미래인재 / 19대 국가전략기술 / 산업·사회 문제 해결)를 위에 두고,
+   기존 정합성 분석 화면은 지우지 않고 아래 접힘 영역에 보존한다.        */
 function tabAnalysis() {
+  return '<section id="bk21-results-root" aria-label="결과 분석 세 경로"></section>' +
+    '<details class="panel" id="legacyBox" style="margin-top:24px;padding:0">' +
+    '<summary style="cursor:pointer;padding:16px 20px;font-weight:700;font-size:0.9375rem;color:var(--ink-2)">' +
+    '기존 정합성 분석 화면 (구버전 기준 · 위 결과와 같은 분석이 아닙니다)</summary>' +
+    '<div id="legacyBody" style="padding:0 20px 20px"></div></details>';
+}
+
+/* 기존 화면: 코드·판정 로직을 바꾸지 않고 이름만 분리했다 */
+function tabAnalysisLegacy() {
   if (!A.alignRows.length) return '<div class="card empty-state"><b>분석할 응답이 없습니다.</b>' +
     "<p>AI 융합인재 트랙 응답이 들어오면 여기에 표시됩니다.</p></div>";
 
@@ -2653,21 +3747,156 @@ function axisIssue() {
       : '<div class="empty-state"><b>해당하는 응답이 없습니다.</b></div>') + "</div>";
 }
 
+/* ── 결과 분석: 세 경로 ──────────────────────────────────────────
+   자료는 대시보드가 이미 읽어 둔 응답(A.rows)만 사용한다.
+   분석에 필요 없는 이메일·matchKey·접수일시는 넘기지 않는다.        */
+function resultsRows() {
+  var rows = (A && A.rows) ? A.rows : [];
+  return rows.map(function (r) {
+    return {
+      id: r.id || "",
+      name: r.name || "",
+      college: r.college || DEPT_COLLEGE[r.dept] || "",
+      dept: r.dept || "",
+      intent: r.intent || "",
+      track: r.track || "",
+      futureTopic: r.futureTopic || "",
+      topics: (r.topics || []).filter(function (t) { return String(t == null ? "" : t).trim(); }),
+      techs: (r.techs || []).slice(),
+      problem: r.problem || "",
+      /* 산업·사회 묶음 이름과 융복합 유형은 기존 운영 분류 함수를 그대로 쓴다.
+         새 모듈이 따로 추정하지 않는다. */
+      issueTheme: r.problem ? classifyIssue(r.problem) : "",
+      fusionType: r.problem ? classifyProblem(r.problem) : ""
+    };
+  });
+}
+function resultsOrigin() {
+  if (Backend.mode === "gas") return "Apps Script 서버 응답";
+  if (Backend.mode === "remote") return "원격 API 응답";
+  return "데모 가상 응답 (서버 미연결)";
+}
+/* ── 19대 국가전략기술 체계에 근거한 판정 ─────────────────────────
+   기존 parseTopic() 이 한 문장에서 '수단'과 '연구 대상'을 갈라내고,
+   classifyTech() 가 대상을 19대 분야·중분류로 찍는다. 그 결과로 판정한다.
+
+     원천 기술 — 연구 대상이 선택 기술 f 이고, 그 중분류가 f 의 원천 중분류
+     연계 기술 — f 를 수단으로 쓰고 연구 대상이 따로 있거나,
+                 대상이 f 의 적용 중분류인 경우
+     미판정   — 대상·수단 어느 쪽으로도 f 와의 관계를 확인하지 못한 경우
+                (타 분야 대상, 체계 밖 대상, 표현 부족을 사유로 나눠 적는다)
+
+   미판정을 부적합·무관·체계 밖으로 확정하지 않는다. */
+function techJudge19(text, field) {
+  var raw = String(text == null ? "" : text).trim();
+  if (!raw) return { categories: ["pending"], reason: "질문이 입력되지 않았습니다.", evidence: [], tax: null };
+  var pt = parseTopic(raw);
+  /* 수단으로 쓴 말이 선택 기술 f 인지 본다.
+     '기존 AI를 활용한' 처럼 중분류 키워드에 없는 짧은 표현도 잡아야 하므로
+     분야 인식 패턴을 함께 쓴다. */
+  var pat = BK21AnalysisV2.fieldPattern(field);
+  var usesField = (pt.means || []).indexOf(field) >= 0 ||
+    (pt.meansText || []).some(function (m) { return pat && pat.test(m); });
+  var isObject = pt.object === field && !!pt.objId;
+  var tax = pt.objId ? { id: pt.objId, name: pt.objGroup, kind: pt.objKind, hits: [] } : null;
+  var cats = [], reason = "";
+  var where = pt.objId ? pt.objId + " " + pt.objGroup : pt.objGroup || "분류 불가";
+
+  if (isObject && pt.objKind === "원천") {
+    cats.push("core");
+    reason = "연구 대상이 " + field + " 체계의 원천 중분류 " + where + " 로 확인됩니다. 기술 자체를 다루는 질문입니다. 실제 혁신성·성공 가능성을 검증한 것은 아닙니다.";
+  } else if (isObject) {
+    cats.push("connected");
+    reason = "연구 대상이 " + field + " 체계의 적용 중분류 " + where + " 로 확인됩니다.";
+  }
+  if (usesField && !isObject) {
+    cats.push("connected");
+    reason = field + " 를 수단으로 쓰고, 연구 대상은 " +
+      (pt.object && pt.object !== "체계 밖" ? pt.object + (pt.objId ? " · " + where : "") : "19대 체계 밖의 " + (pt.objGroup || "분류 불가")) + " 입니다.";
+  }
+  if (!cats.length) {
+    cats.push("pending");
+    if (pt.object && pt.object !== "체계 밖") {
+      reason = "이 질문의 연구 대상은 " + pt.object + (pt.objId ? " · " + where : "") +
+        " 입니다. 선택 기술 " + field + " 를 대상으로 삼지도, 수단으로 쓰지도 않아 관계를 확정하지 못했습니다.";
+    } else {
+      reason = "19대 체계의 중분류 표현을 찾지 못했습니다 (" + where + "). " +
+        "체계 밖·부적합으로 확정하지 않으며, 추가 확인이 필요합니다.";
+    }
+  }
+  /* 보조 근거: 원문에 기술개발·개선 목표 표현이 있는지. 판정을 바꾸지는 않는다. */
+  var nv = "";
+  try {
+    var st = BK21AnalysisV2.classifyTopic(raw).structure.noveltyEvidence.status;
+    nv = st === "development_stated" ? " 원문에 개발 목표 표현이 있습니다."
+      : st === "improvement_stated" ? " 원문에 개선 목표 표현이 있습니다."
+      : st === "nondevelopment_stated" ? " 원문에 기술개발을 하지 않는다는 표현이 있습니다."
+      : " 원문에서 개발·개선 목표 표현은 확인되지 않았습니다.";
+  } catch (e) { nv = ""; }
+  var ev = (pt.meansText || []).slice(0, 3);
+  return {
+    categories: cats, reason: reason + nv, evidence: ev, tax: tax,
+    objectField: pt.object, objectGroup: pt.objGroup,
+    aiUse: pt.aiRole === "수단"
+  };
+}
+BK21TopicsV3.setTaxonomy(TAXONOMY);
+BK21TopicsV3.setTechJudge(techJudge19);
+var ResultsV3 = BK21ResultsUI.create({
+  getRows: function () {
+    return {
+      rows: resultsRows(),
+      label: "응답 " + ((A && A.rows) ? A.rows.length : 0) + "건 기준",
+      origin: resultsOrigin()
+    };
+  },
+  notify: toast
+});
+
 function bindAnalysis() {
-  $$("[data-axis]").forEach(function (b) {
-    b.onclick = function () { filters.axis = b.dataset.axis; page.analysis = 1; paintTab(); };
+  var root = document.getElementById("bk21-results-root");
+  if (root) ResultsV3.mount(root);
+  var box = document.getElementById("legacyBox");
+  if (box) box.addEventListener("toggle", function () {
+    if (!box.open) return;
+    var body = document.getElementById("legacyBody");
+    if (!body || body.getAttribute("data-ready")) return;
+    body.setAttribute("data-ready", "1");
+    paintAnalysisLegacy();
   });
-  $$("[data-atech]").forEach(function (b) {
-    b.onclick = function () { filters.atech = b.dataset.atech; page.analysis = 1; paintTab(); };
+}
+
+/* 기존 화면은 자기 영역만 다시 그린다. paintTab() 을 부르면
+   위의 세 경로가 통째로 다시 마운트되므로 호출하지 않는다.        */
+function paintAnalysisLegacy() {
+  var body = document.getElementById("legacyBody");
+  if (!body) return;
+  body.innerHTML = tabAnalysisLegacy();
+  bindAnalysisLegacy();
+}
+function bindAnalysisLegacy() {
+  var body = document.getElementById("legacyBody");
+  if (!body) return;
+  $$("[data-axis]", body).forEach(function (b) {
+    b.onclick = function () { filters.axis = b.dataset.axis; page.analysis = 1; paintAnalysisLegacy(); };
   });
-  $$("[data-issue]").forEach(function (b) {
-    b.onclick = function () { filters.issue = b.dataset.issue; page.analysis = 1; paintTab(); };
+  $$("[data-atech]", body).forEach(function (b) {
+    b.onclick = function () { filters.atech = b.dataset.atech; page.analysis = 1; paintAnalysisLegacy(); };
   });
-  var j = $("#ajudge"); if (j) j.onchange = function () { filters.judge = j.value; page.analysis = 1; paintTab(); };
-  var c = $("#aclear"); if (c) c.onclick = function () { filters.judge = ""; page.analysis = 1; paintTab(); };
-  var ac = $("#acsv"); if (ac) ac.onclick = function () { exportTechList(filters.atech); };
-  var ic = $("#icsv"); if (ic) ic.onclick = function () { exportIssueList(filters.issue); };
-  bindPager();
+  $$("[data-issue]", body).forEach(function (b) {
+    b.onclick = function () { filters.issue = b.dataset.issue; page.analysis = 1; paintAnalysisLegacy(); };
+  });
+  var j = $("#ajudge", body); if (j) j.onchange = function () { filters.judge = j.value; page.analysis = 1; paintAnalysisLegacy(); };
+  var c = $("#aclear", body); if (c) c.onclick = function () { filters.judge = ""; page.analysis = 1; paintAnalysisLegacy(); };
+  var ac = $("#acsv", body); if (ac) ac.onclick = function () { exportTechList(filters.atech); };
+  var ic = $("#icsv", body); if (ic) ic.onclick = function () { exportIssueList(filters.issue); };
+  $$("[data-page]", body).forEach(function (b) {
+    b.onclick = function () {
+      var v = b.dataset.page.split(":");
+      page[v[0]] = Math.max(1, Number(v[1]));
+      paintAnalysisLegacy();
+    };
+  });
 }
 
 function tabSettings() {
