@@ -372,6 +372,11 @@ details.fold .fold-body{margin-top:16px}
    .r3* 는 결과 분석 안에서만 쓰입니다. 기존 화면 선택자와 겹치지 않습니다. */
 .r3{color:#16202B;font-size:15px;line-height:1.65}
 .r3-dept{white-space:nowrap;font-weight:600}
+.r3-pager{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:14px}
+.r3-page{min-width:34px;padding:7px 10px;border:1px solid #DCE2EA;background:#fff;border-radius:7px;cursor:pointer;font-size:13px}
+.r3-page.is-on{background:#0A2A4E;color:#fff;border-color:#0A2A4E;font-weight:700}
+.r3-page[disabled]{opacity:.4;cursor:default}
+.r3-page-info{margin-left:auto;font-size:12px;color:#5A6672}
 .r3-dup{color:#9AA5B1;font-weight:400}
 .r3-group-label small{display:block;font-weight:400;color:#5A6672;font-size:12px;margin-top:3px}
 .r3 *{box-sizing:border-box}
@@ -1321,8 +1326,20 @@ function create(options={}){
  function futureContent(vm){
    if(!vm.entries.length)return empty();
    const title=vm.missingField?"미래인재 참여 교원 목록":`${vm.field} 교원 목록`;
+   const per=10,total=vm.entries.length,last=Math.max(1,Math.ceil(total/per));
+   const f=state.filters.future;
+   if(!f.page||f.page>last)f.page=Math.min(Math.max(1,f.page||1),last);
+   const from=(f.page-1)*per,rows=vm.entries.slice(from,from+per);
+   const btn=(n,label,on)=>`<button class="r3-page${on?" is-on":""}" data-page="${n}"${on?' aria-current="page"':""}>${label}</button>`;
+   const nums=[];for(let i=1;i<=last;i++)nums.push(btn(i,String(i),i===f.page));
    return `<div class="r3-list-head"><h3>${E(title)}</h3><span>${vm.participantCount}${vm.unit}</span></div>
-     ${rosterTable(vm.entries,false)}`;
+     ${rosterTable(rows,false)}
+     ${last>1?`<nav class="r3-pager" aria-label="명단 쪽 이동">
+       ${btn(f.page-1,"이전",false).replace('data-page="'+(f.page-1)+'"',f.page>1?'data-page="'+(f.page-1)+'"':"disabled")}
+       ${nums.join("")}
+       ${btn(f.page+1,"다음",false).replace('data-page="'+(f.page+1)+'"',f.page<last?'data-page="'+(f.page+1)+'"':"disabled")}
+       <span class="r3-page-info">${from+1}–${from+rows.length} / 전체 ${total}건 · 내려받기와 인쇄는 전체를 담습니다</span>
+     </nav>`:""}`;
  }
  /* 학과 → 교원 → 연구주제 순의 명단표. 같은 학과는 첫 행에만 학과명을 쓴다. */
  function rosterTable(entries,showFusion){
@@ -1424,15 +1441,16 @@ function create(options={}){
        state.mode=arr[e.key==="Home"?0:e.key==="End"?2:(i+(e.key==="ArrowRight"?1:2))%3];paint("r3-mode-"+state.mode);
      };
    });
+   qa(".r3-pager [data-page]").forEach(b=>b.onclick=()=>{state.filters.future.page=Number(b.dataset.page);paint();});
    const fusionSel=q("#r3-fusion");
    if(fusionSel)fusionSel.onchange=e=>{state.filters[state.mode].category=e.target.value;paint("r3-fusion");};
    const deptSel=q("#r3-dept");
-   if(deptSel)deptSel.onchange=e=>{state.filters[state.mode].dept=e.target.value;paint("r3-dept");};
+   if(deptSel)deptSel.onchange=e=>{state.filters[state.mode].dept=e.target.value;state.filters.future.page=1;paint("r3-dept");};
    const fieldSel=q("#r3-field");
    if(fieldSel)fieldSel.onchange=e=>{const f=state.filters[state.mode];f.field=e.target.value;f.category="all";f.q="";f.dept="";paint("r3-field");};
    qa("[data-type]").forEach(b=>b.onclick=()=>{const f=state.filters[state.mode];f.category=f.category===b.dataset.type?"all":b.dataset.type;paint();});
-   q("#r3-search").oninput=e=>{state.filters[state.mode].q=e.target.value;paint("r3-search");};
-   if(q("#r3-reset"))q("#r3-reset").onclick=()=>{const f=state.filters[state.mode];f.category="all";f.q="";f.dept="";paint();};
+   q("#r3-search").oninput=e=>{state.filters[state.mode].q=e.target.value;state.filters.future.page=1;paint("r3-search");};
+   if(q("#r3-reset"))q("#r3-reset").onclick=()=>{const f=state.filters[state.mode];f.category="all";f.q="";f.dept="";f.page=1;paint();};
    q("#r3-export").onclick=exportCurrent;
    q("#r3-print").onclick=printCurrent;
  }
@@ -1481,7 +1499,7 @@ function shiftDays(n) {
 }
 
 /* ── 조사 설정 (실배포 시 Code.gs의 CONFIG와 함께 수정) ───────────── */
-var BUILD = "2026.09.20-r37 (pages)";   /* GitHub Pages 배포본 · Code.gs 는 r36 그대로 */
+var BUILD = "2026.09.20-r37 (pages)";   /* 결과 분석 3경로 · Code.gs 는 r36 그대로 */
 var CONFIG = {
   title: "5단계 BK21사업 개별 교원 참여의향 조사",
   owner: "대학원전략팀",
@@ -1686,7 +1704,7 @@ function makeDemo(n) {
 /* ── 백엔드 어댑터 ─────────────────────────────────────────────────
    GAS 환경이면 google.script.run, 아니면 메모리 저장소를 사용한다.  */
 var hasGAS = (typeof google !== "undefined" && google.script && google.script.run);
-var REMOTE = "https://script.google.com/macros/s/AKfycbxH4-5A_i8n6O3vUnhb2A_bPZJVPSjAoeCD6v9ckGO8X1h75pSxvDlXBGxzcpND_YrvGA/exec";            /* GitHub Pages 배포본 — Apps Script 웹 앱 /exec 주소 */
+var REMOTE = "https://script.google.com/macros/s/AKfycbxH4-5A_i8n6O3vUnhb2A_bPZJVPSjAoeCD6v9ckGO8X1h75pSxvDlXBGxzcpND_YrvGA/exec";            /* ★ GitHub Pages 등 외부에 올릴 때, Apps Script 웹 앱의 /exec 주소를 여기에 넣으세요 */
 var memory = null;
 var adminEntry = !hasGAS && !REMOTE;   // ?view=admin 으로 들어왔을 때 true
 var adminCodeEntered = "";  // 담당자가 입력한 관리자 코드 (서버 검증용, 화면에 표시하지 않음)
@@ -3496,11 +3514,7 @@ var JUDGE_DESC = {
    세 경로(미래인재 / 19대 국가전략기술 / 산업·사회 문제 해결)를 위에 두고,
    기존 정합성 분석 화면은 지우지 않고 아래 접힘 영역에 보존한다.        */
 function tabAnalysis() {
-  return '<section id="bk21-results-root" aria-label="결과 분석 세 경로"></section>' +
-    '<details class="panel" id="legacyBox" style="margin-top:24px;padding:0">' +
-    '<summary style="cursor:pointer;padding:16px 20px;font-weight:700;font-size:0.9375rem;color:var(--ink-2)">' +
-    '기존 정합성 분석 화면 (구버전 기준 · 위 결과와 같은 분석이 아닙니다)</summary>' +
-    '<div id="legacyBody" style="padding:0 20px 20px"></div></details>';
+  return '<section id="bk21-results-root" aria-label="결과 분석 세 경로"></section>';
 }
 
 /* 기존 화면: 코드·판정 로직을 바꾸지 않고 이름만 분리했다 */
@@ -3856,14 +3870,6 @@ var ResultsV3 = BK21ResultsUI.create({
 function bindAnalysis() {
   var root = document.getElementById("bk21-results-root");
   if (root) ResultsV3.mount(root);
-  var box = document.getElementById("legacyBox");
-  if (box) box.addEventListener("toggle", function () {
-    if (!box.open) return;
-    var body = document.getElementById("legacyBody");
-    if (!body || body.getAttribute("data-ready")) return;
-    body.setAttribute("data-ready", "1");
-    paintAnalysisLegacy();
-  });
 }
 
 /* 기존 화면은 자기 영역만 다시 그린다. paintTab() 을 부르면
@@ -4066,7 +4072,7 @@ if (hasGAS && google.script.url && google.script.url.getLocation) {
     var v = (loc && loc.parameter && loc.parameter.view) || "";
     if (v === "admin") { adminEntry = true; route = "admin"; }
     render();
-  });
+  });fvar 
 } else {
   if (REMOTE && /[?&]view=admin/.test(location.search)) { adminEntry = true; route = "admin"; }
   render();
