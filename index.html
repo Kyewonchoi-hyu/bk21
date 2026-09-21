@@ -1502,7 +1502,7 @@ function shiftDays(n) {
 }
 
 /* ── 조사 설정 (실배포 시 Code.gs의 CONFIG와 함께 수정) ───────────── */
-var BUILD = "2026.09.20-r41 (pages)";   /* 결과 분석 3경로 · Code.gs 는 r36 그대로 */
+var BUILD = "2026.09.21-r42 (pages)";   /* 결과 분석 3경로 · Code.gs r42 — 접수번호 중복 수정 */
 var CONFIG = {
   title: "5단계 BK21사업 개별 교원 참여의향 조사",
   owner: "대학원전략팀",
@@ -1733,11 +1733,23 @@ function jsonp(body) {
     document.body.appendChild(el);
   });
 }
+/* 서버에 닿지도 못한 경우에만 JSONP 로 재시도한다.
+   응답을 읽지 못한 경우는 이미 저장됐을 수 있으므로 다시 보내지 않는다.
+   예전에는 r.json() 파싱 실패까지 .catch 가 잡아 중복 제출이 될 수 있었다. */
+var PARSE_FAIL = "서버 응답을 읽지 못했습니다.";
 function callRemote(body) {
   if (typeof fetch !== "function") return jsonp(body);
   return fetch(REMOTE, { method: "POST", body: JSON.stringify(body) })
-    .then(function (r) { return r.json(); })
-    .catch(function () { return jsonp(body); });
+    .then(function (r) {
+      return r.text().then(function (t) {
+        try { return JSON.parse(t); }
+        catch (e) { throw new Error(PARSE_FAIL); }
+      });
+    })
+    .catch(function (err) {
+      if (err && err.message === PARSE_FAIL) throw err;
+      return jsonp(body);
+    });
 }
 
 var Backend = {
