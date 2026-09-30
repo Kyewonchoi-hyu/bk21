@@ -1502,12 +1502,13 @@ function shiftDays(n) {
 }
 
 /* ── 조사 설정 (실배포 시 Code.gs의 CONFIG와 함께 수정) ───────────── */
-var BUILD = "2026.09.21-r42 (pages)";   /* 결과 분석 3경로 · Code.gs r42 — 접수번호 중복 수정 */
+var BUILD = "2026.09.30-r43 (pages)";   /* 접수번호 중복 수정 · 마감 차단 · Code.gs r43 과 짝 */
 var CONFIG = {
   title: "5단계 BK21사업 개별 교원 참여의향 조사",
   owner: "대학원전략팀",
   opensAt: "2026-09-09",     // 운영값
-  closesAt: "2026-10-31",    // 운영값
+  closesAt: "2026-09-30",    // ★ 마감일 — Code.gs 의 CLOSES_AT 과 반드시 같게 맞추세요
+  closesAtTime: "12:00",     // ★ 마감 시각 (24시간제, 한국 시간)
   targetCount: 1050,         // 조사 대상 전임교원 수 (응답률 분모)
   minFacultyPerUnit: 7,      // 교육연구단 후보 판정 가정치
   minDeptsPerUnit: 3
@@ -1568,6 +1569,13 @@ function fmtDate(iso) {
   if (isNaN(d)) return String(iso);
   return d.getFullYear() + "." + String(d.getMonth() + 1).padStart(2, "0") + "." + String(d.getDate()).padStart(2, "0");
 }
+
+/* ── 마감 판정 ──────────────────────────────────────
+   화면 표시용 판정이다. 실제 차단은 Code.gs 의 CLOSES_AT 이 맡는다.
+   응답자 PC 시계가 틀려도 서버가 막아주므로 안전하다. */
+var CLOSE_TS = new Date(CONFIG.closesAt + "T" + (CONFIG.closesAtTime || "23:59") + ":00+09:00").getTime();
+function isClosed() { return isFinite(CLOSE_TS) && Date.now() >= CLOSE_TS; }
+function closeLabel() { return fmtDate(CONFIG.closesAt) + " " + (CONFIG.closesAtTime || ""); }
 function toast(msg) {
   var t = document.createElement("div");
   t.className = "toast"; t.textContent = msg;
@@ -2416,6 +2424,8 @@ function paintNav() {
 function render() {
   paintNav();
   if (route === "admin") return renderAdmin();
+  /* 마감 후에는 관리자 화면과 방금 받은 접수증 외엔 안내만 보여준다 */
+  if (isClosed() && !(route === "done" && S && S.receipt)) return renderClosed();
   if (route === "survey") return renderSurvey();
   if (route === "done") return renderDone();
   return renderCover();
@@ -2915,9 +2925,24 @@ function submit() {
   }).catch(function (err) {
     S.submitting = false;
     if (btn) { btn.disabled = false; btn.textContent = "응답 제출"; }
-    toast("제출에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+    var m = String((err && err.message) || "");
+    if (m.indexOf("마감") >= 0) { toast(m); render(); }   /* 마감 안내는 그대로 보여준다 */
+    else toast("제출에 실패했습니다. 잠시 후 다시 시도해 주세요.");
     console.error(err);
   });
+}
+
+function renderClosed() {
+  app.innerHTML =
+  '<div class="wrap wrap-tight" style="padding-top:56px"><div class="card done">' +
+    "<h2>응답이 마감되었습니다.</h2>" +
+    "<p>5단계 BK21사업 개별 교원 참여의향 조사는 <b>" + esc(closeLabel()) + "</b> 부로 마감되었습니다.<br>" +
+    "응답해 주신 모든 교수님께 감사드립니다.</p>" +
+    '<div class="notice" style="margin-top:18px"><span>마감 이후에는 새 응답 제출과 기존 응답 수정이 모두 불가능합니다. 부득이한 사정이 있으시면 아래로 연락 주시기 바랍니다.</span></div>' +
+    '<dl class="meta-rows" style="margin-top:18px">' +
+      '<div class="meta-row"><dt>문의</dt><dd>대학원전략처 대학원전략팀<br>02-2220-2297 · <a href="mailto:bk21five@hanyang.ac.kr">bk21five@hanyang.ac.kr</a></dd></div>' +
+    "</dl>" +
+  "</div></div>";
 }
 
 function renderDone() {
